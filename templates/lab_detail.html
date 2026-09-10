@@ -1,0 +1,220 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ category.code }} - {{ category.title }} - RedTeam Hacker Academy{% endblock %}
+
+{% block content %}
+<div class="panel" style="width: 100%; min-height: calc(100vh - 112px); margin: 0; padding: 32px; display: flex; flex-direction: column;">
+    <!-- Top Navigation Header -->
+    <div style="margin-bottom: 24px; border-bottom: 1px solid #26334d; padding-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <div style="margin-bottom: 8px;">
+                <a href="/labs" style="color: #94a3b8; text-decoration: none; font-size: 13px; font-weight: 600;">&larr; Back to Categories</a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                <span style="font-size: 12px; font-weight: 700; color: #d32f2f; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(211, 47, 47, 0.15); padding: 4px 10px; border-radius: 4px;">
+                    {{ category.code }}
+                </span>
+                <h1 class="panel-title" style="font-size: 24px; font-weight: 700; margin: 0;">
+                    {{ category.title }}
+                </h1>
+            </div>
+            <p style="font-size: 13px; color: #94a3b8; max-width: 800px; line-height: 1.6;">
+                {{ category.description }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Step 2: 3 Challenge Options -->
+    <h2 style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 16px;">
+        Challenge Options (3 Levels)
+    </h2>
+
+    <div style="display: flex; flex-direction: column; gap: 20px; flex: 1;">
+        {% for opt in category.options %}
+        {% set lab_key = opt.cmd_code.lower().replace(' ', '-') %}
+        <div id="card-{{ lab_key }}" style="background: #0b0e14; border: 1px solid #26334d; border-radius: 8px; padding: 22px 24px; transition: border-color 0.2s;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+                <div style="flex: 1;">
+                    <span style="font-size: 11px; font-weight: 700; color: #d32f2f; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 6px;">
+                        {{ opt.level }}
+                    </span>
+                    <h3 style="font-size: 17px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                        {{ opt.name }}
+                    </h3>
+                    {% if opt.topic %}
+                    <div style="background: #141b26; border-radius: 6px; padding: 8px 12px; margin-top: 8px; display: inline-block;">
+                        <span style="font-size: 12px; font-weight: 600; color: #38bdf8;">Topic:</span>
+                        <span style="font-size: 13px; color: #cbd5e1; margin-left: 4px;">{{ opt.topic }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div style="display: flex; align-items: center; margin-top: 6px;">
+                    <button id="btn-{{ lab_key }}" 
+                            onclick="startLab('{{ opt.cmd_code }}', '{{ lab_key }}')" 
+                            class="btn-logout" 
+                            style="background: #d32f2f; color: white; border: none; padding: 10px 22px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; border-radius: 6px;">
+                        Launch Option
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inline Lab Controls and Flag Submission below the challenge -->
+            <div id="inline-panel-{{ lab_key }}" style="display: none; margin-top: 20px; padding-top: 18px; border-top: 1px solid #1e293b;">
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #141b26; padding: 14px 18px; border-radius: 6px; margin-bottom: 14px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #22c55e;"></span>
+                        <span style="font-size: 13px; font-weight: 600; color: #ffffff;">Lab Instance Online</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <a id="link-{{ lab_key }}" href="#" target="_blank" style="background: #2563eb; color: #ffffff; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block;">
+                            Open Lab in New Tab
+                        </a>
+                        <button onclick="stopLab('{{ lab_key }}')" style="background: #475569; color: #ffffff; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">
+                            Stop Lab
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label style="display: block; font-size: 12px; font-weight: 600; color: #94a3b8; margin-bottom: 6px;">
+                        Submit Dynamic Flag (Format: RTSA{...})
+                    </label>
+                    <div style="display: flex; gap: 10px; max-width: 550px;">
+                        <input type="text" id="flag-input-{{ lab_key }}" placeholder="RTSA{...}" style="flex: 1; padding: 9px 12px; background: #0b0e14; border: 1px solid #26334d; border-radius: 6px; color: #ffffff; font-size: 13px; outline: none; font-family: monospace;">
+                        <button onclick="submitFlag('{{ lab_key }}')" style="background: #d32f2f; color: #ffffff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                            Submit Flag
+                        </button>
+                    </div>
+                    <div id="flag-result-{{ lab_key }}" style="margin-top: 10px; font-size: 13px; font-weight: 600; display: none;"></div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+let currentActiveLab = null;
+
+function checkStatus() {
+    fetch('/api/lab-status')
+    .then(res => res.json())
+    .then(data => {
+        // Hide all inline panels first
+        document.querySelectorAll('[id^="inline-panel-"]').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+            btn.innerText = 'Launch Option';
+            btn.style.background = '#d32f2f';
+        });
+
+        if (data.running && data.challenge) {
+            currentActiveLab = data.challenge.toLowerCase();
+            const panel = document.getElementById('inline-panel-' + currentActiveLab);
+            const link = document.getElementById('link-' + currentActiveLab);
+            const btn = document.getElementById('btn-' + currentActiveLab);
+            const card = document.getElementById('card-' + currentActiveLab);
+
+            if (panel) {
+                panel.style.display = 'block';
+            }
+            if (link) {
+                link.href = 'http://' + window.location.hostname + ':' + data.port;
+            }
+            if (btn) {
+                btn.innerText = 'Running';
+                btn.style.background = '#15803d';
+            }
+            if (card) {
+                card.style.borderColor = '#22c55e';
+            }
+        } else {
+            currentActiveLab = null;
+            document.querySelectorAll('[id^="card-"]').forEach(card => card.style.borderColor = '#26334d');
+        }
+    })
+    .catch(() => {});
+}
+
+function startLab(cmdCode, labKey) {
+    const btn = document.getElementById('btn-' + labKey);
+    if (btn) {
+        btn.innerText = 'Starting...';
+        btn.disabled = true;
+    }
+
+    fetch('/api/launch-lab', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cmd_code: cmdCode })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (btn) btn.disabled = false;
+        if (data.success) {
+            checkStatus();
+        } else {
+            if (btn) btn.innerText = 'Launch Option';
+            alert('Error starting lab: ' + data.error);
+        }
+    })
+    .catch(err => {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = 'Launch Option';
+        }
+        alert('Lab launch request error: ' + err);
+    });
+}
+
+function stopLab(labKey) {
+    fetch('/api/stop-lab', { method: 'POST' })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert('Error stopping lab: ' + (data.error || 'Unknown error'));
+            return;
+        }
+        checkStatus();
+    })
+    .catch(err => {
+        alert('Stop request failed: ' + err);
+    });
+}
+
+function submitFlag(labKey) {
+    const input = document.getElementById('flag-input-' + labKey);
+    const flag = input ? input.value.trim() : '';
+    const resDiv = document.getElementById('flag-result-' + labKey);
+
+    if (!flag) {
+        alert('Please enter a flag before submitting.');
+        return;
+    }
+
+    fetch('/api/submit-flag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flag: flag })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (resDiv) {
+            resDiv.style.display = 'block';
+            if (data.success) {
+                resDiv.style.color = '#22c55e';
+                resDiv.innerText = data.message;
+            } else {
+                resDiv.style.color = '#ef4444';
+                resDiv.innerText = data.message;
+            }
+        }
+    })
+    .catch(err => {
+        alert('Flag submission failed: ' + err);
+    });
+}
+
+// Auto-check status when page loads
+checkStatus();
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}Labs - RedTeam Hacker Academy{% endblock %}
+
+{% block content %}
+<div class="panel" style="width: 100%; min-height: calc(100vh - 112px); margin: 0; padding: 32px; display: flex; flex-direction: column;">
+    <div style="margin-bottom: 24px; border-bottom: 1px solid #26334d; padding-bottom: 16px;">
+        <h1 class="panel-title" style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">
+            OWASP Top 10 2025 Web Security Standard
+        </h1>
+        <p style="font-size: 13px; color: #94a3b8;">
+            Select an OWASP 2025 category below to view and launch challenge options.
+        </p>
+    </div>
+
+    <!-- Step 1: OWASP Top 10 Categories Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; flex: 1;">
+        {% for cat in categories %}
+        <a href="/labs/{{ cat.id }}" style="text-decoration: none; color: inherit; display: flex;">
+            <div style="background: #0b0e14; border: 1px solid #26334d; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; width: 100%; transition: border-color 0.2s, transform 0.15s; cursor: pointer;"
+                 onmouseover="this.style.borderColor='#d32f2f'; this.style.transform='translateY(-2px)';" 
+                 onmouseout="this.style.borderColor='#26334d'; this.style.transform='translateY(0)';">
+                <div>
+                    <div style="margin-bottom: 10px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #d32f2f; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(211, 47, 47, 0.15); padding: 4px 10px; border-radius: 4px;">
+                            {{ cat.code }}
+                        </span>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: #ffffff; margin-bottom: 10px;">
+                        {{ cat.title }}
+                    </h3>
+                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                        {{ cat.description }}
+                    </p>
+                </div>
+
+                <div style="border-top: 1px solid #1e293b; margin-top: 20px; padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 12px; font-weight: 600; color: #64748b;">3 Options Available</span>
+                    <span style="font-size: 13px; font-weight: 600; color: #d32f2f;">View Options &rarr;</span>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

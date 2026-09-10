@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RedTeam Hacker Academy{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/" class="navbar-brand">
+            <img src="{{ url_for('static', filename='images/logo.webp') }}" 
+                 alt="RedTeam Hacker Academy" 
+                 class="logo-img"
+                 onError="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+        </a>
+        <div class="navbar-user">
+            <span class="user-name">Logged in as: <strong>{{ session.get('username') }}</strong></span>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a></li>
+                <li><a href="/labs" class="{% if request.path == '/labs' %}active{% endif %}">Labs</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert-message">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+</body>
+</html>

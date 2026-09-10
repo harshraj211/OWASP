@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedTeam Hacker Academy - Student Portal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; }
+        body { background: #0b0e14; color: #cbd5e1; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: #141b26; border-bottom: 1px solid #26334d; padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 38px; width: auto; }
+        .badge { background: rgba(211, 47, 47, 0.2); color: #ef4444; border: 1px solid rgba(211, 47, 47, 0.4); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .container { max-width: 960px; margin: 40px auto; padding: 0 20px; width: 100%; }
+        .card { background: #141b26; border: 1px solid #26334d; border-radius: 8px; padding: 26px; margin-bottom: 24px; }
+        h2 { color: #ffffff; font-size: 20px; margin-bottom: 8px; }
+        p { color: #94a3b8; font-size: 14px; line-height: 1.5; }
+        .user-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 18px; padding-top: 18px; border-top: 1px solid #222d3d; }
+        .meta-item span { display: block; font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; }
+        .meta-item strong { color: #ffffff; font-size: 14px; margin-top: 3px; display: block; }
+        .btn-action { background: #d32f2f; color: #ffffff; border: none; padding: 10px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-action:hover { background: #b71c1c; }
+        .doc-box { background: #0b0e14; border: 1px solid #26334d; border-radius: 6px; padding: 18px; margin-top: 18px; }
+        pre { background: #05070a; border: 1px solid #1e293b; border-radius: 4px; padding: 14px; color: #38bdf8; font-family: monospace; font-size: 13px; overflow-x: auto; white-space: pre-wrap; margin-top: 10px; }
+        .hint-box { background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 14px 18px; margin-top: 20px; }
+        .hint-title { color: #38bdf8; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+        .token-display { word-break: break-all; font-family: monospace; color: #cbd5e1; font-size: 12px; background: #0b0e14; padding: 8px; border-radius: 4px; border: 1px solid #1e293b; margin-top: 6px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="color: #94a3b8; font-size: 12px;">Academy SSO</span>
+            <span class="badge">Signed in</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Student Document & Records Vault</h2>
+            <p>Welcome back. Your Academy SSO session is active and your account is in good standing.</p>
+            
+            <div class="user-meta">
+                <div class="meta-item">
+                    <span>Student Name</span>
+                    <strong>{{ user.name }}</strong>
+                </div>
+                <div class="meta-item">
+                    <span>Account Number</span>
+                    <strong>#{{ account_num }}</strong>
+                </div>
+                <div class="meta-item">
+                    <span>Role / Clearance</span>
+                    <strong>{{ user.role }} ({{ user.access_level }})</strong>
+                </div>
+                <div class="meta-item">
+                    <span>Assigned Document</span>
+                    <strong>DOC-{{ account_num }}</strong>
+                </div>
+                <div class="meta-item">
+                    <span>Last Sign-in</span>
+                    <strong>Today, 09:42 UTC</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2>My Documents</h2>
+                    <p>These are the documents currently assigned to your account.</p>
+                </div>
+            </div>
+
+            <div class="document-list" style="margin-top: 18px; display: grid; gap: 10px;">
+                {% for document in documents %}
+                <button class="document-row" onclick="fetchDocument('{{ document.id }}')" style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; background: #0b0e14; border: 1px solid #26334d; border-radius: 6px; padding: 14px 16px; color: #ffffff; cursor: pointer;">
+                    <span><strong>{{ document.title }}</strong><small style="display: block; color: #64748b; margin-top: 4px;">{{ document.id }} · {{ document.category }} · Updated yesterday</small></span>
+                    <span style="color: #38bdf8; font-size: 12px;">Open &rarr;</span>
+                </button>
+                {% endfor %}
+            </div>
+
+            <div class="doc-box" id="docViewer" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong id="docTitle" style="color: #ffffff; font-size: 16px;"></strong>
+                    <span id="docClassification" class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);"></span>
+                </div>
+                <p id="docAuthor" style="font-size: 12px; color: #64748b; margin-top: 4px;"></p>
+                <pre id="docContent"></pre>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 0;">
+            <div class="hint-title">Account activity</div>
+            <p style="margin-top: 8px;">Your document access activity is monitored and retained for 90 days. If a document is missing, contact Academy Support.</p>
+            <div style="display: flex; gap: 28px; margin-top: 16px; color: #64748b; font-size: 12px;">
+                <span>Session: <strong style="color: #22c55e;">Active</strong></span>
+                <span>Risk checks: <strong style="color: #22c55e;">Passed</strong></span>
+                <span>Support case: <strong style="color: #cbd5e1;">None</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fetchDocument(documentId) {
+            fetch('/api/v1/student/documents/' + encodeURIComponent(documentId))
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('docViewer').style.display = 'block';
+                    document.getElementById('docTitle').innerText = data.title;
+                    document.getElementById('docClassification').innerText = data.classification;
+                    document.getElementById('docAuthor').innerText = 'Author: ' + data.author + ' | Record: ' + data.document_id;
+                    document.getElementById('docContent').innerText = data.content;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(err => {
+                alert('Network request failed: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
