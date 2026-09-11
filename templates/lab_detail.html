@@ -50,6 +50,8 @@
                 </div>
                 <div style="display: flex; align-items: center; margin-top: 6px;">
                     <button id="btn-{{ lab_key }}" 
+                            data-cmd="{{ opt.cmd_code }}"
+                            data-key="{{ lab_key }}"
                             onclick="startLab('{{ opt.cmd_code }}', '{{ lab_key }}')" 
                             class="btn-logout" 
                             style="background: #d32f2f; color: white; border: none; padding: 10px 22px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; border-radius: 6px;">
@@ -80,7 +82,7 @@
                         Submit Dynamic Flag (Format: RTSA{...})
                     </label>
                     <div style="display: flex; gap: 10px; max-width: 550px;">
-                        <input type="text" id="flag-input-{{ lab_key }}" placeholder="RTSA{...}" style="flex: 1; padding: 9px 12px; background: #0b0e14; border: 1px solid #26334d; border-radius: 6px; color: #ffffff; font-size: 13px; outline: none; font-family: monospace;">
+                        <input type="text" id="flag-input-{{ lab_key }}" placeholder="RTSA{...}" autocomplete="off" style="flex: 1; padding: 9px 12px; background: #0b0e14; border: 1px solid #26334d; border-radius: 6px; color: #ffffff; font-size: 13px; outline: none; font-family: monospace;">
                         <button onclick="submitFlag('{{ lab_key }}')" style="background: #d32f2f; color: #ffffff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
                             Submit Flag
                         </button>
@@ -95,20 +97,42 @@
 
 <script>
 let currentActiveLab = null;
+let currentLabUrl = null;
+
+function clearFlagInputs() {
+    document.querySelectorAll('[id^="flag-input-"]').forEach(inp => inp.value = '');
+    document.querySelectorAll('[id^="flag-result-"]').forEach(res => {
+        res.style.display = 'none';
+        res.innerText = '';
+    });
+}
 
 function checkStatus() {
     fetch('/api/lab-status')
     .then(res => res.json())
     .then(data => {
-        // Hide all inline panels first
+        // Immediately hide all inline panels
         document.querySelectorAll('[id^="inline-panel-"]').forEach(el => el.style.display = 'none');
+
+        // Reset all buttons to initial state
         document.querySelectorAll('[id^="btn-"]').forEach(btn => {
             btn.innerText = 'Launch Option';
             btn.style.background = '#d32f2f';
+            const cmd = btn.getAttribute('data-cmd');
+            const key = btn.getAttribute('data-key');
+            btn.onclick = function() { startLab(cmd, key); };
         });
 
         if (data.running && data.challenge) {
-            currentActiveLab = data.challenge.toLowerCase();
+            const labKey = data.challenge.toLowerCase();
+            const isNewLab = (currentActiveLab !== labKey);
+            currentActiveLab = labKey;
+            currentLabUrl = 'http://' + window.location.hostname + ':' + data.port;
+
+            if (isNewLab) {
+                clearFlagInputs();
+            }
+
             const panel = document.getElementById('inline-panel-' + currentActiveLab);
             const link = document.getElementById('link-' + currentActiveLab);
             const btn = document.getElementById('btn-' + currentActiveLab);
@@ -118,18 +142,25 @@ function checkStatus() {
                 panel.style.display = 'block';
             }
             if (link) {
-                link.href = 'http://' + window.location.hostname + ':' + data.port;
+                link.href = currentLabUrl;
             }
             if (btn) {
-                btn.innerText = 'Running';
+                btn.innerText = 'Open Lab (Running)';
                 btn.style.background = '#15803d';
+                btn.onclick = function(e) {
+                    if (e) e.preventDefault();
+                    window.open(currentLabUrl, '_blank');
+                };
             }
             if (card) {
                 card.style.borderColor = '#22c55e';
             }
         } else {
             currentActiveLab = null;
+            currentLabUrl = null;
+            document.querySelectorAll('[id^="inline-panel-"]').forEach(el => el.style.display = 'none');
             document.querySelectorAll('[id^="card-"]').forEach(card => card.style.borderColor = '#26334d');
+            clearFlagInputs();
         }
     })
     .catch(() => {});
@@ -137,6 +168,17 @@ function checkStatus() {
 
 function startLab(cmdCode, labKey) {
     const btn = document.getElementById('btn-' + labKey);
+    // If this lab is already running, open it directly without restart
+    if (currentActiveLab === labKey || (btn && btn.innerText.includes('Running'))) {
+        if (currentLabUrl) {
+            window.open(currentLabUrl, '_blank');
+        }
+        return;
+    }
+
+    // Clear any previous flag input and message
+    clearFlagInputs();
+
     if (btn) {
         btn.innerText = 'Starting...';
         btn.disabled = true;
@@ -167,9 +209,21 @@ function startLab(cmdCode, labKey) {
 }
 
 function stopLab(labKey) {
+    const btn = document.getElementById('btn-' + labKey);
+    if (btn) {
+        btn.innerText = 'Stopping...';
+        btn.disabled = true;
+    }
+
+    const panel = document.getElementById('inline-panel-' + labKey);
+    if (panel) panel.style.display = 'none';
+
+    clearFlagInputs();
+
     fetch('/api/stop-lab', { method: 'POST' })
     .then(res => res.json())
     .then(data => {
+        if (btn) btn.disabled = false;
         if (!data.success) {
             alert('Error stopping lab: ' + (data.error || 'Unknown error'));
             return;
@@ -177,6 +231,7 @@ function stopLab(labKey) {
         checkStatus();
     })
     .catch(err => {
+        if (btn) btn.disabled = false;
         alert('Stop request failed: ' + err);
     });
 }
@@ -214,6 +269,8 @@ function submitFlag(labKey) {
     });
 }
 
+// Clear any stale browser-stored inputs on initial page load
+clearFlagInputs();
 // Auto-check status when page loads
 checkStatus();
 </script>

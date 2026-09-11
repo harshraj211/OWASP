@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX Cloud Gateway - RedTeam Hacker Academy</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #0b0e14; color: #cbd5e1; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: #141b26; border-bottom: 1px solid #26334d; padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 36px; width: auto; }
+        .nav-links { display: flex; gap: 24px; font-size: 13px; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; padding-bottom: 4px; transition: all 0.2s; }
+        .nav-links a:hover { color: #ffffff; }
+        .nav-links a.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; font-weight: 600; }
+        .user-status { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+        .status-badge { background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+        .container { max-width: 1140px; margin: 32px auto; padding: 0 24px; width: 100%; flex: 1; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 28px; }
+        .stat-card { background: #141b26; border: 1px solid #26334d; border-radius: 8px; padding: 20px; }
+        .stat-label { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; }
+        .stat-value { font-size: 22px; font-weight: 700; color: #ffffff; margin-top: 6px; }
+        .stat-sub { font-size: 12px; color: #10b981; margin-top: 4px; }
+        .content-panel { background: #141b26; border: 1px solid #26334d; border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+        .panel-header { padding: 18px 24px; border-bottom: 1px solid #26334d; display: flex; justify-content: space-between; align-items: center; }
+        .panel-title { font-size: 16px; font-weight: 600; color: #ffffff; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th { background: #0d121c; padding: 12px 24px; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
+        td { padding: 16px 24px; border-top: 1px solid #1e293b; color: #cbd5e1; }
+        .badge-active { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge-restricted { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge-info { background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .api-card { padding: 20px 24px; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; }
+        .api-card:last-child { border-bottom: none; }
+        .api-method { font-family: monospace; font-size: 12px; font-weight: 700; background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 3px 8px; border-radius: 4px; }
+        .api-path { font-family: monospace; font-size: 13px; color: #ffffff; font-weight: 600; margin-left: 10px; }
+        footer { border-top: 1px solid #1e293b; padding: 16px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 32px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <nav class="nav-links">
+                <a href="/" class="{% if tab == 'overview' %}active{% endif %}">Cluster Overview</a>
+                <a href="/services" class="{% if tab == 'services' %}active{% endif %}">Mesh Services</a>
+                <a href="/api-docs" class="{% if tab == 'docs' %}active{% endif %}">API Explorer</a>
+                <a href="/telemetry" class="{% if tab == 'telemetry' %}active{% endif %}">Gateway Telemetry</a>
+            </nav>
+        </div>
+        <div class="user-status">
+            <span>Session: <strong style="color: #ffffff;">cadet_observer</strong></span>
+            <span class="status-badge">Read-Only Viewer</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Overview Tab -->
+        {% if tab == 'overview' %}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Ingress Controller</div>
+                <div class="stat-value">APEX v3.4</div>
+                <div class="stat-sub">&#x25B2; Multi-Route Mesh</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Worker Nodes</div>
+                <div class="stat-value">3 Nodes</div>
+                <div class="stat-sub">Kubernetes Cluster</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Gateway Ingress ACL</div>
+                <div class="stat-value">Strict Mode</div>
+                <div class="stat-sub">Internal Namespace Isolation</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Cluster Health</div>
+                <div class="stat-value">100%</div>
+                <div class="stat-sub">All Services Nominal</div>
+            </div>
+        </div>
+
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Production Compute Nodes</div>
+                <div style="font-size: 12px; color: #64748b;">Queried via /api/v1/cluster/nodes</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Node ID</th>
+                        <th>Internal IP</th>
+                        <th>Role</th>
+                        <th>Kubelet Version</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-family: monospace;">node-worker-01</td>
+                        <td style="font-family: monospace;">10.244.1.12</td>
+                        <td>Worker</td>
+                        <td>v1.30.2</td>
+                        <td><span class="badge-active">Ready</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">node-worker-02</td>
+                        <td style="font-family: monospace;">10.244.1.13</td>
+                        <td>Worker</td>
+                        <td>v1.30.2</td>
+                        <td><span class="badge-active">Ready</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">node-control-01</td>
+                        <td style="font-family: monospace;">10.244.0.10</td>
+                        <td>Control Plane</td>
+                        <td>v1.30.2</td>
+                        <td><span class="badge-active">Ready</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Mesh Services Tab -->
+        {% if tab == 'services' %}
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Registered Cluster Mesh Microservices</div>
+                <div style="font-size: 12px; color: #64748b;">Service Catalog</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service Identifier</th>
+                        <th>Deployment Namespace</th>
+                        <th>Ingress Policy</th>
+                        <th>Auth Scheme</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-family: monospace; font-weight: 600;">auth-gateway</td>
+                        <td style="font-family: monospace;">default</td>
+                        <td>Public Route (/api/v1/cluster/*)</td>
+                        <td>OAuth2 / Bearer</td>
+                        <td><span class="badge-active">Online</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace; font-weight: 600;">metrics-agent</td>
+                        <td style="font-family: monospace;">monitoring</td>
+                        <td>Public Route (/healthz)</td>
+                        <td>Anonymous</td>
+                        <td><span class="badge-active">Online</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace; font-weight: 600;">vault-enclave</td>
+                        <td style="font-family: monospace;">secure-vault</td>
+                        <td>Internal Mesh (/api/v1/internal/*)</td>
+                        <td>HMAC-SHA256 Service Mesh</td>
+                        <td><span class="badge-restricted">Air-Gapped / Isolated</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- API Explorer Tab -->
+        {% if tab == 'docs' %}
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Public Ingress API Catalog</div>
+                <div style="font-size: 12px; color: #64748b;">OpenAPI Spec 3.0</div>
+            </div>
+            <div>
+                <div class="api-card">
+                    <div>
+                        <span class="api-method">GET</span>
+                        <span class="api-path">/api/v1/cluster/status</span>
+                        <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">Returns cluster operational state, active region, and gateway metrics.</p>
+                    </div>
+                    <span class="badge-active">Public</span>
+                </div>
+                <div class="api-card">
+                    <div>
+                        <span class="api-method">GET</span>
+                        <span class="api-path">/api/v1/cluster/nodes</span>
+                        <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">Lists registered worker and control plane instances.</p>
+                    </div>
+                    <span class="badge-active">Public</span>
+                </div>
+                <div class="api-card">
+                    <div>
+                        <span class="api-method">GET</span>
+                        <span class="api-path">/healthz</span>
+                        <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">Container readiness and liveness probe endpoint.</p>
+                    </div>
+                    <span class="badge-active">Public</span>
+                </div>
+                <div class="api-card">
+                    <div>
+                        <span style="font-family: monospace; font-size: 12px; font-weight: 700; background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 3px 8px; border-radius: 4px;">ALL</span>
+                        <span class="api-path" style="color: #94a3b8;">/api/v1/internal/*</span>
+                        <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">Internal service mesh management namespace. Direct external access prohibited by Gateway Ingress ACL.</p>
+                    </div>
+                    <span class="badge-restricted">Gateway Filtered</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Telemetry Tab -->
+        {% if tab == 'telemetry' %}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Ingress Engine</div>
+                <div class="stat-value">APEX-Gateway/3.4</div>
+                <div class="stat-sub">&#x25B2; High Availability Mode</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Origin Framework</div>
+                <div class="stat-value">WSGI Cluster Core</div>
+                <div class="stat-sub">RFC 3986 Path Resolver</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Security Policy</div>
+                <div class="stat-value">Strict ACL Ingress</div>
+                <div class="stat-sub">Path-based Perimeter Filter</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Service Mesh Protocol</div>
+                <div class="stat-value">HMAC-SHA256</div>
+                <div class="stat-sub">Cryptographic Pod Authentication</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        &copy; 2026 RedTeam Hacker Academy. Enterprise Cloud Gateway Console.
+    </footer>
+</body>
+</html>

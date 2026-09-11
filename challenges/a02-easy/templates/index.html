@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Infrastructure Portal - RedTeam Hacker Academy</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        body { background: #0b0e14; color: #cbd5e1; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: #141b26; border-bottom: 1px solid #26334d; padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 36px; width: auto; }
+        .nav-links { display: flex; gap: 24px; font-size: 13px; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 500; padding-bottom: 4px; transition: all 0.2s; }
+        .nav-links a:hover { color: #ffffff; }
+        .nav-links a.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; font-weight: 600; }
+        .user-status { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+        .status-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; }
+        .container { max-width: 1140px; margin: 32px auto; padding: 0 24px; width: 100%; flex: 1; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 28px; }
+        .stat-card { background: #141b26; border: 1px solid #26334d; border-radius: 8px; padding: 20px; }
+        .stat-label { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; }
+        .stat-value { font-size: 22px; font-weight: 700; color: #ffffff; margin-top: 6px; }
+        .stat-sub { font-size: 12px; color: #10b981; margin-top: 4px; }
+        .content-panel { background: #141b26; border: 1px solid #26334d; border-radius: 8px; overflow: hidden; }
+        .panel-header { padding: 18px 24px; border-bottom: 1px solid #26334d; display: flex; justify-content: space-between; align-items: center; }
+        .panel-title { font-size: 16px; font-weight: 600; color: #ffffff; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th { background: #0d121c; padding: 12px 24px; color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; }
+        td { padding: 16px 24px; border-top: 1px solid #1e293b; color: #cbd5e1; }
+        .badge-running { background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .badge-locked { background: rgba(239, 68, 68, 0.15); color: #ef4444; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+        .btn-view { background: transparent; border: 1px solid #334155; color: #94a3b8; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+        .btn-view:hover { border-color: #38bdf8; color: #ffffff; }
+        .progress-bar { width: 100%; height: 8px; background: #0b0e14; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .progress-fill { height: 100%; background: #38bdf8; border-radius: 4px; }
+        .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; padding: 24px; }
+        .setting-item { background: #0b0e14; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; }
+        .setting-key { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; }
+        .setting-val { font-size: 14px; color: #ffffff; margin-top: 6px; font-family: monospace; }
+        footer { border-top: 1px solid #1e293b; padding: 16px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 32px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <nav class="nav-links">
+                <a href="/" class="{% if tab == 'overview' %}active{% endif %}">Overview</a>
+                <a href="/clusters" class="{% if tab == 'clusters' %}active{% endif %}">Clusters</a>
+                <a href="/nodes" class="{% if tab == 'nodes' %}active{% endif %}">Nodes</a>
+                <a href="/metrics" class="{% if tab == 'metrics' %}active{% endif %}">Monitoring</a>
+                <a href="/settings" class="{% if tab == 'settings' %}active{% endif %}">Settings</a>
+            </nav>
+        </div>
+        <div class="user-status">
+            <span class="status-dot"></span>
+            <span>Cluster Manager (v2.4.1)</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Overview Tab -->
+        {% if tab == 'overview' %}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Nodes Active</div>
+                <div class="stat-value">12 / 12</div>
+                <div class="stat-sub">&#x25B2; 100% Operational</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Allocated Pods</div>
+                <div class="stat-value">84</div>
+                <div class="stat-sub">Across 3 Training Zones</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Memory Usage</div>
+                <div class="stat-value">42.8 GB</div>
+                <div class="stat-sub">64 GB Total Provisioned</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Security Mesh</div>
+                <div class="stat-value">mTLS Active</div>
+                <div class="stat-sub">Strict Authorization</div>
+            </div>
+        </div>
+
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Production Cluster Services</div>
+                <div style="font-size: 12px; color: #64748b;">Auto-refreshing every 30s</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cluster ID</th>
+                        <th>Service / Role</th>
+                        <th>Subnet</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-prod-k8s-01</td>
+                        <td>Kubernetes Control Plane</td>
+                        <td style="font-family: monospace;">10.240.0.10</td>
+                        <td><span class="badge-running">Active</span></td>
+                        <td><button class="btn-view" onclick="inspectService('Control Plane')">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-worker-node-a</td>
+                        <td>Training Environment Host</td>
+                        <td style="font-family: monospace;">10.240.1.14</td>
+                        <td><span class="badge-running">Active</span></td>
+                        <td><button class="btn-view" onclick="inspectService('Worker Node A')">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-worker-node-b</td>
+                        <td>CTF Sandbox Runner</td>
+                        <td style="font-family: monospace;">10.240.1.15</td>
+                        <td><span class="badge-running">Active</span></td>
+                        <td><button class="btn-view" onclick="inspectService('Worker Node B')">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-vault-sync</td>
+                        <td>Master Compliance Key Vault</td>
+                        <td style="font-family: monospace;">10.240.4.50</td>
+                        <td><span class="badge-locked">Restricted</span></td>
+                        <td><button class="btn-view" onclick="inspectService('Key Vault (mTLS Protected)')">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Clusters Tab -->
+        {% if tab == 'clusters' %}
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Cluster Inventory &amp; Topologies</div>
+                <div style="font-size: 12px; color: #64748b;">3 Production Regions</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cluster ID</th>
+                        <th>Region</th>
+                        <th>Node Count</th>
+                        <th>Pods</th>
+                        <th>Orchestrator</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-prod-k8s-01</td>
+                        <td>eu-west-1a</td>
+                        <td>3 Control Nodes</td>
+                        <td>84</td>
+                        <td>Kubernetes v1.28.4</td>
+                        <td><span class="badge-running">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-worker-pool</td>
+                        <td>eu-west-1b</td>
+                        <td>8 Worker Nodes</td>
+                        <td>62</td>
+                        <td>Kubernetes v1.28.4</td>
+                        <td><span class="badge-running">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">rtsa-vault-sync</td>
+                        <td>eu-west-1c</td>
+                        <td>1 Vault Sync Node</td>
+                        <td>4</td>
+                        <td>Vault Engine v1.15</td>
+                        <td><span class="badge-locked">Restricted</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Nodes Tab -->
+        {% if tab == 'nodes' %}
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">Infrastructure Worker Nodes</div>
+                <div style="font-size: 12px; color: #64748b;">Bare-Metal &amp; Cloud Hosts</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Node Name</th>
+                        <th>Internal IP</th>
+                        <th>OS / Kernel</th>
+                        <th>vCPU / RAM</th>
+                        <th>Load</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-family: monospace;">node-master-01</td>
+                        <td style="font-family: monospace;">10.240.0.10</td>
+                        <td>Linux 6.8.0-generic</td>
+                        <td>8 vCPU / 32 GB</td>
+                        <td>24%</td>
+                        <td><span class="badge-running">Healthy</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">node-worker-01</td>
+                        <td style="font-family: monospace;">10.240.1.14</td>
+                        <td>Linux 6.8.0-generic</td>
+                        <td>16 vCPU / 64 GB</td>
+                        <td>45%</td>
+                        <td><span class="badge-running">Healthy</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">node-worker-02</td>
+                        <td style="font-family: monospace;">10.240.1.15</td>
+                        <td>Linux 6.8.0-generic</td>
+                        <td>16 vCPU / 64 GB</td>
+                        <td>52%</td>
+                        <td><span class="badge-running">Healthy</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-family: monospace;">node-vault-01</td>
+                        <td style="font-family: monospace;">10.240.4.50</td>
+                        <td>Linux 6.8.0-hardened</td>
+                        <td>4 vCPU / 16 GB</td>
+                        <td>18%</td>
+                        <td><span class="badge-locked">Restricted</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- Monitoring / Metrics Tab -->
+        {% if tab == 'metrics' %}
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">CPU Utilization</div>
+                <div class="stat-value">28.4%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 28.4%;"></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Memory Utilization</div>
+                <div class="stat-value">66.8%</div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 66.8%; background: #10b981;"></div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Network Ingress</div>
+                <div class="stat-value">114.2 Mbps</div>
+                <div class="stat-sub">Peak: 148.0 Mbps</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">API Gateway Latency</div>
+                <div class="stat-value">4.2 ms</div>
+                <div class="stat-sub">p99: 9.8 ms</div>
+            </div>
+        </div>
+        <div class="content-panel" style="padding: 24px;">
+            <div class="panel-title" style="margin-bottom: 12px;">Prometheus &amp; Grafana Telemetry</div>
+            <p style="font-size: 13px; color: #94a3b8; line-height: 1.6;">
+                Metrics exporter is streaming real-time heartbeat data to the central telemetry collector. Pod status checks report 100% availability across all zones with zero crash loops in the preceding 72-hour window.
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Settings Tab -->
+        {% if tab == 'settings' %}
+        <div class="content-panel">
+            <div class="panel-header">
+                <div class="panel-title">System Configuration &amp; Governance</div>
+                <div style="font-size: 12px; color: #64748b;">Runtime Environment</div>
+            </div>
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <div class="setting-key">Cluster Environment</div>
+                    <div class="setting-val">Production-Primary</div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-key">Control Plane API</div>
+                    <div class="setting-val">https://k8s-api.internal:6443</div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-key">Vault Authentication</div>
+                    <div class="setting-val">Bearer Key Authorization</div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-key">Ingress Controller</div>
+                    <div class="setting-val">Nginx Gateway v1.24.0</div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-key">Network Mesh Policy</div>
+                    <div class="setting-val">Calico CNI (mTLS Enforced)</div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-key">Controller Build</div>
+                    <div class="setting-val">rtsa-k8s-agent v2.4.1</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        &copy; 2026 RedTeam Hacker Academy. All rights reserved. Cloud Infrastructure Controller.
+    </footer>
+
+    <script>
+        function inspectService(name) {
+            alert(`Service [${name}] is operating normally in cluster zone eu-west-1.`);
+        }
+    </script>
+</body>
+</html>

@@ -14,7 +14,7 @@ OWASP_CATEGORIES_2025 = [
         "id": "A01",
         "code": "A01:2025",
         "title": "Broken Access Control",
-        "description": "Access control enforces policy so users cannot act outside intended permissions.",
+        "description": "Access control enforces policy so users cannot act outside intended permissions, including SSRF and CORS flaws.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
@@ -30,8 +30,8 @@ OWASP_CATEGORIES_2025 = [
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "CORS Misconfiguration",
-                "topic": "CORS, Origin Reflection, Cross-Origin Data Exfiltration",
+                "name": "Asterion Benefits Exchange",
+                "topic": "CORS, Origin Reflection, Credentialed Cross-Origin Data Exposure",
                 "cmd_code": "A01 hard"
             }
         ]
@@ -39,25 +39,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A02",
         "code": "A02:2025",
-        "title": "Cryptographic Failures",
-        "description": "Failures related to cryptography exposing sensitive data and authentication tokens.",
+        "title": "Security Misconfiguration",
+        "description": "Insecure default settings, exposed sensitive files/interfaces, and reverse proxy or cache misconfigurations.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "JWT Algorithm Confusion",
-                "topic": "JWT, None Algorithm, Signature Bypass",
+                "name": "Exposed Sensitive Files & Debug Console",
+                "topic": "Git Exposure, Env File Leak, Debug Console",
                 "cmd_code": "A02 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Weak Hash Cracking",
-                "topic": "MD5, Database Dump, Rainbow Tables",
+                "name": "Nginx Off-by-Slash & Reverse Proxy Traversal",
+                "topic": "Reverse Proxy Misconfiguration, Alias Traversal, Internal Bypass",
                 "cmd_code": "A02 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Padding Oracle Attack",
-                "topic": "AES-CBC, PKCS7, Padding Oracle, Cookie Forgery",
+                "name": "Web Cache Deception & Request Smuggling",
+                "topic": "Cache Rules Misconfiguration, WCD, Hop-by-Hop Headers, CL.TE",
                 "cmd_code": "A02 hard"
             }
         ]
@@ -65,25 +65,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A03",
         "code": "A03:2025",
-        "title": "Injection & Remote Execution",
-        "description": "Applications fail to sanitize user-supplied input across client-side and server-side contexts.",
+        "title": "Software Supply Chain Failures",
+        "description": "Risks from compromised dependencies, untrusted third-party packages, vulnerable components, and build pipeline flaws.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Cross-Site Scripting (XSS)",
-                "topic": "XSS, Reflected, Stored, WAF Bypass",
+                "name": "Known Component CVE Exploitation",
+                "topic": "Known Component CVE, Dependency Audit, Framework Exploit",
                 "cmd_code": "A03 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "SQL Injection (SQLi)",
-                "topic": "SQL Injection, Union-Based, Error-Based, Auth Bypass",
+                "name": "Dependency Confusion & Poisoned Package",
+                "topic": "Package Registry Confusion, Namespace Hijacking, Malicious Script",
                 "cmd_code": "A03 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "OS Command Injection",
-                "topic": "Command Injection, RCE, Filename Injection, WAF Evasion",
+                "name": "Log4Shell / JNDI Supply Chain Attack",
+                "topic": "Log4Shell, JNDI Remote Class Loading, Untrusted Logging, RCE",
                 "cmd_code": "A03 hard"
             }
         ]
@@ -91,25 +91,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A04",
         "code": "A04:2025",
-        "title": "Insecure Design & Business Logic Flaws",
-        "description": "Flaws in architectural design and workflow logic.",
+        "title": "Cryptographic Failures",
+        "description": "Failures related to cryptography exposing sensitive data, weak ciphers, and flawed token validations.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Password Reset Poisoning",
-                "topic": "Host Header Injection, Password Reset Hijacking",
+                "name": "JWT Algorithm Confusion",
+                "topic": "JWT, None Algorithm, Signature Bypass",
                 "cmd_code": "A04 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Cross-Site Request Forgery (CSRF)",
-                "topic": "CSRF, State-Changing Requests, Missing Anti-CSRF Token",
+                "name": "Weak Hash Cracking",
+                "topic": "MD5, Database Dump, Rainbow Tables, Salt Misuse",
                 "cmd_code": "A04 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Business Logic Abuse",
-                "topic": "Multi-Step Cart Logic, Coupon Stacking, Negative Cart",
+                "name": "Padding Oracle Attack",
+                "topic": "AES-CBC, PKCS7, Padding Oracle, Cookie Forgery",
                 "cmd_code": "A04 hard"
             }
         ]
@@ -117,25 +117,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A05",
         "code": "A05:2025",
-        "title": "Security Misconfiguration",
-        "description": "Improperly configured permissions, exposed files, and protocol-level misconfigurations.",
+        "title": "Injection",
+        "description": "Applications fail to sanitize user-supplied input across SQL, command, LDAP, and client-side interpreters.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Exposed Sensitive Files",
-                "topic": "Git Exposure, Env File Leak, Debug Console",
+                "name": "Cross-Site Scripting (XSS)",
+                "topic": "XSS, Reflected, Stored, WAF Bypass",
                 "cmd_code": "A05 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Path Traversal and LFI",
-                "topic": "Path Traversal, LFI, PHP Wrappers, Arbitrary File Read",
+                "name": "SQL Injection (SQLi)",
+                "topic": "SQL Injection, Union-Based, Error-Based, Auth Bypass",
                 "cmd_code": "A05 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "HTTP Request Smuggling",
-                "topic": "HTTP Request Smuggling, CL.TE, Response Queue Poisoning",
+                "name": "OS Command Injection",
+                "topic": "Command Injection, RCE, Filename Injection, WAF Evasion",
                 "cmd_code": "A05 hard"
             }
         ]
@@ -143,25 +143,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A06",
         "code": "A06:2025",
-        "title": "Vulnerable & Outdated Components",
-        "description": "Using software with known CVEs and outdated third-party libraries.",
+        "title": "Insecure Design",
+        "description": "Flaws in architectural design, business logic workflows, and failure to apply threat modeling.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Known Component CVE",
-                "topic": "Known CVE, Framework Auth Bypass, Header Injection",
+                "name": "Password Reset Poisoning",
+                "topic": "Host Header Injection, Password Reset Hijacking",
                 "cmd_code": "A06 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "XML External Entity (XXE)",
-                "topic": "XXE, XML Parser, File Read, Internal SSRF",
+                "name": "Cross-Site Request Forgery (CSRF)",
+                "topic": "CSRF, State-Changing Requests, Missing Anti-CSRF Token",
                 "cmd_code": "A06 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "JNDI / Log4Shell Injection",
-                "topic": "Log4Shell, JNDI Lookup, Untrusted Logging, RCE",
+                "name": "Business Logic Abuse",
+                "topic": "Multi-Step Cart Logic, Coupon Stacking, Negative Cart",
                 "cmd_code": "A06 hard"
             }
         ]
@@ -169,8 +169,8 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A07",
         "code": "A07:2025",
-        "title": "Identification & Authentication Failures",
-        "description": "Failures in identity verification, session management, and authentication workflows.",
+        "title": "Authentication Failures",
+        "description": "Failures in identity verification, credential handling, session management, and multi-factor authentication.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
@@ -180,7 +180,7 @@ OWASP_CATEGORIES_2025 = [
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "OAuth 2.0 Flaws",
+                "name": "OAuth 2.0 Implementation Flaws",
                 "topic": "OAuth, Open Redirect, Authorization Code Interception",
                 "cmd_code": "A07 medium"
             },
@@ -195,8 +195,8 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A08",
         "code": "A08:2025",
-        "title": "Software & Data Integrity Failures",
-        "description": "Applications failing to verify integrity of uploads, templates, and serialized data objects.",
+        "title": "Software or Data Integrity Failures",
+        "description": "Applications failing to verify the integrity of critical data, untrusted deserialization, and unvalidated updates.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
@@ -221,8 +221,8 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A09",
         "code": "A09:2025",
-        "title": "Security Logging & Monitoring Failures",
-        "description": "Insufficient logging and exploiting logging mechanisms as an attack vector.",
+        "title": "Security Logging and Alerting Failures",
+        "description": "Insufficient logging, lack of real-time monitoring and alerting, and exploiting logging sinks as attack vectors.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
@@ -247,25 +247,25 @@ OWASP_CATEGORIES_2025 = [
     {
         "id": "A10",
         "code": "A10:2025",
-        "title": "Server-Side Request Forgery (SSRF) & API Security",
-        "description": "Applications fetching remote resources without verifying destination targets.",
+        "title": "Mishandling of Exceptional Conditions",
+        "description": "Security risks arising when applications fail to safely handle unexpected runtime errors, failing open, or leaking system internals.",
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "SSRF Filter Bypass",
-                "topic": "SSRF, Localhost Bypass, Alternative IP Formats",
+                "name": "Verbose Error & Stack Trace Exposure",
+                "topic": "CWE-209, Unhandled Exception, Internal Architecture & Secret Leak",
                 "cmd_code": "A10 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "SSRF Internal Pivot",
-                "topic": "SSRF, Internal Subnet Port Scan, Private Admin API",
+                "name": "Fail-Open Authentication Bypass",
+                "topic": "CWE-636, Exception in Auth Provider, Default Allow State",
                 "cmd_code": "A10 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "SSRF Cloud Metadata Exfiltration",
-                "topic": "SSRF, AWS Metadata, 169.254.169.254, IAM Credentials, S3",
+                "name": "Unhandled Logic Fault to RCE",
+                "topic": "CWE-476, Resource Exhaustion, Deserialization Panic, Fail-Open RCE",
                 "cmd_code": "A10 hard"
             }
         ]
@@ -359,13 +359,43 @@ def launch_lab():
         parts = cmd_code.split()
         category = parts[0]
         level = parts[1]
+        target_challenge = f"{category.lower()}-{level.lower()}"
+        status_file = "/tmp/active_lab.json"
+
+        # Check if this lab is already running to avoid unnecessary restarts
+        if os.path.exists(status_file):
+            try:
+                with open(status_file, "r") as f:
+                    active_info = json.load(f)
+                if active_info.get("running") and active_info.get("challenge") == target_challenge:
+                    docker_check = subprocess.run(["docker", "ps", "-q", "-f", "name=oswap-active-challenge"], capture_output=True, text=True)
+                    if docker_check.stdout.strip() or active_info.get("mode") == "process":
+                        return jsonify({
+                            "success": True,
+                            "already_running": True,
+                            "message": f"Lab {category} ({level}) is already running on port {active_info.get('port', 6001)}",
+                            "port": active_info.get("port", 6001),
+                            "challenge": target_challenge
+                        })
+            except Exception:
+                pass
+
         launcher_script = os.path.join(app.root_path, "scripts", "start_challenge.sh")
         if os.path.exists(launcher_script):
             subprocess.run([launcher_script, category, level], check=True)
+            port = 6001
+            status_file = "/tmp/active_lab.json"
+            if os.path.exists(status_file):
+                try:
+                    with open(status_file, "r") as f:
+                        lab_info = json.load(f)
+                    port = lab_info.get("port", 6001)
+                except Exception:
+                    pass
             return jsonify({
                 "success": True, 
-                "message": f"Lab {category} ({level}) started on port {6002 if category.lower() + '-' + level.lower() == 'a01-medium' else 6001}",
-                "port": 6002 if category.lower() + '-' + level.lower() == 'a01-medium' else 6001,
+                "message": f"Lab {category} ({level}) started on port {port}",
+                "port": port,
                 "challenge": f"{category.lower()}-{level.lower()}"
             })
         else:

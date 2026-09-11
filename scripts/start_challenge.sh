@@ -9,10 +9,15 @@ challenge_key="${category}-${level}"
 challenge_dir="$(cd "$(dirname "$0")/../challenges/$challenge_key" && pwd)"
 container_name="oswap-active-challenge"
 image_name="oswap-${challenge_key}:latest"
-port="6001"
-if [[ "$challenge_key" == "a01-medium" ]]; then
-    port="6002"
+cat_num="$(echo "$category" | grep -o '[0-9]\+' | sed 's/^0*//')"
+cat_num="${cat_num:-1}"
+offset=0
+if [[ "$level" == "medium" ]]; then
+    offset=1
+elif [[ "$level" == "hard" ]]; then
+    offset=2
 fi
+port=$(( 6000 + (cat_num - 1) * 3 + 1 + offset ))
 
 if [[ ! -f "$challenge_dir/Dockerfile" ]]; then
     echo "Challenge is not installed: $challenge_key" >&2
@@ -48,8 +53,13 @@ else
     if [[ "$old_pid" =~ ^[0-9]+$ ]]; then
         kill "$old_pid" >/dev/null 2>&1 || true
     fi
-    FLAG="$flag" LAB_PORT="$port" nohup python "$challenge_dir/app.py" \
-        >/tmp/oswap-active-challenge.log 2>&1 &
+    if [[ -f "$challenge_dir/app.py" ]]; then
+        FLAG="$flag" LAB_PORT="$port" setsid nohup python3 "$challenge_dir/app.py" \
+            >/tmp/oswap-active-challenge.log 2>&1 &
+    elif [[ -f "$challenge_dir/app.js" ]]; then
+        FLAG="$flag" PORT="$port" setsid nohup node "$challenge_dir/app.js" \
+            >/tmp/oswap-active-challenge.log 2>&1 &
+    fi
     echo $! >/tmp/oswap-active-challenge.pid
     pid="$!"
     for _ in {1..20}; do

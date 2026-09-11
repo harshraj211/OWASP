@@ -1,0 +1,4 @@
+RedTeam Hacker Academy - Training Asset Orientation
+==================================================
+Welcome to the training asset distribution server.
+All academy lab modules are verified through automated container testing.
