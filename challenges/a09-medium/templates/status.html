@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Compliance Monitor Status{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Automated Compliance Monitor</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        The daemon scans <code>audit.log</code> every request to verify if regulatory overrides have been logged.
+    </p>
+
+    <div style="background: #040811; border-left: 4px solid var(--emerald); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Auditor Override Verification Specification</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            The compliance daemon searches for log entries matching:
+            <br>
+            <code style="color: var(--emerald);">[YYYY-MM-DD HH:MM:SS] [AUDIT_OVERRIDE] CLEARANCE_TOKEN=&lt;MD5_HASH&gt; STATUS=CERTIFIED</code>
+            <br><br>
+            Current Active Clearance Token for Today: <strong style="color: #fff; font-family: monospace;">{{ active_token }}</strong>
+        </p>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #121e36; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+        <div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Vault Clearance State</div>
+            <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.25rem;">
+                {% if override_active %}
+                <span style="color: var(--emerald);">AUTHORIZED — Treasury Vault Unlocked</span>
+                {% else %}
+                <span style="color: var(--danger);">LOCKED — No Valid Auditor Override Found</span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="/vault/treasury" class="btn btn-emerald">Proceed to Treasury Vault &rarr;</a>
+    </div>
+</div>
+{% endblock %}

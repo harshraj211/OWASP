@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Press Releases & Articles{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Editorial Drafts & Workflows</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Upcoming investigative publications and technical specifications.
+    </p>
+
+    <div style="background: #060911; border-left: 4px solid var(--pink); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Architecture Advisory: Automated Media Sanitizer Pipeline</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            1. Stage 1: Filename validation and image header parser.<br>
+            2. Stage 2: Deep content anti-malware string signature scanner.<br>
+            3. Fallback Handler: If an <code>ImageHeaderError</code> exception occurs during Stage 1 header verification, the file is assumed to be an unformatted legacy binary and is moved to <code>static/scripts/</code> without reaching the Stage 2 malware scanner.
+        </p>
+    </div>
+</div>
+{% endblock %}

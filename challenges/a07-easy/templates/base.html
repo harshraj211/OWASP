@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AeroFleet Operations{% endblock %} - AeroFleet Global</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <span>✈️ AeroFleet Global Ops</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Dashboard</a>
+            <a href="/crew-roster" class="{% if request.path == '/crew-roster' %}active{% endif %}">Crew Directory</a>
+            <a href="/bulletins" class="{% if request.path == '/bulletins' %}active{% endif %}">Operations Bulletins</a>
+            {% if session.get('user') %}
+                <a href="/dispatch/operations" class="{% if '/dispatch' in request.path %}active{% endif %}">Dispatch Console</a>
+                <span class="badge badge-green">{{ session.user }} ({{ session.role }})</span>
+                <a href="/logout" style="color: var(--danger);">Logout</a>
+            {% else %}
+                <a href="/login" class="btn btn-primary">Crew Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        AeroFleet Global Aviation Systems &copy; 2026. Internal Restricted Operations Gateway.
+    </footer>
+</body>
+</html>

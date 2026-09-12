@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Dispatch Operations Console{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Chief Flight Operations Console</h1>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Authenticated as: {{ session.user }} ({{ session.role }})</p>
+        </div>
+        <a href="/dispatch/manifest/classified" class="btn btn-primary" style="background: #dc2626;">View Diplomatic Manifest</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+        <div>
+            <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Active Flight Clearance Slips</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Flight</th>
+                        <th>Route</th>
+                        <th>Fuel Reserve</th>
+                        <th>Altitude</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>AF-802</strong></td>
+                        <td>LAX &rarr; HND</td>
+                        <td>94,200 kg</td>
+                        <td>FL380</td>
+                        <td><span class="badge badge-green">Cleared</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>AF-311</strong></td>
+                        <td>JFK &rarr; LHR</td>
+                        <td>81,500 kg</td>
+                        <td>FL360</td>
+                        <td><span class="badge badge-blue">Pending Push</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="background: #141b26; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem;">Terminal Security Advisory</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                You are accessing Level-3 Flight Operations. Access to high-priority diplomatic manifests is logged under FAA/EASA compliance rules.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

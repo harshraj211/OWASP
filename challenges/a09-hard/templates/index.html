@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Strategic Defense Command{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Titan Defense Strategic Cyber Command</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Cryptographic hash-chain auditing for classified defense programs.</p>
+    </div>
+    <div>
+        <span class="badge badge-amber">DEFCON 2</span>
+        <span class="badge badge-green">Sentinel Integrity Guard Active</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Ledger Height</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--amber);">{{ ledger|length }} Blocks</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Breach Detection State</div>
+        <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.5rem;">
+            {% if has_breach %}
+            <span style="color: var(--red);">INTRUSION LOGGED IN LEDGER</span>
+            {% else %}
+            <span style="color: var(--success);">NO BREACH LOGGED</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Cryptographic Chain Integrity</div>
+        <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.5rem;">
+            {% if chain_valid %}
+            <span style="color: var(--success);">HASH CHAIN VERIFIED</span>
+            {% else %}
+            <span style="color: var(--red);">CHAIN BROKEN</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Classified Special Access Programs (SAP)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Project Code</th>
+                <th>Classification</th>
+                <th>Access Compartment</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>TITAN-HYPER-7</code></td>
+                <td><span class="badge badge-red">TOP SECRET // SCI</span></td>
+                <td>Sub-Orbital Hypersonic Guidance</td>
+                <td><span class="badge badge-green">Secured in Vault</span></td>
+            </tr>
+            <tr>
+                <td><code>ORION-STEALTH-X</code></td>
+                <td><span class="badge badge-red">TOP SECRET // NOFORN</span></td>
+                <td>Electromagnetic Shielding Matrix</td>
+                <td><span class="badge badge-green">Secured in Vault</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

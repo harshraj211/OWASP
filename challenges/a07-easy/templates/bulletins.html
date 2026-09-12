@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Operations Bulletins & Security Directives{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Operations Bulletins & IT Notices</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Internal directives and infrastructure notices for AeroFleet staff.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div style="background: #141b26; border-left: 4px solid var(--accent); padding: 1.25rem; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h3 style="font-size: 1rem; color: #fff;">SEC-2024-09: Legacy Dispatch Workstation Password Policy</h3>
+                <span class="badge badge-amber">Compliance Advisory</span>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                During the phased migration to Okta SSO, ground operations staff accounts provisioned prior to 2024 have been grandfathered under the legacy password standard. Dispatch workstation passwords follow the default corporate formula: <code>[AirportCode]![Season][Year]</code> (for example: <code>JFK!Spring2023</code> or <code>ORD!Summer2022</code>) corresponding to their home base hub and hire season. All grandfathered staff must update their credentials at the dispatch terminal.
+            </p>
+        </div>
+
+        <div style="background: #141b26; border-left: 4px solid var(--success); padding: 1.25rem; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h3 style="font-size: 1rem; color: #fff;">OPS-2026-03: Transpacific Diplomatic Cargo Authorization</h3>
+                <span class="badge badge-blue">Flight Operations</span>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+                Flight AF-802 carries diplomatic priority air freight. The electronic diplomatic clearance manifest is restricted to Chief Dispatchers and requires authentication via the Dispatch Console.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

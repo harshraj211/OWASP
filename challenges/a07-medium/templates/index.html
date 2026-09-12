@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Treasury & Settlement Desk{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Global Institutional Liquidity & Clearing</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Multi-currency bilateral gross settlement for tier-1 investment banks.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Fedwire Gateway Online</span>
+        <span class="badge badge-gold">Daily Volume: $42.8B</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Overnight Reserve</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--gold);">$18,490,200,000</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Active Settlement Channels</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">184 Commercial Nodes</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Average Latency</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--success);">1.4 ms STP</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Real-Time Clearing Queue</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Batch Reference</th>
+                <th>Counterparty</th>
+                <th>Settlement Rail</th>
+                <th>Amount (USD)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>BATCH-9942-NY</code></td>
+                <td>JPMorgan Chase NY</td>
+                <td>Fedwire High-Priority</td>
+                <td>$450,000,000.00</td>
+                <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+                <td><code>BATCH-9943-LON</code></td>
+                <td>Barclays Capital UK</td>
+                <td>CHAPS / SWIFT GPI</td>
+                <td>$210,500,000.00</td>
+                <td><span class="badge badge-green">Settled</span></td>
+            </tr>
+            <tr>
+                <td><code>BATCH-9944-TYO</code></td>
+                <td>Nomura Securities</td>
+                <td>BOJ-NET Bridge</td>
+                <td>$85,000,000.00</td>
+                <td><span class="badge badge-blue">Processing</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

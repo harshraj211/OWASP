@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Engine API Specification{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">QuantEdge Internal API Reference</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Developer endpoint documentation for the quantitative risk engine.
+    </p>
+
+    <div style="background: #040810; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; line-height: 1.8;">
+        <div><strong>Public Endpoints:</strong></div>
+        <div style="margin-left: 1rem;">- <code>POST /portfolio</code> (Form-based portfolio optimizer)</div>
+        <div style="margin-left: 1rem;">- <code>GET /models</code> (Model registry)</div>
+        <div style="margin-top: 1rem;"><strong>Internal Confidential Endpoints:</strong></div>
+        <div style="margin-left: 1rem; color: var(--cyan);">- <code>GET /api/v1/internal/confidential-vault?token=&lt;INTERNAL_TOKEN&gt;</code></div>
+        <div style="margin-left: 2rem; color: var(--text-muted); font-size: 0.8rem;">Requires authenticated internal session token. Disclosed in internal architecture specs.</div>
+    </div>
+</div>
+{% endblock %}

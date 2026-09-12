@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Network Configuration{% endblock %}
+{% block content %}
+<div style="max-width: 650px; margin: 2rem auto;">
+    <div class="card">
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Network & OTA Mirror Configuration</h1>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+            Configure local gateway network settings and upstream OTA update mirrors.
+        </p>
+
+        {% if message %}
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/settings/network">
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Gateway Hostname</label>
+                <input type="text" name="hostname" value="{{ hostname }}" style="width: 100%; padding: 0.75rem; background: #060913; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.9rem;">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Upstream OTA Update Repository URL</label>
+                <input type="text" name="update_mirror" value="{{ update_mirror }}" style="width: 100%; padding: 0.75rem; background: #060913; border: 1px solid var(--border); border-radius: 6px; color: var(--orange); font-family: monospace; font-size: 0.85rem;">
+                <span style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">Point to any reachable HTTP server or local test endpoint that serves <code>package.tar.gz</code>.</span>
+            </div>
+            <button type="submit" class="btn btn-orange">Save Network Settings</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

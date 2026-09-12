@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Cold-Chain Clinical Network Overview{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Clinical Trial Logistics & Cold-Chain Stream</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Real-time IoT temperature logging for Phase III monoclonal antibody trials.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Cryo-Storage Stable (-80°C)</span>
+        <span class="badge badge-teal">Shipments: 1,420 Active</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Protected Bio-Doses</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--teal);">385,000 Units</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Accredited Trial Sites</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">84 Medical Centers</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Lead Governance Account</div>
+        <div style="font-size: 1.1rem; font-weight: 600; margin-top: 0.75rem; color: var(--cyan);">admin@apexbiologistics.net</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Active Clinical Consignments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Consignment ID</th>
+                <th>Investigational Compound</th>
+                <th>Target Protocol</th>
+                <th>Depot</th>
+                <th>Temp Telemetry</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>CRYO-8821</code></td>
+                <td>APX-Onco-492</td>
+                <td>Protocol APX-301</td>
+                <td>Zurich Bio-Hub</td>
+                <td><span class="badge badge-green">-78.9°C</span></td>
+            </tr>
+            <tr>
+                <td><code>CRYO-9014</code></td>
+                <td>Neuro-Regen-12</td>
+                <td>Protocol APX-204</td>
+                <td>Boston Genomics</td>
+                <td><span class="badge badge-green">-81.2°C</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

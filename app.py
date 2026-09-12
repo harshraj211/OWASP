@@ -174,20 +174,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Predictable Session Token",
-                "topic": "Session Hijacking, Sequential Tokens, Weak Session ID",
+                "name": "Weak Password Policy",
+                "topic": "Credential Guessing, Password Spraying, Legacy Policy Bypass",
                 "cmd_code": "A07 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "OAuth 2.0 Implementation Flaws",
-                "topic": "OAuth, Open Redirect, Authorization Code Interception",
+                "name": "MFA Bypass",
+                "topic": "Improper MFA Validation, Step Jumping, Session Elevation",
                 "cmd_code": "A07 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "MFA Bypass and Session Fixation",
-                "topic": "MFA Bypass, Response Manipulation, Session Fixation",
+                "name": "Password Reset Token Prediction",
+                "topic": "Predictable PRNG Tokens, Seed Recovery, Account Takeover",
                 "cmd_code": "A07 hard"
             }
         ]
@@ -200,20 +200,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Malicious File Upload",
-                "topic": "File Upload, Webshell, MIME Bypass, Double Extension",
+                "name": "Unsigned Plugin Installation",
+                "topic": "Untrusted Code Execution, Signature Verification Bypass, Malicious Plugin",
                 "cmd_code": "A08 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Server-Side Template Injection (SSTI)",
-                "topic": "SSTI, Jinja2, Sandbox Escape, Secret Key Leak",
+                "name": "Insecure Update Mechanism",
+                "topic": "Unauthenticated Update Packages, Checksum Tampering, Firmware Hijack",
                 "cmd_code": "A08 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Insecure Deserialization",
-                "topic": "PHP Deserialization, POP Gadget Chain, Object Injection, RCE",
+                "name": "Unsafe Deserialization",
+                "topic": "Restricted Object Deserialization, Python Gadget Chain, Arbitrary Code Execution",
                 "cmd_code": "A08 hard"
             }
         ]
@@ -226,20 +226,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "CRLF Log Injection",
-                "topic": "CRLF Injection, Log Forgery, Audit Log Tampering",
+                "name": "Missing Login Logs",
+                "topic": "Unlogged Authentication Routes, SIEM Evasion, Brute Force Detection Failure",
                 "cmd_code": "A09 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Verbose Error Data Leak",
-                "topic": "Error Handling, Stack Trace, Database Credentials Leak",
+                "name": "Log Injection",
+                "topic": "CRLF Injection, Log Forgery, Automated Audit Daemon Deception",
                 "cmd_code": "A09 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Blind XSS in Log Dashboard",
-                "topic": "Blind XSS, Log Monitoring Panel, Admin Cookie Theft",
+                "name": "Audit Log Tampering",
+                "topic": "Audit Ledger Manipulation, Chained Hash Reconstruction, Evidence Tampering",
                 "cmd_code": "A09 hard"
             }
         ]
@@ -252,20 +252,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Verbose Error & Stack Trace Exposure",
-                "topic": "CWE-209, Unhandled Exception, Internal Architecture & Secret Leak",
+                "name": "Information Disclosure Through Errors",
+                "topic": "Unhandled Exceptions, Stack Traces, Internal File Paths & Token Leak",
                 "cmd_code": "A10 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Fail-Open Authentication Bypass",
-                "topic": "CWE-636, Exception in Auth Provider, Default Allow State",
+                "name": "Unhandled Exception Denial of Service",
+                "topic": "Malformed Input Exception, State Machine Crash, Fail-Open Override",
                 "cmd_code": "A10 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Unhandled Logic Fault to RCE",
-                "topic": "CWE-476, Resource Exhaustion, Deserialization Panic, Fail-Open RCE",
+                "name": "File Upload Validation Bypass",
+                "topic": "Image Parser Crash, Exception Mishandling Fail-Open, Web Shell Upload to RCE",
                 "cmd_code": "A10 hard"
             }
         ]

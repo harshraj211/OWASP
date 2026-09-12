@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OmniPress Media Suite{% endblock %} - Digital Assets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="brand">
+            <span>📰 OmniPress Media Suite</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Editorial Home</a>
+            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">Press Drafts</a>
+            <a href="/media/library" class="{% if request.path == '/media/library' %}active{% endif %}">Asset Library</a>
+            <a href="/media/upload" class="{% if request.path == '/media/upload' %}active{% endif %}">Asset Upload</a>
+            <a href="/editorial/terminal" class="{% if request.path == '/editorial/terminal' %}active{% endif %}" style="color: var(--pink); font-weight: 700;">Script Terminal</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        OmniPress Digital Asset Publishing CMS &copy; 2026. Automated Media Ingestion Engine.
+    </footer>
+</body>
+</html>

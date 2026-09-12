@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Gateway System Logs{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1 style="font-size: 1.5rem;">Gateway Event & Upgrade Audit Logs</h1>
+        <a href="/settings/firmware" class="btn btn-orange">Firmware Controls</a>
+    </div>
+
+    <div style="background: #060913; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #cbd5e1; border: 1px solid var(--border); max-height: 400px; overflow-y: auto;">
+        {% for log in logs %}
+        <div style="margin-bottom: 0.4rem;">{{ log }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

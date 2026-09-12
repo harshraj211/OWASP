@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Telemetry Datasets{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Registered Big Data Sets</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Sensory streams available for pipeline transformations.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dataset ID</th>
+                <th>Name</th>
+                <th>Records</th>
+                <th>Format</th>
+                <th>Access</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>DS-FLIGHT-TELEMETRY</code></td>
+                <td>Commercial Flight Sensor Telemetry (Alt, Speed, Fuel)</td>
+                <td>1.2B rows</td>
+                <td>Parquet</td>
+                <td><span class="badge badge-green">Public Read</span></td>
+            </tr>
+            <tr>
+                <td><code>DS-ATMOSPHERIC-TURBULENCE</code></td>
+                <td>Atmospheric Pressure & CAT Radar Stream</td>
+                <td>840M rows</td>
+                <td>Avro</td>
+                <td><span class="badge badge-green">Public Read</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

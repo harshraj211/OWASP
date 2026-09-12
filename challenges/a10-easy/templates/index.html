@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Algorithmic Market Analytics{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Quantitative Investment Strategies & Risk</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated portfolio variance minimization and Monte Carlo simulation.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Engine Online</span>
+        <span class="badge badge-cyan">AUM: $3.8B</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Average Sharpe Ratio</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--cyan);">3.42</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Max Drawdown (YTD)</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">-2.1%</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Production Mode</div>
+        <div style="font-size: 1rem; font-weight: 600; margin-top: 0.75rem; color: var(--danger);">Verbose Debug Active</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Algorithmic Alpha Portfolios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Strategy</th>
+                <th>Benchmark</th>
+                <th>Annualized Return</th>
+                <th>Beta</th>
+                <th>Execution Desk</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>DeepAlpha-Momentum-9</strong></td>
+                <td>S&P 500</td>
+                <td>+34.2%</td>
+                <td>0.72</td>
+                <td><span class="badge badge-green">Active Allocation</span></td>
+            </tr>
+            <tr>
+                <td><strong>Macro-Arbitrage-Vol</strong></td>
+                <td>UST 10Y Yield</td>
+                <td>+19.8%</td>
+                <td>0.18</td>
+                <td><span class="badge badge-green">Active Allocation</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

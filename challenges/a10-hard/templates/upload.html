@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Asset Ingestion Portal{% endblock %}
+{% block content %}
+<div style="max-width: 650px; margin: 2rem auto;">
+    <div class="card">
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Upload Media Asset</h1>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+            Upload photographic assets or unformatted editorial data. The upload pipeline enforces structural checks before scanning for malicious signatures.
+        </p>
+
+        {% if message %}
+        <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ message }}
+        </div>
+        {% endif %}
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/media/upload" enctype="multipart/form-data">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Select Asset File</label>
+                <input type="file" name="asset_file" required style="width: 100%; padding: 0.6rem; background: #060911; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
+            </div>
+            <button type="submit" class="btn btn-pink" style="width: 100%;">Upload & Verify Asset</button>
+        </form>
+
+        <div style="margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-muted);">
+            Note: Files are analyzed by the image header parser. Files with exception condition (e.g. starting with custom header <code>CORRUPT_RAW_STREAM</code> or invalid chunk header) enter the unhandled raw staging path.
+        </div>
+    </div>
+</div>
+{% endblock %}

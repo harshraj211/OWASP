@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Editorial Publishing Suite{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">OmniPress Global Media Suite</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated media asset verification and multi-channel publication workflow.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Asset Ingest: Online</span>
+        <span class="badge badge-pink">Security Scanner Active</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Media Assets Managed</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--pink);">84,120 Files</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Staged Script Automations</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">{{ staged_scripts|length }} Executable</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Asset Verification Policy</div>
+        <div style="font-size: 0.85rem; font-weight: 500; margin-top: 0.5rem; color: var(--text-muted); line-height: 1.4;">
+            Strict image header & signature scanning. In exceptional parse conditions, fallback staging archives raw assets for editorial review.
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Active Editorial Publications</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Article ID</th>
+                <th>Title</th>
+                <th>Section</th>
+                <th>Media Attachment</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>ART-9921</code></td>
+                <td>Global Tech Summit 2026 Keynote</td>
+                <td>Technology</td>
+                <td><code>keynote_banner.png</code></td>
+                <td><span class="badge badge-green">Published</span></td>
+            </tr>
+            <tr>
+                <td><code>ART-9922</code></td>
+                <td>Renewable Energy Transitions in APAC</td>
+                <td>Environment</td>
+                <td><code>solar_diagram.jpg</code></td>
+                <td><span class="badge badge-green">Published</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

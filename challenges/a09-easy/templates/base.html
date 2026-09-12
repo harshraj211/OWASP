@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sentinel SOC Gateway{% endblock %} - SIEM Monitoring</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="brand">
+            <span>🛡️ Sentinel SOC Gateway</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Threat Center</a>
+            <a href="/compliance" class="{% if request.path == '/compliance' %}active{% endif %}">Compliance Audit</a>
+            <a href="/siem/monitor" class="{% if request.path == '/siem/monitor' %}active{% endif %}">SIEM Activity Viewer</a>
+            <a href="/api/v1/docs" class="{% if request.path == '/api/v1/docs' %}active{% endif %}">API Gateway Docs</a>
+            {% if session.get('user') %}
+                <a href="/auditor/vault" class="{% if request.path == '/auditor/vault' %}active{% endif %}" style="color: var(--cyan); font-weight: 700;">Auditor Vault</a>
+                <span class="badge badge-cyan">{{ session.user }} ({{ session.role }})</span>
+                <a href="/logout" style="color: var(--danger);">Disconnect</a>
+            {% else %}
+                <a href="/login" class="btn btn-cyan">Auditor Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        Sentinel SOC & Incident Response Network &copy; 2026. Automated SIEM Telemetry Active.
+    </footer>
+</body>
+</html>

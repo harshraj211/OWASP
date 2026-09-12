@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Clinical Trial Protocols{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Registered Clinical Trial Protocols</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Authorized investigators can manage patient dose regimens and trial certificates.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Protocol ID</th>
+                <th>Phase</th>
+                <th>Therapeutic Area</th>
+                <th>Principal Investigator</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>APX-301</code></td>
+                <td>Phase III</td>
+                <td>Targeted Immunotherapy</td>
+                <td>Dr. Sarah Vance, MD</td>
+                <td><code>researcher_demo@apexbiologistics.net</code></td>
+            </tr>
+            <tr>
+                <td><code>APX-GOV</code></td>
+                <td>Oversight</td>
+                <td>Institutional Review Board</td>
+                <td>Dr. Arthur Pendelton (Chief Medical Director)</td>
+                <td><code>admin@apexbiologistics.net</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

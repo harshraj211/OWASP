@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Quant Vault{% endblock %}
+{% block content %}
+<div class="card" style="border: 1px solid var(--cyan);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+        <div>
+            <span class="badge badge-cyan">INTERNAL ASSET VAULT</span>
+            <h1 style="font-size: 1.6rem; color: #fff; margin-top: 0.5rem;">Confidential Proprietary Trading Strategies</h1>
+        </div>
+        <a href="/" class="btn btn-cyan">&larr; Return to Market</a>
+    </div>
+
+    {% if flag %}
+    <div style="background: #040810; border: 1px dashed var(--cyan); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--cyan); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem;">Extracted Proprietary Strategy Flag</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Successfully extracted sensitive internal secrets from unhandled exception disclosure. Here is the dynamic flag:
+        </p>
+        <div style="background: #0e172a; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 1.15rem; color: #10b981; border: 1px solid var(--border); word-break: break-all;">
+            {{ flag }}
+        </div>
+    </div>
+    {% else %}
+    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px;">
+        <h3 style="color: var(--danger); font-size: 1rem; margin-bottom: 0.5rem;">Access Denied: Internal Token Required</h3>
+        <p style="color: #fca5a5; font-size: 0.85rem;">
+            Query <code>/api/v1/internal/confidential-vault?token=...</code> with the internal master token.
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Apex Global Bank{% endblock %} - Compliance Gateway</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="brand">
+            <span>🏦 Apex Global Commercial Bank</span>
+        </a>
+        <div class="nav-links">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Banking Hub</a>
+            <a href="/transfer" class="{% if request.path == '/transfer' %}active{% endif %}">Wire Transfers</a>
+            <a href="/compliance/stream" class="{% if request.path == '/compliance/stream' %}active{% endif %}">Audit Log Stream</a>
+            <a href="/compliance/status" class="{% if request.path == '/compliance/status' %}active{% endif %}">Compliance Monitor</a>
+            <a href="/vault/treasury" class="{% if request.path == '/vault/treasury' %}active{% endif %}" style="color: var(--emerald); font-weight: 700;">Treasury Vault</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        Apex Global Banking Corporation &copy; 2026. Automated Financial Transaction Auditing.
+    </footer>
+</body>
+</html>

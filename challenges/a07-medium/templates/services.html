@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Settlement Architecture & Compliance{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.75rem;">Settlement Rails & Technical Architecture</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Aegis Clearinghouse leverages high-assurance HSM cryptography and strict multi-factor authentication (MFA) to safeguard all operations.
+    </p>
+
+    <div style="background: #090d16; border-left: 4px solid var(--gold); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">System Release Notes (Build 4.8.2-prod)</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            - Primary HSM hardware token rotation completed.<br>
+            - Developer advisory: System administrator test account <code>sysadmin_root</code> provisioned with temporary default password <code>AutumnSettlement#99</code> for disaster recovery dry-runs. 2FA TOTP enforcement mandatory on all administrative sessions.
+        </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: #101626; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--gold);">Tier-1 Core Security</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                All administrative access requires second-factor authorization. Automated SecOps monitoring checks every session elevation.
+            </p>
+        </div>
+        <div style="background: #101626; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--primary);">Disaster Recovery Bypass</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+                In the event of cellular network disruption, emergency console override protocols allow automated session exchange via designated SecOps network headers.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

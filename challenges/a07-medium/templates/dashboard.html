@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Treasury Desk Operations{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Institutional Treasury Desk</h1>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Authenticated as: <strong>{{ session.user }}</strong> | Role: <span class="badge badge-gold">{{ session.role }}</span></p>
+        </div>
+        {% if session.role == 'System Administrator' %}
+        <a href="/security/audit-vault" class="btn btn-gold">Access Executive Vault &rarr;</a>
+        {% endif %}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+        <div>
+            <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Institutional Liquidity Accounts</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Currency</th>
+                        <th>Ledger Balance</th>
+                        <th>Settlement Window</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>USD Fedwire Settlement</strong></td>
+                        <td>USD</td>
+                        <td>$8,410,290,110.00</td>
+                        <td><span class="badge badge-green">Continuous</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>EUR Target2 Clearing</strong></td>
+                        <td>EUR</td>
+                        <td>€3,120,400,000.00</td>
+                        <td><span class="badge badge-green">Continuous</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="background: #090d16; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--gold);">Security Status</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                MFA Authentication: <strong style="color: var(--success);">VERIFIED</strong><br>
+                Hardware Token: YubiKey 5 FIPS<br>
+                Session Encryption: TLS 1.3 ChaCha20-Poly1305
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

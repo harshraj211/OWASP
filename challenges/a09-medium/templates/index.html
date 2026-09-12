@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Commercial Banking Portal{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Commercial Wire Clearance & Audit Portal</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated real-time compliance ledger for international liquidity transfers.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">SWIFT Network: Active</span>
+        <span class="badge badge-emerald">Continuous Audit Active</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Clearing Volume</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--emerald);">$14.2B USD</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Automated Audit Status</div>
+        <div style="font-size: 1.3rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">
+            {% if override_active %}
+                <span style="color: var(--emerald);">OVERRIDE ACTIVE</span>
+            {% else %}
+                <span style="color: var(--danger);">STANDARD LOCK</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Compliance Rule</div>
+        <div style="font-size: 0.85rem; font-weight: 500; margin-top: 0.5rem; color: var(--text-muted); line-height: 1.4;">
+            Treasury Vault unlocks upon detecting certified <code>[AUDIT_OVERRIDE]</code> in application log stream.
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Recent Cleared Settlements</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Tx Reference</th>
+                <th>Currency</th>
+                <th>Amount</th>
+                <th>Memo / Purpose</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>TX-29184</code></td>
+                <td>USD</td>
+                <td>$1,500,000.00</td>
+                <td>Overnight Commercial Repo</td>
+                <td><span class="badge badge-green">Audited & Posted</span></td>
+            </tr>
+            <tr>
+                <td><code>TX-29185</code></td>
+                <td>EUR</td>
+                <td>€850,000.00</td>
+                <td>Trade Finance Invoice 992</td>
+                <td><span class="badge badge-green">Audited & Posted</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

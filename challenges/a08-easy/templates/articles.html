@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}News Articles{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Corporate Newsfeed & Documentation</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Public articles and security policy disclosures.
+    </p>
+
+    <div style="background: #141b26; border-left: 4px solid var(--purple); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Developer Bulletin: Third-Party Plugin Signing Standard</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            Novus CMS requires third-party plugins to provide an integrity manifest <code>manifest.json</code> inside the ZIP archive. For internal sandbox testing, the signature verifier supports <code>verification_mode: "developer_bypass"</code> or self-signed verification when <code>public_key.pem</code> is bundled in the archive.
+        </p>
+    </div>
+</div>
+{% endblock %}

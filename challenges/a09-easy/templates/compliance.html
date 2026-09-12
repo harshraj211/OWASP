@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Security Compliance Audit{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">SOC 2 Type II Compliance & Audit Controls</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Annual external audit review documentation and lead officer assignments.
+    </p>
+
+    <div style="background: #060b13; border-left: 4px solid var(--cyan); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Auditor Profile: Lead External Assessor</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            Assigned Lead Compliance Officer: <strong>Elena Kostas</strong><br>
+            Auditor Account ID: <code>sec_auditor</code><br>
+            Compliance Directive Note: "Temporary password assigned per security onboarding memo: <code>Auditor2026!</code>. The compliance vault is accessible only by verified audit accounts."
+        </p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Control ID</th>
+                <th>Description</th>
+                <th>Implementation</th>
+                <th>Audit Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>CC6.1</code></td>
+                <td>Authentication Logging & Failed Login Detection</td>
+                <td>Centralized SIEM Streamer</td>
+                <td><span class="badge badge-amber">Under Review</span></td>
+            </tr>
+            <tr>
+                <td><code>CC6.2</code></td>
+                <td>Automatic Account & IP Lockout on Brute Force</td>
+                <td>SIEM Interceptor Filter</td>
+                <td><span class="badge badge-green">Pass</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

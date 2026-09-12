@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Research Relay Mail Outbox{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Research Relay Dispatch Outbox</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Simulated SMTP relay log for test research accounts. Protected admin emails are forwarded to external air-gapped gateway.</p>
+        </div>
+        <a href="/forgot-password" class="btn btn-teal">Request New Token</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Recipient</th>
+                <th>Subject</th>
+                <th>Dispatched Token</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in outbox %}
+            <tr>
+                <td><code>{{ item.time }}</code></td>
+                <td><strong>{{ item.recipient }}</strong></td>
+                <td>{{ item.subject }}</td>
+                <td><code style="color: var(--teal); font-weight: 700;">{{ item.token }}</code></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No tokens dispatched yet. Use the password recovery form.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

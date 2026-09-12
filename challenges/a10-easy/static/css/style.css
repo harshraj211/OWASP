@@ -1,0 +1,106 @@
+:root {
+    --cyan: #38bdf8;
+    --cyan-dark: #0284c7;
+    --bg-dark: #070d18;
+    --bg-card: #0e172a;
+    --border: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --danger: #ef4444;
+    --success: #10b981;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    background: #040810;
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-cyan { background: var(--cyan); color: #000; }
+.btn-cyan:hover { background: var(--cyan-dark); color: #fff; }
+
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-cyan { background: rgba(56, 189, 248, 0.15); color: var(--cyan); }
+.badge-green { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+.badge-red { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    background: #040810;
+}

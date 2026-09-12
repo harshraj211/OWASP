@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Classified Defense Vault{% endblock %}
+{% block content %}
+<div class="card" style="border: 1px solid var(--amber);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+        <div>
+            <span class="badge badge-amber">SPECIAL ACCESS PROGRAM (SAP)</span>
+            <h1 style="font-size: 1.6rem; color: #fff; margin-top: 0.5rem;">Titan Defense Classified Repository</h1>
+        </div>
+        <a href="/" class="btn btn-amber">&larr; Command Center</a>
+    </div>
+
+    {% if access_granted %}
+    <div style="background: #080c14; border: 1px dashed var(--amber); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--amber); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem;">Sentinel Clearance Verified & Evidence Erased</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Sentinel automated forensics confirm zero breach events in the audit trail AND 100% cryptographic ledger hash integrity. Here is the classified flag:
+        </p>
+        <div style="background: #111827; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 1.15rem; color: #10b981; border: 1px solid var(--border); word-break: break-all;">
+            {{ flag }}
+        </div>
+    </div>
+    {% else %}
+    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--red); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--red); font-size: 1.1rem; margin-bottom: 0.5rem;">SENTINEL INTRUSION LOCKDOWN ENGAGED</h3>
+        <p style="color: #fca5a5; font-size: 0.85rem; line-height: 1.6;">
+            Access Denied: An unauthorized breach event has been registered in the cryptographic audit ledger, OR the ledger hash chain is inconsistent.<br>
+            Sentinel Reason: <strong>{{ failure_reason }}</strong>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

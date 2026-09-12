@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Enterprise Publishing Portal{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Novus Enterprise Publishing Network</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">High-throughput modular CMS powering global digital media syndicates.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Engine Online</span>
+        <span class="badge badge-purple">Core v5.2</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Published Stories</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--purple);">12,840 Posts</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Monthly Readers</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">4.6 Million</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Installed Extensions</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--success);">{{ plugins|length }} Verified</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Featured Corporate Headlines</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Next-Gen Headless CMS Architecture Announced</strong></td>
+                <td>Editorial Team</td>
+                <td>Technology</td>
+                <td><span class="badge badge-green">Published</span></td>
+            </tr>
+            <tr>
+                <td><strong>Novus Security Architecture: Cryptographic Plugin Verification</strong></td>
+                <td>Security Operations</td>
+                <td>Compliance</td>
+                <td><span class="badge badge-purple">Advisory</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

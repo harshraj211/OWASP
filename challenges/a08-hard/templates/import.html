@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Import Serialized Pipeline{% endblock %}
+{% block content %}
+<div style="max-width: 650px; margin: 2rem auto;">
+    <div class="card">
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Import Pipeline Execution Context</h1>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+            Paste a Base64-encoded serialized pipeline state to deserialize and restore execution graph.
+        </p>
+
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+        {% if result %}
+        <div style="background: #030712; border: 1px solid var(--indigo); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.25rem;">
+            <h3 style="color: var(--indigo); font-size: 0.95rem; margin-bottom: 0.5rem;">Restored Pipeline Evaluation Result:</h3>
+            <pre style="color: #10b981; font-family: monospace; font-size: 0.9rem; white-space: pre-wrap;">{{ result }}</pre>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/pipeline/import">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Base64 Serialized Token</label>
+                <textarea name="payload" rows="6" required placeholder="Paste base64 serialized token here..." style="width: 100%; padding: 0.75rem; background: #030712; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-family: monospace; font-size: 0.85rem;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-indigo" style="width: 100%;">Deserialize & Execute Pipeline</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

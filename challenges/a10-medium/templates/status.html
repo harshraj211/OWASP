@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Safety Interlock Monitor{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Safety Interlock Monitor & State Machine</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Real-time status of the hardware interlock daemon and fail-open override timer.
+    </p>
+
+    <div style="background: #03060a; border-left: 4px solid var(--yellow); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">NERC CIP Fail-Open Architecture Specification</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            To prevent grid blackout or equipment explosion when sensory analysis crashes, the supervisor enters a 60-second <strong>Fail-Safe Emergency Override</strong> mode. During this window, all interlocks disengage, allowing manual activation of the emergency power core.
+        </p>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #0e1626; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+        <div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Current Safety Daemon State</div>
+            <div style="font-size: 1.3rem; font-weight: 700; margin-top: 0.25rem;">
+                {% if is_fail_open %}
+                <span style="color: var(--danger);">FAIL-SAFE EMERGENCY OVERRIDE (ACTIVE)</span>
+                {% else %}
+                <span style="color: var(--success);">ARMED — ALL INTERLOCKS ENGAGED</span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="/core/override" class="btn btn-yellow">Access Emergency Core &rarr;</a>
+    </div>
+</div>
+{% endblock %}

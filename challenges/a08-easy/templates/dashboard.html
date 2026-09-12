@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Editorial Dashboard{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Editorial & Extensions Console</h1>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Signed in as: <strong>{{ session.user }}</strong> | Role: <span class="badge badge-purple">{{ session.role }}</span></p>
+        </div>
+        <a href="/admin/plugins" class="btn btn-purple">Manage Installed Plugins &rarr;</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+        <div>
+            <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">System Engine Status</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subsystem</th>
+                        <th>Status</th>
+                        <th>Engine Runtime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Content Delivery Engine</strong></td>
+                        <td><span class="badge badge-green">Operational</span></td>
+                        <td>FastCGI / Python 3.11</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Plugin Sandbox</strong></td>
+                        <td><span class="badge badge-purple">Integrity Mode Active</span></td>
+                        <td>Dynamic Import Hook</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="background: #141b26; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--purple);">Plugin Upload Policy</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+                All plugin packages must be uploaded as <code>.zip</code> files. Verified plugins execute in the platform host environment.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

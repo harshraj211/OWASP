@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Digital Asset Library{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Digital Media Asset Library</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Verified images and unformatted assets staged for publication.</p>
+        </div>
+        <a href="/media/upload" class="btn btn-pink">+ Upload New Asset</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Location</th>
+                <th>Validation Stage</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asset in assets %}
+            <tr>
+                <td><strong>{{ asset.name }}</strong></td>
+                <td><code>{{ asset.path }}</code></td>
+                <td>{{ asset.stage }}</td>
+                <td><span class="badge badge-green">{{ asset.status }}</span></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No custom assets uploaded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

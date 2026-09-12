@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Live Audit Stream{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Real-Time Compliance Audit Stream</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Live output of <code>audit.log</code> monitored by the automated compliance daemon.</p>
+        </div>
+        <a href="/compliance/status" class="btn btn-emerald">Check Monitor Status</a>
+    </div>
+
+    <div style="background: #040811; padding: 1.25rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #94a3b8; border: 1px solid var(--border); max-height: 450px; overflow-y: auto;">
+        {% for line in log_lines %}
+        <div style="margin-bottom: 0.35rem; white-space: pre-wrap; word-break: break-all;">{{ line }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

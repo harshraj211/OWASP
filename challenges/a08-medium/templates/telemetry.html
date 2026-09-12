@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Sensor Telemetry{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">SCADA Sensor Channels</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Real-time telemetry polled across field instruments.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Channel</th>
+                <th>Sensor Type</th>
+                <th>Current Reading</th>
+                <th>Threshold Limit</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>CH-01</td>
+                <td>Core Oil Temperature</td>
+                <td>68.4 °C</td>
+                <td>95.0 °C</td>
+                <td><span class="badge badge-green">Nominal</span></td>
+            </tr>
+            <tr>
+                <td>CH-02</td>
+                <td>Sulfur Hexafluoride (SF6) Pressure</td>
+                <td>6.2 bar</td>
+                <td>5.5 bar</td>
+                <td><span class="badge badge-green">Nominal</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

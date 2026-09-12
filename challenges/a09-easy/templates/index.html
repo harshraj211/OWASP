@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Threat Intelligence Center{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Enterprise Security Operations Center</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Real-time ingestion and automated alert correlation across enterprise endpoints.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">SIEM Pipeline: 100% Ingest</span>
+        <span class="badge badge-cyan">SOC 2 Type II Certified</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Logged Auth Events (24h)</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--cyan);">148,290</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Active Blacklisted IPs</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--danger);">{{ blacklisted|length }} Blocked</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Automated Defense</div>
+        <div style="font-size: 1.1rem; font-weight: 600; margin-top: 0.75rem; color: var(--success);">Brute-Force Auto-Block Active</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Real-Time Threat Detections</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Incident ID</th>
+                <th>Vector</th>
+                <th>Target Asset</th>
+                <th>Severity</th>
+                <th>Resolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>INC-8891</code></td>
+                <td>Credential Stuffing / SSH</td>
+                <td>DMZ-Proxy-01</td>
+                <td><span class="badge badge-red">Critical</span></td>
+                <td><span class="badge badge-green">IP Auto-Dropped</span></td>
+            </tr>
+            <tr>
+                <td><code>INC-8892</code></td>
+                <td>Port Scan (SYN Flood)</td>
+                <td>Border Gateway</td>
+                <td><span class="badge badge-amber">Medium</span></td>
+                <td><span class="badge badge-green">Mitigated</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

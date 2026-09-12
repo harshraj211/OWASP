@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Flight Operations Dashboard{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.75rem; font-weight: 700;">Global Flight Telemetry & Operations</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Real-time ATC dispatch and flight status for commercial & charter wings.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">Network Nominal</span>
+        <span class="badge badge-blue">DEFCON 5 Standard</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Active Flights</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--accent);">428 Airborne</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Ground Control Hubs</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">14 International</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">On-Duty Dispatchers</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--success);">52 Officers</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Live Scheduled Departures</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Flight No</th>
+                <th>Aircraft</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Status</th>
+                <th>Chief Dispatcher</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AF-802</td>
+                <td>Boeing 787-9</td>
+                <td>LAX (Los Angeles)</td>
+                <td>HND (Tokyo)</td>
+                <td><span class="badge badge-blue">En Route</span></td>
+                <td>m.vance</td>
+            </tr>
+            <tr>
+                <td>AF-311</td>
+                <td>Airbus A350-1000</td>
+                <td>JFK (New York)</td>
+                <td>LHR (London)</td>
+                <td><span class="badge badge-green">Boarding</span></td>
+                <td>j.morrison</td>
+            </tr>
+            <tr>
+                <td>AF-914</td>
+                <td>Boeing 777-300ER</td>
+                <td>ORD (Chicago)</td>
+                <td>FRA (Frankfurt)</td>
+                <td><span class="badge badge-amber">Gate Hold</span></td>
+                <td>s.jenkins</td>
+            </tr>
+            <tr>
+                <td>AF-105</td>
+                <td>Airbus A321neo</td>
+                <td>SFO (San Francisco)</td>
+                <td>SEA (Seattle)</td>
+                <td><span class="badge badge-blue">Taxiing</span></td>
+                <td>e.rostova</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

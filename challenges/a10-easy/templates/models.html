@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Risk Models{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Registered Risk Models</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Mathematical specifications for institutional risk computations.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Model Name</th>
+                <th>Formula</th>
+                <th>Target Metric</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Markowitz Efficient Frontier</strong></td>
+                <td><code>min(w^T * Cov * w) / factor</code></td>
+                <td>Variance Reduction</td>
+                <td><span class="badge badge-green">Production</span></td>
+            </tr>
+            <tr>
+                <td><strong>Parametric Value-at-Risk (VaR)</strong></td>
+                <td><code>Z_alpha * sigma * sqrt(t)</code></td>
+                <td>Tail Risk Loss</td>
+                <td><span class="badge badge-green">Production</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

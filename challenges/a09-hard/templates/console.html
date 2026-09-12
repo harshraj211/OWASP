@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Audit Maintenance Console{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Ledger Maintenance Console</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Authorized SecOps administrators can manage and purge audit records.</p>
+        </div>
+        <a href="/audit/ledger" class="btn btn-amber">&larr; View Ledger</a>
+    </div>
+
+    {% if message %}
+    <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+        {{ message }}
+    </div>
+    {% endif %}
+    {% if error %}
+    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--red); color: #fca5a5; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: #080c14; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--amber);">Edit / Redact Block Event</h3>
+            <form method="POST" action="/api/v1/audit/tamper-block">
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Block Index</label>
+                    <input type="number" name="index" required placeholder="3" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">New Event Type</label>
+                    <input type="text" name="event_type" required value="ROUTINE_SECURITY_PATROL" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">New Details</label>
+                    <input type="text" name="details" required value="Routine telemetry heartbeat" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Admin Key</label>
+                    <input type="password" name="admin_key" required placeholder="••••••••" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <button type="submit" class="btn btn-amber" style="width: 100%;">Redact Block Content</button>
+            </form>
+        </div>
+
+        <div style="background: #080c14; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--amber);">Recompute Hash Chain</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+                    After editing or deleting audit records, the cryptographic hash chain must be recomputed from genesis so that Sentinel inspection validates all block hashes.
+                </p>
+            </div>
+            <form method="POST" action="/api/v1/audit/recompute-chain">
+                <div style="margin-bottom: 1rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Admin Key</label>
+                    <input type="password" name="admin_key" required placeholder="••••••••" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <button type="submit" class="btn btn-amber" style="width: 100%;">Recompute Ledger Hashes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

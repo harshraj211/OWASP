@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Flight Operations Personnel Directory{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Operations Personnel Directory</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Official roster of licensed pilots, flight coordinators, and ground dispatch directors.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Staff ID</th>
+                <th>Employee Name</th>
+                <th>Username</th>
+                <th>Primary Station (Hub)</th>
+                <th>Operational Role</th>
+                <th>Joined Cohort</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in staff %}
+            <tr>
+                <td><code>{{ person.id }}</code></td>
+                <td><strong>{{ person.name }}</strong></td>
+                <td><code>{{ person.username }}</code></td>
+                <td><span class="badge badge-blue">{{ person.hub }}</span></td>
+                <td>{{ person.role }}</td>
+                <td><span class="badge badge-amber">{{ person.joined }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

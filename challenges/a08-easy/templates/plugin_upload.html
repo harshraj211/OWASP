@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Upload Plugin Bundle{% endblock %}
+{% block content %}
+<div style="max-width: 500px; margin: 3rem auto;">
+    <div class="card">
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem; text-align: center;">Install Plugin Package</h1>
+        <p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-bottom: 1.5rem;">
+            Upload a signed <code>.zip</code> archive containing <code>manifest.json</code> and entrypoint.
+        </p>
+
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/admin/plugins/upload" enctype="multipart/form-data">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Plugin Bundle (.zip)</label>
+                <input type="file" name="plugin_file" accept=".zip" required style="width: 100%; padding: 0.6rem; background: #090d16; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
+            </div>
+            <button type="submit" class="btn btn-purple" style="width: 100%;">Verify & Install Plugin</button>
+        </form>
+
+        <div style="margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+            Supported formats: standard ZIP archives with valid <code>manifest.json</code>.
+        </div>
+    </div>
+</div>
+{% endblock %}

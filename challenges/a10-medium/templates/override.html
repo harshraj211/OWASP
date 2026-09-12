@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Emergency Core Override{% endblock %}
+{% block content %}
+<div class="card" style="border: 1px solid var(--yellow);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+        <div>
+            <span class="badge badge-yellow">HIGH-VOLTAGE EMERGENCY CORE</span>
+            <h1 style="font-size: 1.6rem; color: #fff; margin-top: 0.5rem;">Grid Master Breaker & Core Activation</h1>
+        </div>
+        <a href="/" class="btn btn-yellow">&larr; Return to Telemetry</a>
+    </div>
+
+    {% if is_fail_open %}
+    <div style="background: #03060a; border: 1px dashed var(--yellow); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--yellow); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem;">Fail-Open Emergency Interlock Bypassed</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            The safety interlock supervisor crashed due to an unhandled exception in the harmonic analyzer, entering fail-open mode. High-voltage emergency core release authorized:
+        </p>
+        <div style="background: #0e1626; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 1.15rem; color: #10b981; border: 1px solid var(--border); word-break: break-all;">
+            {{ flag }}
+        </div>
+    </div>
+    {% else %}
+    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px;">
+        <h3 style="color: var(--danger); font-size: 1.1rem; margin-bottom: 0.5rem;">ACCESS DENIED: SAFETY INTERLOCK ENGAGED</h3>
+        <p style="color: #fca5a5; font-size: 0.85rem; line-height: 1.6;">
+            The Emergency Core is locked by the active Safety Interlock Daemon.<br>
+            Manual activation is permitted only if the safety supervisor encounters an exceptional crash condition and enters Fail-Safe Emergency Override mode.
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

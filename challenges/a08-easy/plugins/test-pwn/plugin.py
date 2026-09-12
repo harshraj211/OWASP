@@ -1,0 +1,1 @@
+print("DYNAMIC_FLAG:" + FLAG)

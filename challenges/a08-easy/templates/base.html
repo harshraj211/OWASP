@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Novus CMS{% endblock %} - Enterprise Digital Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="brand">
+            <span>📰 Novus Enterprise CMS</span>
+        </a>
+        <div class="menu">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Portal Home</a>
+            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">News & Articles</a>
+            {% if session.get('user') %}
+                <a href="/admin/dashboard" class="{% if request.path == '/admin/dashboard' %}active{% endif %}">Editorial Suite</a>
+                <a href="/admin/plugins" class="{% if '/admin/plugins' in request.path %}active{% endif %}">Plugins Manager</a>
+                <span class="badge badge-purple">{{ session.user }} ({{ session.role }})</span>
+                <a href="/logout" style="color: var(--danger);">Log Out</a>
+            {% else %}
+                <a href="/login" class="btn btn-purple">Editorial Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        Novus CMS Enterprise Digital Experience &copy; 2026. Microservices & Plugin Gateway.
+    </footer>
+</body>
+</html>

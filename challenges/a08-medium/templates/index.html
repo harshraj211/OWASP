@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Gateway Operations Overview{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Substation Gateway Controller</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated Modbus TCP / DNP3 telemetry concentrator.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">PLC Bus: Healthy</span>
+        <span class="badge badge-orange">Firmware: {{ current_version }}</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Grid Frequency</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--orange);">59.99 Hz</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Transformer Bus Load</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">84.2 MVA</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">OTA Update Channel</div>
+        <div style="font-size: 1rem; font-weight: 600; margin-top: 0.75rem; color: var(--success); word-break: break-all;">{{ update_mirror }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Active Substation Feeder Nodes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Node ID</th>
+                <th>Subsystem</th>
+                <th>Protocol</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>FEEDER-01-NORTH</code></td>
+                <td>345kV Main Breaker Interlock</td>
+                <td>IEC-61850 GOOSE</td>
+                <td><span class="badge badge-green">Engaged</span></td>
+            </tr>
+            <tr>
+                <td><code>FEEDER-02-SOUTH</code></td>
+                <td>Capacitor Bank Regulator</td>
+                <td>Modbus TCP</td>
+                <td><span class="badge badge-green">Online</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

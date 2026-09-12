@@ -1,0 +1,1 @@
+{"id": "test-pwn", "name": "Pwn Plugin", "entrypoint": "plugin.py", "verification_mode": "developer_bypass"}

@@ -1,0 +1,106 @@
+:root {
+    --purple: #8b5cf6;
+    --purple-dark: #6d28d9;
+    --bg-dark: #0f172a;
+    --bg-card: #1e293b;
+    --border: #334155;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --danger: #ef4444;
+    --success: #22c55e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav {
+    background: #090d16;
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.menu {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+.menu a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.menu a:hover, .menu a.active { color: var(--purple); }
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: 100%;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-purple { background: var(--purple); color: #fff; }
+.btn-purple:hover { background: var(--purple-dark); }
+
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
+.badge-green { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+.badge-red { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+
+.footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    background: #090d16;
+}

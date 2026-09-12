@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Multi-Factor Authentication Required{% endblock %}
+{% block content %}
+<div style="max-width: 440px; margin: 3rem auto;">
+    <div class="card" style="border: 1px solid var(--gold);">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <span class="badge badge-gold">STEP 2 OF 2: MULTI-FACTOR VERIFICATION</span>
+            <h1 style="font-size: 1.4rem; color: #fff; margin-top: 0.75rem;">Enter TOTP Security Token</h1>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                A 6-digit verification code has been dispatched to your registered YubiKey/Authenticator for account <strong>{{ session.user }}</strong>.
+            </p>
+        </div>
+
+        {% if error %}
+        <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/auth/2fa" onsubmit="return handleMfaSubmit(event);">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; text-align: center;">6-Digit TOTP Code</label>
+                <input type="text" id="mfa-code" name="code" maxlength="6" autofocus required placeholder="000000" style="width: 100%; padding: 0.85rem; background: #06090f; border: 1px solid var(--border); border-radius: 6px; color: var(--gold); font-size: 1.5rem; text-align: center; letter-spacing: 0.5rem; font-family: monospace;">
+            </div>
+            <button type="submit" class="btn btn-gold" style="width: 100%;">Verify & Authorize Session</button>
+        </form>
+
+        <div style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+            Encountering hardware token issues? Contact SecOps internal emergency dispatch or consult system upgrade documentation.
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}SIEM Security Activity Viewer{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">SIEM Live Activity Streamer</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Monitors security events on <code>/login</code>. Exceeding 3 failed attempts triggers automatic IP block.</p>
+        </div>
+        <div>
+            <span class="badge badge-green">Live Hook Connected</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>Source IP</th>
+                <th>Endpoint</th>
+                <th>Event Type</th>
+                <th>Target Username</th>
+                <th>Security Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evt in events %}
+            <tr>
+                <td><code>{{ evt.time }}</code></td>
+                <td><code>{{ evt.ip }}</code></td>
+                <td><code>{{ evt.endpoint }}</code></td>
+                <td>
+                    {% if 'FAIL' in evt.type %}
+                    <span class="badge badge-red">{{ evt.type }}</span>
+                    {% else %}
+                    <span class="badge badge-green">{{ evt.type }}</span>
+                    {% endif %}
+                </td>
+                <td><strong>{{ evt.user }}</strong></td>
+                <td>
+                    {% if evt.blocked %}
+                    <span class="badge badge-red">BLOCKED</span>
+                    {% else %}
+                    <span class="badge badge-cyan">LOGGED</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No events logged in the current window.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

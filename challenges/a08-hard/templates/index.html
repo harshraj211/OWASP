@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Cluster Hub & Status{% endblock %}
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; font-weight: 700;">Distributed Stream Analytics Cluster</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Real-time flight sensor data aggregation & multi-stage transformation engine.</p>
+    </div>
+    <div>
+        <span class="badge badge-green">32 Nodes Online</span>
+        <span class="badge badge-indigo">Spark Runtime 3.5</span>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Processed Events/sec</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--indigo);">2,840,000 / s</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Active Pipeline Tasks</div>
+        <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: #fff;">18 Pipelines</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Object Serialization Sandbox</div>
+        <div style="font-size: 1rem; font-weight: 600; margin-top: 0.75rem; color: var(--success);">Enforced (Blocklist Active)</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Primary Telemetry Ingest Nodes</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Node Name</th>
+                <th>IP Address</th>
+                <th>Assigned Partition</th>
+                <th>CPU Utilization</th>
+                <th>Memory Pool</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>aerodata-worker-01</code></td>
+                <td>10.14.0.11</td>
+                <td>Partition 0 (US-East)</td>
+                <td>18.4%</td>
+                <td><span class="badge badge-green">48 GB / 128 GB</span></td>
+            </tr>
+            <tr>
+                <td><code>aerodata-worker-02</code></td>
+                <td>10.14.0.12</td>
+                <td>Partition 1 (EU-West)</td>
+                <td>24.1%</td>
+                <td><span class="badge badge-green">62 GB / 128 GB</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

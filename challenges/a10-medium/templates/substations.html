@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Substation Topology{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Substation Feeder Bus Architecture</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Regional transmission substations monitored by the central safety supervisor daemon.
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Feeder ID</th>
+                <th>Transformer Bank</th>
+                <th>Telemetry Protocol</th>
+                <th>Interlock Mode</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>FEEDER-500-A</code></td>
+                <td>Westinghouse 750MVA</td>
+                <td>DNP3 / JSON Frame</td>
+                <td><span class="badge badge-green">Hardware Interlock</span></td>
+            </tr>
+            <tr>
+                <td><code>FEEDER-230-B</code></td>
+                <td>ABB Autotransformer</td>
+                <td>Modbus TCP Frame</td>
+                <td><span class="badge badge-green">Hardware Interlock</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

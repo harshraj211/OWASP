@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Editorial Script Terminal{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Editorial Script & Automation Terminal</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Run pre-staged Python scripts located in <code>static/scripts/</code>.</p>
+        </div>
+        <a href="/media/upload" class="btn btn-pink">Upload Script Asset</a>
+    </div>
+
+    {% if execution_output %}
+    <div style="background: #060911; border: 1px solid var(--pink); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--pink); font-size: 0.95rem; margin-bottom: 0.5rem;">Script Execution Console:</h3>
+        <pre style="color: #10b981; font-family: monospace; font-size: 0.95rem; white-space: pre-wrap;">{{ execution_output }}</pre>
+    </div>
+    {% endif %}
+
+    <div style="max-width: 550px;">
+        <form method="POST" action="/editorial/run-automation">
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Script Filename</label>
+                <input type="text" name="script_name" required placeholder="e.g. exploit.py" style="width: 100%; padding: 0.75rem; background: #060911; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-family: monospace; font-size: 0.9rem;">
+            </div>
+            <button type="submit" class="btn btn-pink">Execute Script Automation</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Staged Executable Scripts:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Script Name</th>
+                    <th>Staging Directory</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in staged_scripts %}
+                <tr>
+                    <td><code>{{ s }}</code></td>
+                    <td><code>static/scripts/{{ s }}</code></td>
+                    <td>
+                        <form method="POST" action="/editorial/run-automation" style="display: inline;">
+                            <input type="hidden" name="script_name" value="{{ s }}">
+                            <button type="submit" class="btn btn-pink" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">Run Script</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No scripts currently staged.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

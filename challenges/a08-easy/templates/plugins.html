@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Plugin Manager{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Installed Extensions & Plugins</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Active modules loaded in Novus CMS runtime.</p>
+        </div>
+        <a href="/admin/plugins/upload" class="btn btn-purple">+ Upload New Plugin (ZIP)</a>
+    </div>
+
+    {% if execution_output %}
+    <div style="background: #090d16; border: 1px solid var(--purple); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--purple); font-size: 0.95rem; margin-bottom: 0.5rem;">Plugin Execution Result:</h3>
+        <pre style="color: #22c55e; font-family: monospace; font-size: 0.95rem; white-space: pre-wrap;">{{ execution_output }}</pre>
+    </div>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Plugin ID</th>
+                <th>Name</th>
+                <th>Version</th>
+                <th>Integrity Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in plugins %}
+            <tr>
+                <td><code>{{ p.id }}</code></td>
+                <td><strong>{{ p.name }}</strong></td>
+                <td><span class="badge badge-purple">{{ p.version }}</span></td>
+                <td><span class="badge badge-green">{{ p.integrity }}</span></td>
+                <td>
+                    <a href="/admin/plugins/run/{{ p.id }}" class="btn btn-purple" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;">Execute Task</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Firmware Update Manager{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem;">Firmware & OTA Package Manager</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Download and deploy hotfix updates to substation controller.</p>
+        </div>
+        <div>
+            <span class="badge badge-orange">Active: {{ current_version }}</span>
+        </div>
+    </div>
+
+    {% if update_result %}
+    <div style="background: #060913; border: 1px solid var(--orange); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--orange); font-size: 0.95rem; margin-bottom: 0.5rem;">Firmware Deployment Output:</h3>
+        <pre style="color: #10b981; font-family: monospace; font-size: 0.9rem; white-space: pre-wrap;">{{ update_result }}</pre>
+    </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: #060913; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--orange);">Check & Deploy from Configured Repository</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Pull updates from repository: <code>{{ update_mirror }}</code>.
+            </p>
+            <form method="POST" action="/api/v1/update/apply">
+                <button type="submit" class="btn btn-orange">Pull & Install Firmware &rarr;</button>
+            </form>
+        </div>
+
+        <div style="background: #060913; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #fff;">Direct Package Staging</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Upload a raw <code>package.tar.gz</code> bundle directly to the local staging cache for immediate execution.
+            </p>
+            <form method="POST" action="/api/v1/staging/upload" enctype="multipart/form-data">
+                <input type="file" name="firmware_file" accept=".tar.gz,.tgz" required style="margin-bottom: 1rem; display: block; font-size: 0.85rem; color: var(--text-muted);">
+                <button type="submit" class="btn btn-orange">Stage & Deploy Package</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

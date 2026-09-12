@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Classified Diplomatic Manifest{% endblock %}
+{% block content %}
+<div class="card" style="border: 1px solid #dc2626;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid #dc2626; padding-bottom: 1rem;">
+        <div>
+            <span class="badge badge-red">TOP SECRET // DIPLOMATIC FREIGHT</span>
+            <h1 style="font-size: 1.6rem; color: #fff; margin-top: 0.5rem;">Flight AF-802 Cargo & Clearance Vault</h1>
+        </div>
+        <a href="/dispatch/operations" class="btn btn-primary">&larr; Back to Console</a>
+    </div>
+
+    <div style="background: #090d16; border: 1px dashed #ef4444; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: #ef4444; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 0.5rem;">Authorized Clearance Seal & Verification Flag</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            The flight manifest has been certified by Chief Dispatcher Marcus Vance. Below is the active cryptographic mission token for platform submission:
+        </p>
+        <div style="background: #1e293b; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 1.1rem; color: #22c55e; border: 1px solid #334155; word-break: break-all;">
+            {{ flag }}
+        </div>
+    </div>
+
+    <table style="max-width: 600px;">
+        <tr>
+            <td style="color: var(--text-muted); width: 180px;">Consignment ID:</td>
+            <td><code>DIP-CARGO-7749-ALPHA</code></td>
+        </tr>
+        <tr>
+            <td style="color: var(--text-muted);">Authorizing Officer:</td>
+            <td>{{ session.user }} (Chief Dispatcher)</td>
+        </tr>
+        <tr>
+            <td style="color: var(--text-muted);">Destination Hub:</td>
+            <td>Tokyo Haneda (HND) VIP Facility</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
