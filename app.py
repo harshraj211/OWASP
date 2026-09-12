@@ -96,20 +96,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "JWT Algorithm Confusion",
-                "topic": "JWT, None Algorithm, Signature Bypass",
+                "name": "JWT Key Traversal & Signature Bypass",
+                "topic": "JWT, Key ID (kid) Path Traversal, HS256 Signature Forgery",
                 "cmd_code": "A04 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Weak Hash Cracking",
-                "topic": "MD5, Database Dump, Rainbow Tables, Salt Misuse",
+                "name": "Cryptographic Hash Length Extension",
+                "topic": "Merkle-Damgard, SHA-256 MAC Extension, Integrity Tampering",
                 "cmd_code": "A04 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Padding Oracle Attack",
-                "topic": "AES-CBC, PKCS7, Padding Oracle, Cookie Forgery",
+                "name": "AES-256-CBC Padding Oracle Attack",
+                "topic": "AES-CBC, PKCS#7 Side-Channel, Byte-by-Byte Decryption & Forgery",
                 "cmd_code": "A04 hard"
             }
         ]
@@ -122,20 +122,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Cross-Site Scripting (XSS)",
-                "topic": "XSS, Reflected, Stored, WAF Bypass",
+                "name": "SQL Injection Authentication Bypass",
+                "topic": "SQLite Auth Bypass, WAF Evasion (No Spaces/Comments), Subqueries & GLOB",
                 "cmd_code": "A05 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "SQL Injection (SQLi)",
-                "topic": "SQL Injection, Union-Based, Error-Based, Auth Bypass",
+                "name": "Server-Side Request Forgery (SSRF)",
+                "topic": "SSRF, Pre-Flight DNS Validation Bypass, HTTP 302 Redirection & TOCTOU",
                 "cmd_code": "A05 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "OS Command Injection",
-                "topic": "Command Injection, RCE, Filename Injection, WAF Evasion",
+                "name": "Blind Server-Side Template Injection (SSTI)",
+                "topic": "Jinja2 Sandbox Escape, Blacklist Filter Evasion, Blind Boolean Oracle",
                 "cmd_code": "A05 hard"
             }
         ]

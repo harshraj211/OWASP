@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Fortified Enclave Authentication - RedTeam Hacker Academy</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-hover: #b71c1c;
+            --bg-main: #0b0e14;
+            --bg-card: #141b26;
+            --border: #26334d;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 36px; width: auto; }
+        .badge { background: rgba(211, 47, 47, 0.15); color: #ef4444; border: 1px solid rgba(211, 47, 47, 0.4); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.4); }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #ffffff; }
+        p.sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        .alert-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 12px 16px; border-radius: 6px; font-size: 13px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; }
+        input[type="text"], input[type="password"] { width: 100%; height: 42px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 6px; padding: 0 14px; color: #ffffff; font-size: 14px; outline: none; }
+        input:focus { border-color: var(--accent); }
+        .btn-submit { width: 100%; height: 42px; background: var(--primary); color: #ffffff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+        .btn-submit:hover { background: var(--primary-hover); }
+        .btn-logout { display: inline-block; background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); padding: 8px 18px; border-radius: 6px; font-size: 13px; text-decoration: none; font-weight: 600; margin-top: 18px; transition: background 0.2s; }
+        .btn-logout:hover { background: #334155; color: #ffffff; }
+        .vault-box { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 20px; margin-top: 20px; text-align: center; }
+        .flag-token { font-family: monospace; font-size: 16px; font-weight: 700; color: #34d399; background: #05070a; border: 1px solid #1e293b; padding: 12px 16px; border-radius: 6px; margin-top: 10px; word-break: break-all; }
+        .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding-top: 16px; border-top: 1px solid var(--border); margin-top: 16px; }
+        .meta-item span { display: block; font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 700; }
+        .meta-item strong { color: #ffffff; font-size: 14px; margin-top: 4px; display: block; }
+        .waf-info { background: #070a0f; border: 1px solid #1e293b; border-radius: 6px; padding: 14px 18px; margin-top: 20px; font-size: 12px; color: #94a3b8; line-height: 1.6; }
+        footer { border-top: 1px solid var(--border); padding: 16px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">Fortified Enclave Authentication</span>
+        </div>
+        <div>
+            {% if session.get('user') %}
+                <span class="badge badge-success">Session: {{ session.get('user') }}</span>
+            {% else %}
+                <span class="badge">WAF Filter Active</span>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Sovereign Enclave Access Gateway</h1>
+            <p class="sub">
+                Enterprise database authentication gateway protected by automated token inspecting WAF filters.
+            </p>
+
+            {% if error %}
+                <div class="alert-error">{{ error }}</div>
+            {% endif %}
+
+            {% if session.get('user') %}
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <span>Authenticated User</span>
+                        <strong style="color: var(--accent);">{{ session.get('user') }}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>Assigned Role</span>
+                        <strong>{{ session.get('role') }}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>Database Engine</span>
+                        <strong>SQLite3 (Embedded Relational)</strong>
+                    </div>
+                </div>
+
+                {% if session.get('role') == 'administrator' %}
+                    <div class="vault-box">
+                        <div style="font-size: 13px; font-weight: 700; color: #34d399; text-transform: uppercase; letter-spacing: 0.05em;">
+                            Administrator Enclave Clearance Confirmed
+                        </div>
+                        <p style="font-size: 13px; color: #94a3b8; margin-top: 6px;">
+                            WAF filter bypass and administrative extraction successful:
+                        </p>
+                        <div class="flag-token">{{ flag }}</div>
+                    </div>
+                {% else %}
+                    <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 6px; padding: 14px 18px; margin-top: 20px;">
+                        <span style="color: var(--accent); font-size: 12px; font-weight: 700; text-transform: uppercase;">Standard User Privileges</span>
+                        <p style="color: #cbd5e1; font-size: 13px; margin-top: 4px;">
+                            You are logged in as a regular user. Administrator clearance is required to unlock the enclave vault.
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div>
+                    <a href="/logout" class="btn-logout">Sign Out</a>
+                </div>
+            {% else %}
+                <form method="POST" action="/login">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="e.g. guest" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="e.g. guest" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Authenticate to Enclave</button>
+                </form>
+
+                <div class="waf-info">
+                    <strong style="color: #ffffff;">[WAF FILTER ACTIVE]:</strong>
+                    <div style="margin-top: 4px;">
+                        Blocks all standard SQL comments (<code>--</code>, <code>#</code>, <code>/* */</code>), whitespace characters, comparison operator (<code>=</code>, <code>LIKE</code>), and boolean keywords (<code>OR</code>, <code>AND</code>).
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        RedTeam Hacker Academy &bull; OWASP A05: Injection Lab Environment
+    </footer>
+
+</body>
+</html>

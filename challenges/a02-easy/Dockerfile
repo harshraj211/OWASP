@@ -13,9 +13,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 USER lab
-EXPOSE 5000
+ENV LAB_PORT=6004
+EXPOSE 6004
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD python -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:5000/healthz', timeout=2)"
+  CMD python -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:6004/healthz', timeout=2)"
 
 CMD ["python", "app.py"]

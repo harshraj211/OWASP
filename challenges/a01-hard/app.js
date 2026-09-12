@@ -4,7 +4,7 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
-const PORT = Number(process.env.PORT || 5000);
+const PORT = Number(process.env.PORT || 6003);
 const FLAG = process.env.FLAG || `FLAG{${crypto.randomUUID()}}`;
 const member = { email: 'jamie.lee@asterion.local', password: 'AsterionMember!42', name: 'Jamie Lee', memberId: `MBR-${crypto.randomInt(100, 999)}` };
 const internalNotice = { metadata: { source: 'people-operations', retention: 'restricted' }, payload: { classification: 'CONFIDENTIAL', message: 'Board-approved Q4 benefits restructuring memo.', reference: `ASTERION-${crypto.randomBytes(4).toString('hex')}`, flag: FLAG } };

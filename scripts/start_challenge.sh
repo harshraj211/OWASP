@@ -36,7 +36,7 @@ if docker info >/dev/null 2>&1; then
         docker build --label "org.oswap.source-hash=${source_hash}" --tag "$image_name" "$challenge_dir"
     fi
     docker run --detach --name "$container_name" \
-        --publish "127.0.0.1:${port}:5000" \
+        --publish "127.0.0.1:${port}:${port}" \
         --env "FLAG=${flag}" \
         "$image_name" >/dev/null
     running="$(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null || true)"
@@ -64,13 +64,13 @@ else
     pid="$!"
     for _ in {1..20}; do
         if kill -0 "$pid" >/dev/null 2>&1; then
-            if python -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
+            if python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
                 break
             fi
         fi
         sleep 0.25
     done
-    if ! python -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
+    if ! python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
         cat /tmp/oswap-active-challenge.log >&2 || true
         kill "$pid" >/dev/null 2>&1 || true
         exit 1

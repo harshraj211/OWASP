@@ -4,7 +4,7 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
-const PORT = Number(process.env.PORT || 5000);
+const PORT = Number(process.env.PORT || 6002);
 const FLAG = `FLAG{${crypto.randomUUID()}}`;
 const reportName = `Q4_Layoff_List_${crypto.randomBytes(5).toString('hex')}.txt`;
 const adminPassword = process.env.HR_ADMIN_PASSWORD || `MeridianHR-${crypto.randomBytes(18).toString('base64url')}`;

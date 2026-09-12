@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KubeShield Enterprise Cloud SIEM - RedTeam Hacker Academy</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-hover: #b71c1c;
+            --bg-main: #0b0e14;
+            --bg-card: #141b26;
+            --border: #26334d;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 34px; width: auto; }
+        .badge { background: rgba(211, 47, 47, 0.15); color: #ef4444; border: 1px solid rgba(211, 47, 47, 0.4); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .container { max-width: 1040px; margin: 30px auto; padding: 0 20px; width: 100%; flex: 1; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.5); }
+        h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #ffffff; }
+        p.sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 18px; line-height: 1.6; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .metric-card { background: #0b0e14; border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+        .metric-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px; }
+        .metric-value { font-size: 15px; font-weight: 700; color: #ffffff; }
+        .nav-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; }
+        .tab-btn { background: #0b0e14; border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-btn:hover:not(.active) { background: #1e293b; color: #ffffff; }
+        .btn { padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; }
+        .btn-primary { background: var(--primary); color: #ffffff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #334155; color: #ffffff; }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 6px; }
+        input[type="text"] { width: 100%; background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; color: #ffffff; font-size: 13px; outline: none; font-family: monospace; }
+        input:focus { border-color: var(--accent); }
+        .log-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12.5px; }
+        .log-table th { background: #0b0e14; text-align: left; padding: 10px 12px; font-size: 11px; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+        .log-table td { padding: 10px 12px; border-bottom: 1px solid #141b26; vertical-align: top; font-family: monospace; }
+        .level-info { color: #38bdf8; }
+        .level-alert { color: #ef4444; font-weight: 700; }
+        .diag-box { background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 16px; font-family: monospace; font-size: 12.5px; white-space: pre-wrap; word-break: break-all; display: none; }
+        .diag-box.error { border-color: rgba(239, 68, 68, 0.5); color: #f87171; }
+        .diag-box.success { border-color: rgba(34, 197, 94, 0.4); color: #22c55e; }
+        footer { border-top: 1px solid var(--border); padding: 14px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <span style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">KubeShield Enterprise SIEM</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <span class="badge">OWASP A03:2025</span>
+            <span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">Hard</span>
+            <span class="badge badge-cyan">Port 6009</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Status Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Ingress Cluster</div>
+                <div class="metric-value" style="color: #38bdf8;">kubeshield-prod-mesh</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Edge Gateway WAF</div>
+                <div class="metric-value" style="color: #22c55e;">CRS v3.3.4 (Enforcing)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Logging Engine</div>
+                <div class="metric-value" style="color: #f59e0b;">Async Ingestion Sink</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Audit Stream</div>
+                <div class="metric-value" style="color: #22c55e;">ACTIVE</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h1>KubeShield SIEM Telemetry & Event Ingestion Gateway</h1>
+            <p class="sub">
+                Distributed telemetry ingress gateway processing microservice audit events.
+                All incoming payloads are inspected at the edge before being passed to the asynchronous enterprise log processing sink.
+            </p>
+
+            <div class="nav-tabs">
+                <button class="tab-btn active" id="tab-ingest" onclick="showTab('ingest')">Event Ingestion</button>
+                <button class="tab-btn" id="tab-logs" onclick="showTab('logs')">SIEM Live Log Stream</button>
+                <button class="tab-btn" id="tab-stats" onclick="showTab('stats')">Gateway Topology</button>
+            </div>
+
+            <!-- TAB 1: Ingest -->
+            <div id="view-ingest">
+                <div class="form-group">
+                    <label>Event Message</label>
+                    <input type="text" id="eventMsg" placeholder="Enter telemetry event message...">
+                </div>
+                <div class="form-group">
+                    <label>Audit Context Metadata</label>
+                    <input type="text" id="contextMsg" placeholder="Enter context parameters (e.g. session=abc; tag=xyz)...">
+                </div>
+                <div class="form-group">
+                    <label>Source Identifier</label>
+                    <input type="text" id="sourceTag" placeholder="Component name (e.g. gateway-service)...">
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-primary" onclick="submitTelemetry()">Submit Ingestion Event</button>
+                </div>
+
+                <div id="diagBox" class="diag-box"></div>
+            </div>
+
+            <!-- TAB 2: Live Logs -->
+            <div id="view-logs" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-size: 13px; color: var(--text-secondary);">Live audit events recorded by the downstream ingestion sink:</span>
+                    <button class="btn btn-secondary" onclick="loadSiemLogs()" style="padding: 6px 14px; font-size: 12px;">Refresh Stream</button>
+                </div>
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Level</th>
+                            <th style="width: 140px;">Timestamp</th>
+                            <th style="width: 140px;">Source</th>
+                            <th>Event Details & Context</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody">
+                        <tr><td colspan="4" style="color: var(--text-secondary);">Loading SIEM audit events...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TAB 3: Gateway Topology -->
+            <div id="view-stats" style="display: none;">
+                <pre id="statsPre" style="background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 16px; color: #38bdf8; font-size: 13px;"></pre>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        RedTeam Hacker Academy &bull; OSWAp A03:2025 Software Supply Chain Security Standard
+    </footer>
+
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('view-ingest').style.display = 'none';
+            document.getElementById('view-logs').style.display = 'none';
+            document.getElementById('view-stats').style.display = 'none';
+
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('view-' + tab).style.display = 'block';
+
+            if (tab === 'logs') loadSiemLogs();
+            if (tab === 'stats') loadStats();
+        }
+
+        function submitTelemetry() {
+            const eventMsg = document.getElementById('eventMsg').value.trim();
+            const contextMsg = document.getElementById('contextMsg').value.trim();
+            const sourceTag = document.getElementById('sourceTag').value.trim();
+            const diagBox = document.getElementById('diagBox');
+
+            diagBox.style.display = 'block';
+            diagBox.className = 'diag-box';
+            diagBox.textContent = 'Transmitting event through Edge Gateway...';
+
+            fetch('/api/v1/telemetry/ingest', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Audit-Context': contextMsg
+                },
+                body: JSON.stringify({
+                    event: eventMsg,
+                    context: contextMsg,
+                    source: sourceTag || 'mesh-gateway'
+                })
+            })
+            .then(r => r.json().then(data => ({ status: r.status, body: data })))
+            .then(res => {
+                if (res.status === 403 || res.body.blocked) {
+                    diagBox.className = 'diag-box error';
+                    diagBox.textContent = '[GATEWAY REJECTED] ' + res.body.error;
+                } else if (res.status === 202 && res.body.success) {
+                    diagBox.className = 'diag-box success';
+                    diagBox.innerHTML = `[ACCEPTED] ${res.body.message}<br>Status: ${res.body.status} &bull; Event ID: #${res.body.event_id}<br><br><span style="color: #cbd5e1; font-size: 12px;">Switch to the <strong>SIEM Live Log Stream</strong> tab to view asynchronous sink processing.</span>`;
+                } else {
+                    diagBox.className = 'diag-box error';
+                    diagBox.textContent = 'Processing Error: ' + (res.body.error || 'Failed');
+                }
+            })
+            .catch(err => {
+                diagBox.className = 'diag-box error';
+                diagBox.textContent = 'Transport Error: ' + err;
+            });
+        }
+
+        function loadSiemLogs() {
+            fetch('/api/v1/audit/logs')
+                .then(r => r.json())
+                .then(data => {
+                    const tbody = document.getElementById('logTableBody');
+                    tbody.innerHTML = '';
+                    const logs = data.logs || [];
+                    for (const entry of logs) {
+                        const tr = document.createElement('tr');
+                        let levelClass = entry.level === 'ALERT' ? 'level-alert' : 'level-info';
+
+                        tr.innerHTML = `
+                            <td><span class="${levelClass}">[${escapeHtml(entry.level)}]</span></td>
+                            <td style="color: #64748b;">${escapeHtml(entry.timestamp)}</td>
+                            <td style="color: #38bdf8;">${escapeHtml(entry.source)}</td>
+                            <td>
+                                <div>${escapeHtml(entry.event)}</div>
+                                <div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">Context: ${escapeHtml(entry.context)}</div>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    }
+                });
+        }
+
+        function loadStats() {
+            fetch('/api/v1/telemetry/stats')
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('statsPre').textContent = JSON.stringify(d, null, 2);
+                });
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        window.addEventListener('DOMContentLoaded', loadSiemLogs);
+    </script>
+</body>
+</html>

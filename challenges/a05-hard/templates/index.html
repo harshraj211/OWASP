@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Telemetry Format Diagnostics - RedTeam Hacker Academy</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-hover: #b71c1c;
+            --bg-main: #0b0e14;
+            --bg-card: #141b26;
+            --border: #26334d;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 36px; width: auto; }
+        .badge { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .container { max-width: 900px; margin: 36px auto; padding: 0 20px; width: 100%; flex: 1; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 28px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #ffffff; }
+        p.sub { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+        textarea { width: 100%; height: 130px; background: var(--bg-main); border: 1px solid var(--border); border-radius: 6px; color: #ffffff; padding: 14px; font-family: monospace; font-size: 14px; outline: none; margin-bottom: 16px; resize: vertical; }
+        textarea:focus { border-color: var(--accent); }
+        button { background: var(--primary); color: #ffffff; border: none; padding: 10px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: var(--primary-hover); }
+        #response-output { margin-top: 20px; padding: 16px; border-radius: 6px; font-family: monospace; font-size: 13px; display: none; }
+        .resp-success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; }
+        .resp-error { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
+        .resp-blocked { background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); color: #eab308; }
+        .waf-panel { background: #070a0f; border: 1px solid #1e293b; border-radius: 6px; padding: 16px; margin-top: 24px; font-size: 12px; color: #94a3b8; line-height: 1.6; }
+        footer { border-top: 1px solid var(--border); padding: 16px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">Apex Telemetry Engine</span>
+        </div>
+        <div>
+            <span class="badge">Jinja2 Engine Sandboxed</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Telemetry Diagnostic Format Validator</h1>
+            <p class="sub">
+                Interactive compiler and syntax validator for custom cluster telemetry format templates.
+            </p>
+
+            <label for="format-input" style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px;">
+                Telemetry Format Expression
+            </label>
+            <textarea id="format-input" placeholder="e.g. cluster_status: active | ping_interval: 5000">timestamp: 250</textarea>
+            <button id="btn-validate">Validate Expression</button>
+
+            <div id="response-output"></div>
+
+            <div class="waf-panel">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 6px;">[SANDBOX BLACKLIST FILTERS]:</div>
+                <div>&bull; Prohibited Characters: <code>.</code>, <code>_</code>, <code>[</code>, <code>]</code></div>
+                <div>&bull; Prohibited Keywords: <code>class</code>, <code>mro</code>, <code>base</code>, <code>subclasses</code>, <code>config</code>, <code>self</code>, <code>request</code>, <code>import</code>, <code>builtins</code>, <code>os</code>, <code>system</code>, <code>popen</code>, <code>subprocess</code>, <code>read</code>, <code>write</code>, <code>open</code></div>
+                <div>&bull; Output Rendering: <strong>Blind (Side-Channel Evaluation Only)</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btn-validate').addEventListener('click', async () => {
+            const input = document.getElementById('format-input').value;
+            const output = document.getElementById('response-output');
+            output.style.display = 'block';
+            output.className = '';
+            output.textContent = 'Evaluating expression on telemetry node...';
+
+            try {
+                const res = await fetch('/api/telemetry/probe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ format: input })
+                });
+
+                const data = await res.json();
+                if (res.status === 200) {
+                    output.className = 'resp-success';
+                    output.textContent = '[HTTP 200 OK] ' + data.message;
+                } else if (res.status === 403) {
+                    output.className = 'resp-blocked';
+                    output.textContent = '[HTTP 403 BLOCKED] ' + data.message;
+                } else {
+                    output.className = 'resp-error';
+                    output.textContent = '[HTTP 500 SYNTAX ERROR] ' + (data.message || 'Expression evaluation failed.');
+                }
+            } catch (err) {
+                output.className = 'resp-error';
+                output.textContent = 'Diagnostic request error: ' + err.message;
+            }
+        });
+    </script>
+
+    <footer>
+        RedTeam Hacker Academy &bull; OWASP A05: Injection Lab Environment
+    </footer>
+
+</body>
+</html>

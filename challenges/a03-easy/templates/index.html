@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroGrid Avionics Telemetry Gateway - RedTeam Hacker Academy</title>
+    <style>
+        :root {
+            --primary: #d32f2f;
+            --primary-hover: #b71c1c;
+            --bg-main: #0b0e14;
+            --bg-card: #141b26;
+            --border: #26334d;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #38bdf8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+        header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo-img { height: 34px; width: auto; }
+        .badge { background: rgba(211, 47, 47, 0.15); color: #ef4444; border: 1px solid rgba(211, 47, 47, 0.4); padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .container { max-width: 960px; margin: 30px auto; padding: 0 20px; width: 100%; flex: 1; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(0,0,0,0.5); }
+        h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: #ffffff; display: flex; align-items: center; gap: 10px; }
+        p.sub { color: var(--text-secondary); font-size: 13px; margin-bottom: 18px; line-height: 1.6; }
+        .nav-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px; }
+        .tab-btn { background: #0b0e14; border: 1px solid var(--border); color: var(--text-secondary); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .tab-btn:hover:not(.active) { background: #1e293b; color: #ffffff; }
+        .manifest-area { width: 100%; height: 220px; background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 14px; color: #38bdf8; font-family: "Courier New", Courier, monospace; font-size: 13px; line-height: 1.5; resize: vertical; outline: none; }
+        .manifest-area:focus { border-color: var(--accent); }
+        .action-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 12px; }
+        .btn { padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: background 0.2s; }
+        .btn-primary { background: var(--primary); color: #ffffff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary { background: #1e293b; color: #cbd5e1; border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #334155; color: #ffffff; }
+        .result-box { background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-top: 18px; display: none; }
+        .result-box.success { border-color: rgba(34, 197, 94, 0.4); }
+        .result-box.error { border-color: rgba(239, 68, 68, 0.4); }
+        pre { font-family: "Courier New", Courier, monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 20px; }
+        .metric-card { background: #0b0e14; border: 1px solid var(--border); border-radius: 6px; padding: 14px; }
+        .metric-title { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px; }
+        .metric-value { font-size: 18px; font-weight: 700; color: #ffffff; }
+        .flag-box { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 6px; padding: 16px; text-align: center; margin-top: 14px; display: none; }
+        .flag-token { font-family: monospace; font-size: 16px; font-weight: 700; color: #34d399; background: #05070a; border: 1px solid #1e293b; padding: 10px 14px; border-radius: 6px; margin-top: 8px; display: inline-block; }
+        footer { border-top: 1px solid var(--border); padding: 14px 28px; text-align: center; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <img src="/static/images/logo.webp" alt="RedTeam Hacker Academy" class="logo-img" onerror="this.onerror=null; this.src='https://redteamacademy.com/wp-content/uploads/2026/03/RedTeam-Logo-White-min-300x90-1.webp';">
+            <span style="font-size: 13px; color: var(--text-secondary); font-weight: 600;">AeroGrid Avionics Core</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <span class="badge">OWASP A03:2025</span>
+            <span class="badge badge-cyan">Port 6007</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Flight Live Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Ingestion Engine</div>
+                <div class="metric-value" style="color: #38bdf8;">AeroGrid v2.4.1</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Active Aircraft</div>
+                <div class="metric-value">AG-8821 (787-9)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Telemetry Mode</div>
+                <div class="metric-value" style="color: #22c55e;">ONLINE (YAML)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">SBOM Audit Status</div>
+                <div class="metric-value"><a href="/api/v1/sbom" target="_blank" style="color: #38bdf8; text-decoration: none; font-size: 14px;">Inspect SBOM &rarr;</a></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h1>
+                <span>AeroGrid Avionics Flight Telemetry Ingestion Gateway</span>
+            </h1>
+            <p class="sub">
+                This mission-critical gateway ingests avionics telemetry payloads and sensor flight manifests. 
+                As part of modern software supply chain verification, the system publishes a machine-readable 
+                <strong>Software Bill of Materials (SBOM)</strong> at <code>/api/v1/sbom</code>.
+            </p>
+
+            <div class="nav-tabs">
+                <button class="tab-btn active" id="tab-ingest" onclick="showTab('ingest')">Telemetry Ingest</button>
+                <button class="tab-btn" id="tab-sbom" onclick="showTab('sbom')">SBOM Inspector</button>
+                <button class="tab-btn" id="tab-docs" onclick="showTab('docs')">Documentation & Advisory</button>
+            </div>
+
+            <!-- TAB 1: Ingest -->
+            <div id="view-ingest">
+                <label style="display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px;">
+                    Avionics Mission Manifest (YAML Format)
+                </label>
+                <textarea id="manifestInput" class="manifest-area" spellcheck="false" placeholder="Paste or craft flight manifest YAML..."></textarea>
+                
+                <div class="action-bar">
+                    <button class="btn btn-secondary" onclick="loadSampleManifest()">Load Sample Manifest</button>
+                    <button class="btn btn-primary" onclick="submitTelemetry()">Submit & Process Telemetry</button>
+                </div>
+
+                <div id="resultBox" class="result-box">
+                    <div id="resultStatus" style="font-weight: 700; margin-bottom: 8px;"></div>
+                    <pre id="resultContent"></pre>
+                </div>
+
+                <div id="flagBox" class="flag-box">
+                    <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #22c55e;">Flag Recovered Successfully</span>
+                    <div><span id="flagValue" class="flag-token"></span></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SBOM -->
+            <div id="view-sbom" style="display: none;">
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                    Enterprise CycloneDX 1.4 Component Manifest returned by <code>/api/v1/sbom</code>:
+                </p>
+                <pre id="sbomDisplay" style="background: #05070a; border: 1px solid var(--border); border-radius: 6px; padding: 14px; max-height: 350px; overflow-y: auto; color: #38bdf8; font-size: 12px;"></pre>
+                <div style="margin-top: 14px;">
+                    <a href="/api/v1/sbom" target="_blank" class="btn btn-secondary" style="text-decoration: none; display: inline-block;">Open Raw SBOM JSON</a>
+                </div>
+            </div>
+
+            <!-- TAB 3: Docs -->
+            <div id="view-docs" style="display: none; font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
+                <h3 style="color: #ffffff; margin-bottom: 8px;">Mission Ingestion Protocols</h3>
+                <p>
+                    All incoming avionics manifests must conform to AeroGrid telemetry specifications. Sensor telemetry streams
+                    are deserialized by the legacy telemetry subsystem before persistent flight recording.
+                </p>
+                <br>
+                <h3 style="color: #ffffff; margin-bottom: 8px;">Supply Chain Security Compliance</h3>
+                <p>
+                    In accordance with federal aviation DevSecOps guidelines, all active components and libraries are indexed in the Software Bill of Materials (SBOM).
+                    DevSecOps engineers are advised to audit all transitive parsers for known CVE disclosures.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        RedTeam Hacker Academy &bull; OSWAp A03:2025 Software Supply Chain Security Standard
+    </footer>
+
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('view-ingest').style.display = 'none';
+            document.getElementById('view-sbom').style.display = 'none';
+            document.getElementById('view-docs').style.display = 'none';
+
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('view-' + tab).style.display = 'block';
+
+            if (tab === 'sbom') {
+                loadSbom();
+            }
+        }
+
+        function loadSampleManifest() {
+            fetch('/api/v1/telemetry/sample')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) {
+                        document.getElementById('manifestInput').value = d.manifest;
+                    }
+                });
+        }
+
+        function loadSbom() {
+            fetch('/api/v1/sbom')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('sbomDisplay').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(err => {
+                    document.getElementById('sbomDisplay').textContent = "Failed to load SBOM: " + err;
+                });
+        }
+
+        function submitTelemetry() {
+            const manifest = document.getElementById('manifestInput').value;
+            const resBox = document.getElementById('resultBox');
+            const resStatus = document.getElementById('resultStatus');
+            const resContent = document.getElementById('resultContent');
+            const flagBox = document.getElementById('flagBox');
+            const flagVal = document.getElementById('flagValue');
+
+            resBox.style.display = 'block';
+            resBox.className = 'result-box';
+            resStatus.textContent = 'Processing telemetry manifest...';
+            resContent.textContent = '';
+            flagBox.style.display = 'none';
+
+            fetch('/api/v1/telemetry/parse', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ manifest: manifest })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    resBox.className = 'result-box success';
+                    resStatus.innerHTML = '<span style="color: #22c55e;">&#x2714; ' + data.message + '</span>';
+                    const outputStr = typeof data.data === 'object' ? JSON.stringify(data.data, null, 2) : String(data.data);
+                    resContent.textContent = outputStr;
+
+                    // Detect Flag in output
+                    const flagMatch = outputStr.match(/RTSA\{[a-zA-Z0-9_\-]+\}/);
+                    if (flagMatch) {
+                        flagBox.style.display = 'block';
+                        flagVal.textContent = flagMatch[0];
+                    }
+                } else {
+                    resBox.className = 'result-box error';
+                    resStatus.innerHTML = '<span style="color: #ef4444;">&#x2718; Error</span>';
+                    resContent.textContent = data.error || 'Unknown ingestion error.';
+                }
+            })
+            .catch(err => {
+                resBox.className = 'result-box error';
+                resStatus.innerHTML = '<span style="color: #ef4444;">&#x2718; Network / Parser Fault</span>';
+                resContent.textContent = String(err);
+            });
+        }
+
+        // Initialize with sample manifest on load
+        window.addEventListener('DOMContentLoaded', loadSampleManifest);
+    </script>
+</body>
+</html>

@@ -126,4 +126,4 @@ def get_record(document_id: str):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("LAB_PORT", "5000")), debug=False)
+    app.run(host="0.0.0.0", port=int(os.environ.get("LAB_PORT", "6001")), debug=False)
