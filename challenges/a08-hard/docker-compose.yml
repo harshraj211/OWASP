@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: pentestgarage-a08-hard
+    cap_add:
+      - NET_ADMIN
     environment:
       - LAB_PORT=6024
       - FLAG=RTSA{a08_pickle_blind_timing_egress_9021}

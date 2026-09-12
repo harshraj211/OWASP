@@ -36,6 +36,7 @@ if docker info >/dev/null 2>&1; then
         docker build --label "org.oswap.source-hash=${source_hash}" --tag "$image_name" "$challenge_dir"
     fi
     docker run --detach --name "$container_name" \
+        --cap-add NET_ADMIN \
         --publish "127.0.0.1:${port}:${port}" \
         --env "FLAG=${flag}" \
         "$image_name" >/dev/null
