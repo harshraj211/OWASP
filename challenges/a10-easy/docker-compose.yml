@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  a10-easy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pentestgarage-a10-easy
+    environment:
+      - LAB_PORT=6028
+      - FLAG=RTSA{a10_stack_trace_concurrency_race_8829}
+    ports:
+      - "127.0.0.1:6028:6028"
+    networks:
+      - lab_net
+    restart: unless-stopped
+
+networks:
+  lab_net:
+    name: pentestgarage_lab_net
+    driver: bridge

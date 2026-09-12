@@ -2,18 +2,30 @@
 {% block title %}Engine API Specification{% endblock %}
 {% block content %}
 <div class="card">
-    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">QuantEdge Internal API Reference</h1>
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">QuantEdge Quantitative Risk API Reference</h1>
     <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
-        Developer endpoint documentation for the quantitative risk engine.
+        Developer endpoint documentation for the high-frequency matrix optimization subsystem.
     </p>
 
     <div style="background: #040810; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border); font-family: monospace; font-size: 0.85rem; color: #cbd5e1; line-height: 1.8;">
         <div><strong>Public Endpoints:</strong></div>
-        <div style="margin-left: 1rem;">- <code>POST /portfolio</code> (Form-based portfolio optimizer)</div>
-        <div style="margin-left: 1rem;">- <code>GET /models</code> (Model registry)</div>
+        <div style="margin-left: 1rem;">- <code>POST /portfolio</code> (Web interface for portfolio analysis)</div>
+        <div style="margin-left: 1rem;">- <code>POST /api/v1/matrix/optimize</code> (High-speed asynchronous JSON endpoint)</div>
+        <div style="margin-left: 2rem; color: var(--text-muted); font-size: 0.8rem;">Payload schema:</div>
+        <pre style="margin-left: 2rem; color: var(--cyan); background: #0b1120; padding: 0.75rem; border-radius: 4px; font-size: 0.75rem;">{
+  "assets": ["NVDA", "AAPL", "MSFT"],
+  "weights": [0.4, 0.3, 0.3],
+  "covariance_factor": 1.0,
+  "matrix_config": {
+    "algorithm": "cholesky_decomposition",
+    "worker_slice_ref": "0x00",
+    "thread_affinity": "balanced"
+  }
+}</pre>
+        <div style="margin-left: 1rem;">- <code>GET /models</code> (Algorithm registry)</div>
         <div style="margin-top: 1rem;"><strong>Internal Confidential Endpoints:</strong></div>
-        <div style="margin-left: 1rem; color: var(--cyan);">- <code>GET /api/v1/internal/confidential-vault?token=&lt;INTERNAL_TOKEN&gt;</code></div>
-        <div style="margin-left: 2rem; color: var(--text-muted); font-size: 0.8rem;">Requires authenticated internal session token. Disclosed in internal architecture specs.</div>
+        <div style="margin-left: 1rem; color: var(--danger);">- <code>GET /api/v1/internal/confidential-vault?token=&lt;AUTHENTICATED_MASTER_KEY&gt;</code></div>
+        <div style="margin-left: 2rem; color: var(--text-muted); font-size: 0.8rem;">Requires 32-character master key. Key is strictly held in worker thread kernel registers.</div>
     </div>
 </div>
 {% endblock %}

@@ -1,22 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Portfolio Optimizer{% endblock %}
+{% block title %}Portfolio Matrix Optimizer{% endblock %}
 {% block content %}
-<div style="max-width: 650px; margin: 2rem auto;">
+<div style="max-width: 750px; margin: 2rem auto;">
     <div class="card">
-        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Portfolio Risk Calculation</h1>
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Portfolio Risk Matrix Optimization</h1>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-            Submit portfolio assets, asset weights, and covariance factors to calculate portfolio volatility.
+            Submit portfolio assets, covariance factors, and multivariable matrix partition configurations to calculate high-frequency risk metrics.
         </p>
 
         {% if error_trace %}
         <div style="background: #1e0909; border: 1px solid var(--danger); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
-            <h3 style="color: var(--danger); font-size: 0.95rem; margin-bottom: 0.5rem;">Unhandled System Exception (Stack Trace Disclosure):</h3>
-            <pre style="color: #fca5a5; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto;">{{ error_trace | safe }}</pre>
+            <h3 style="color: var(--danger); font-size: 0.95rem; margin-bottom: 0.5rem;">Unhandled Worker Exception (Thread Synchronization Crash):</h3>
+            <pre style="color: #fca5a5; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; max-height: 350px; overflow-y: auto;">{{ error_trace | safe }}</pre>
         </div>
         {% endif %}
         {% if calculation_result %}
         <div style="background: #040810; border: 1px solid var(--cyan); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
-            <h3 style="color: var(--cyan); font-size: 0.95rem; margin-bottom: 0.5rem;">Calculated Metrics:</h3>
+            <h3 style="color: var(--cyan); font-size: 0.95rem; margin-bottom: 0.5rem;">Execution Status:</h3>
             <pre style="color: #10b981; font-family: monospace; font-size: 0.85rem;">{{ calculation_result }}</pre>
         </div>
         {% endif %}
@@ -27,15 +27,30 @@
                 <input type="text" name="assets" value="NVDA, AAPL, MSFT" style="width: 100%; padding: 0.7rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
             </div>
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Asset Weights (Comma separated)</label>
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Asset Weights</label>
                 <input type="text" name="weights" value="0.4, 0.3, 0.3" style="width: 100%; padding: 0.7rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
             </div>
-            <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Covariance Multiplier Factor</label>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Covariance Multiplier</label>
                 <input type="text" name="covariance_factor" value="1.0" style="width: 100%; padding: 0.7rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
-                <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem; display: block;">Hint: Factor is used in denominator <code>1 / covariance_factor</code>.</span>
             </div>
-            <button type="submit" class="btn btn-cyan" style="width: 100%;">Compute Portfolio Sharpe</button>
+
+            <div style="background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
+                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.75rem; font-weight: 600;">Advanced Matrix Config (Worker Memory Subsystem)</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Decomposition Algorithm</label>
+                        <input type="text" name="algorithm" value="cholesky_decomposition" style="width: 100%; padding: 0.6rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.8rem;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Worker Slice Reference (Hex Offset)</label>
+                        <input type="text" name="worker_slice_ref" value="0x00" style="width: 100%; padding: 0.6rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.8rem;">
+                    </div>
+                </div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; display: block;">Underlying API uses nested JSON: <code>{"matrix_config": {"worker_slice_ref": "0x00"}}</code></span>
+            </div>
+
+            <button type="submit" class="btn btn-cyan" style="width: 100%;">Execute Matrix Decomposition</button>
         </form>
     </div>
 </div>

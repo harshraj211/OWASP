@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  a08-hard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pentestgarage-a08-hard
+    environment:
+      - LAB_PORT=6024
+      - FLAG=RTSA{a08_pickle_blind_timing_egress_9021}
+      - SECRET_KEY=pg_a08_hard_airgapped_secret_vault_88921
+    ports:
+      - "127.0.0.1:6024:6024"
+    networks:
+      - lab_net
+      - airgapped_internal
+    dns:
+      - 127.0.0.1
+    restart: unless-stopped
+    depends_on:
+      - pipeline-sidecar
+
+  pipeline-sidecar:
+    image: alpine:3.19
+    container_name: pentestgarage-a08-sidecar
+    command: >
+      sh -c "while true; do echo 'AeroData Airgapped Processing Pipeline Active' > /dev/null; sleep 10; done"
+    networks:
+      - airgapped_internal
+    restart: unless-stopped
+
+networks:
+  lab_net:
+    name: pentestgarage_lab_net
+    driver: bridge
+  airgapped_internal:
+    name: pentestgarage_airgapped_internal
+    driver: bridge
+    internal: true
