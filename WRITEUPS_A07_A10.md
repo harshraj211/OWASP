@@ -60,7 +60,7 @@ To emulate real-world target environments, each challenge now contains multiple 
 4. Read security notice **SEC-2024-09**:
    > *"Notice: All staff onboarded prior to 2024 still retain default initial credentials matching `[AirportCode]![Season][Year]` (e.g., `JFK!Spring2023`). All personnel must rotate passwords upon next login."*
 5. Synthesize target password: `Base: LAX` + `!` + `Season/Year: Fall2023` = **`LAX!Fall2023`**.
-6. Click **`[Dispatch Login]`**, enter username `m.vance` and password `LAX!Fall2023`, then click **Submit**.
+6. Click **`[Dispatch Login]`**, enter Crew ID `m.vance` and Dispatch Code `LAX!Fall2023`, then click **Submit**.
 
 ### 3. Burp Suite Repeater Wire Capture
 ![Burp Suite Repeater - A07 Easy](docs/images/burp_a07_easy_1789268376978.jpg)
