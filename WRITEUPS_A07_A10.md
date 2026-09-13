@@ -4,6 +4,14 @@
 
 ---
 
+## The RedTeam Hacker Academy UI & Distractor Pages
+All challenges A07-A10 have been upgraded with a **RedTeam Hacker Academy** branded, ultra-professional UI. This includes cinematic, theme-appropriate background slideshows (e.g., aviation for AeroFleet, military vessels for Titan Defense, stock exchanges for QuantEdge). 
+
+**The Pentester's Instinct:**
+To emulate real-world target environments, each challenge now contains multiple highly polished "distractor pages" (`/about`, `/services`, `/contact`, `/careers`). Beginners may waste time enumerating these static rabbit holes. A seasoned pentester will quickly disregard these dummy pages and focus their attention on the core functional endpoints where the vulnerabilities lie.
+
+---
+
 ## Master Challenge Directory
 
 ```

@@ -130,6 +130,24 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/services')
+def services():
+    return render_template('services.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/careers')
+def careers():
+    return render_template('careers.html')
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or 6020)
     print(f"[{CHALLENGE_KEY}] Running on port {port}")

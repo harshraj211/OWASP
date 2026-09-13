@@ -3,20 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}QuantEdge Capital{% endblock %} - Algorithmic Portfolio Platform</title>
+    <title>{% block title %}QuantEdge Capital{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Slideshow Background */
+        .bg-slideshow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: #000;
+        }
+        
+        .bg-slideshow div {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: slideAnim 20s infinite;
+        }
+
+        .bg-slideshow div:nth-child(1) {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/New_York_Stock_Exchange_building.jpg/1280px-New_York_Stock_Exchange_building.jpg');
+            animation-delay: 0s;
+        }
+        .bg-slideshow div:nth-child(2) {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Frankfurt_B%C3%B6rse_Bulle_und_B%C3%A4r.jpg/1280px-Frankfurt_B%C3%B6rse_Bulle_und_B%C3%A4r.jpg');
+            animation-delay: 10s;
+        }
+
+        @keyframes slideAnim {
+            0% { opacity: 0; transform: scale(1.05); }
+            10% { opacity: 0.5; }
+            40% { opacity: 0.5; }
+            50% { opacity: 0; transform: scale(1); }
+            100% { opacity: 0; }
+        }
+
+        /* Overlay */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(15,23,42,0.6) 100%);
+            z-index: -1;
+            backdrop-filter: blur(4px);
+        }
+
+        .navbar {
+            background: rgba(20, 15, 10, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .footer {
+            background: rgba(20, 15, 10, 0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Generic element overrides to look good on glass */
+        input, select, textarea {
+            background: rgba(0,0,0,0.3) !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            color: #fff !important;
+        }
+        
+        table th, table td {
+            border-color: rgba(255,255,255,0.1) !important;
+        }
+    </style>
 </head>
 <body>
-    <nav class="nav">
-        <a href="/" class="brand">
-            <span>📈 QuantEdge Capital Management</span>
+    <div class="bg-slideshow">
+        <div></div>
+        <div></div>
+    </div>
+    <div class="bg-overlay"></div>
+
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="RedTeam Hacker Academy">
+            <span>QuantEdge Capital</span>
         </a>
         <div class="nav-links">
-            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Market Analytics</a>
-            <a href="/portfolio" class="{% if request.path == '/portfolio' %}active{% endif %}">Portfolio Optimizer</a>
-            <a href="/models" class="{% if request.path == '/models' %}active{% endif %}">Risk Models</a>
-            <a href="/api-spec" class="{% if request.path == '/api-spec' %}active{% endif %}">Engine API Spec</a>
-            <a href="/vault" class="{% if request.path == '/vault' %}active{% endif %}" style="color: var(--cyan); font-weight: 700;">Quant Vault</a>
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            
+            <a href="/portfolio" class="{% if request.path == '/portfolio' %}active{% endif %}">Portfolio Optimizer</a>\n            <a href="/models" class="{% if request.path == '/models' %}active{% endif %}">Risk Models</a>\n            <a href="/api-spec" class="{% if request.path == '/api-spec' %}active{% endif %}">Engine API Spec</a>\n            <a href="/vault" class="{% if request.path == '/vault' %}active{% endif %}">Quant Vault</a>
+            
+            {% if session.get('user') or session.get('username') %}
+                <span style="color:var(--success); font-weight:600; font-size:0.85rem; padding: 0.25rem 0.75rem; background: rgba(34, 197, 94, 0.15); border-radius: 4px; border: 1px solid rgba(34, 197, 94, 0.3);">User Active</span>
+                <a href="/logout" style="color: var(--danger);">Logout</a>
+            {% else %}
+                <a href="/login" class="btn btn-primary" style="background:var(--primary); color:#fff; padding:0.5rem 1rem;">Login / Portal</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -25,7 +202,7 @@
     </div>
 
     <footer class="footer">
-        QuantEdge Capital Analytics Engine &copy; 2026. High-Frequency Quantitative Risk Modeling.
+        QuantEdge Capital &copy; 2026. All rights reserved. | Security & Operations Gateway.
     </footer>
 </body>
 </html>
