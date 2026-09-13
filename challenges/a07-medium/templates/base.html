@@ -67,17 +67,7 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
-        .category-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+
 
         /* Animated Status Bar */
         .status-bar {
@@ -273,17 +263,16 @@
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
             <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
-            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
-            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Settlement Rails</a>
-            <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Treasury Desk</a>
-            <a href="/security/audit-vault" class="{% if request.path == '/security/audit-vault' %}active{% endif %}">Executive Vault</a>
-            <a href="/auth/2fa" class="{% if request.path == '/auth/2fa' %}active{% endif %}">2FA Verification Pending</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             {% if session.get('user') or session.get('username') %}
+                <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Treasury Desk</a>
+                <a href="/security/audit-vault" class="{% if request.path == '/security/audit-vault' %}active{% endif %}">Executive Vault</a>
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
+            {% else %}
+                <a href="/login" class="{% if request.path == '/login' %}active{% endif %}">Treasury Portal Login</a>
             {% endif %}
-            <div class="category-badge">A07: Identification and Authentication Failures</div>
         </div>
     </nav>
 

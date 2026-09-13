@@ -1,11 +1,23 @@
 {% extends "base.html" %}
-{% block title %} About {% endblock %}
+{% block title %}About Aegis Treasury{% endblock %}
 {% block content %}
 <div class="card glass-card">
-    <h2>About</h2>
-    <p>Welcome to the About page for AeroFleet Global Operations. We pride ourselves on top-tier professional services and cutting-edge operational excellence. This section is currently undergoing maintenance and some interactive features might be disabled.</p>
-    <div style="margin-top:20px; padding:20px; background:rgba(0,0,0,0.4); border-radius:8px;">
-        <p style="color:#a8b2d1;"><strong>Notice:</strong> Internal communications and secure portals should be accessed via your designated operational endpoint.</p>
+    <h1 style="font-size: 1.5rem; color: #fff; margin-bottom: 0.5rem;">About Aegis Global Treasury</h1>
+    <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
+        Pioneering ultra-secure multilateral settlement systems for international financial institutions since 2018.
+    </p>
+
+    <div style="background: #090e1a; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; color: var(--gold); margin-bottom: 0.5rem;">Mission-Critical Infrastructure</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            Aegis operates high-throughput bilateral gross settlement channels processing upwards of $1.4 Trillion daily. Our architecture combines immutable cryptographic ledgers, strict role-based access control, and automated failover mechanics across redundant global availability zones.
+        </p>
+    </div>
+
+    <div style="padding: 1.25rem; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid var(--border);">
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Security Notice:</strong> All administrative access to clearing engines requires multi-factor cryptographic authorization. Access logs are continuously audited and archived to compliant tamper-evident storage.
+        </p>
     </div>
 </div>
 {% endblock %}

@@ -67,17 +67,7 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
-        .category-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+
 
         /* Animated Status Bar */
         .status-bar {
@@ -277,12 +267,13 @@
             <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             <a href="/trials" class="{% if request.path == '/trials' %}active{% endif %}">Active Trials</a>
             <a href="/outbox" class="{% if request.path == '/outbox' %}active{% endif %}">Research Relay (Outbox)</a>
-            <a href="/admin/governance" class="{% if request.path == '/admin/governance' %}active{% endif %}">Governance Vault</a>
             {% if session.get('user') or session.get('username') %}
+                <a href="/admin/governance" class="{% if request.path == '/admin/governance' %}active{% endif %}">Governance Vault</a>
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
+            {% else %}
+                <a href="/login" class="{% if request.path == '/login' %}active{% endif %}">Investigator Login</a>
             {% endif %}
-            <div class="category-badge">A07: Identification and Authentication Failures</div>
         </div>
     </nav>
 

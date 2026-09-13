@@ -68,44 +68,46 @@ def login():
         session['mfa_verified'] = True
         return redirect(url_for('dashboard'))
 
+ACTIVE_DR_TICKET = "INC-88219-DR"
+
 @app.route('/auth/2fa', methods=['GET', 'POST'])
 def mfa_view():
     if not session.get('user'):
         return redirect(url_for('login'))
-    if not session.get('mfa_required'):
+    if not session.get('mfa_required') or session.get('mfa_verified'):
         return redirect(url_for('dashboard'))
     
     if request.method == 'GET':
         return render_template('mfa.html')
     
-    # Check SecOps header or override parameter
-    if request.headers.get('X-SecOps-Internal') == '1' or request.form.get('emergency_override') == '1':
-        session['mfa_verified'] = True
-        return redirect(url_for('dashboard'))
-
     code = request.form.get('code', '').strip()
-    # Any fake TOTP fails unless bypassed
     return render_template('mfa.html', error="Invalid TOTP authentication code. Attempt logged to SecOps monitor."), 403
 
-@app.route('/api/v1/auth/session/upgrade', methods=['POST'])
-def api_session_upgrade():
-    """Alternative upgrade endpoint for automated SecOps integrations."""
+@app.route('/api/v1/auth/session/emergency-dispatch', methods=['POST'])
+def api_emergency_dispatch():
+    """Emergency dispatch elevation endpoint for active DR response."""
     if not session.get('user'):
-        return jsonify({"error": "No unauthenticated session active"}), 401
+        return jsonify({"success": False, "error": "No active authenticated session."}), 401
 
     data = request.get_json(silent=True) or {}
-    secops_hdr = request.headers.get('X-SecOps-Internal')
-    bypass_reason = data.get('bypass_mfa_reason')
+    ticket = (data.get('incident_ticket') or request.form.get('incident_ticket') or request.headers.get('X-SecOps-Ticket') or '').strip()
 
-    if secops_hdr == '1' or bypass_reason:
+    if ticket == ACTIVE_DR_TICKET:
         session['mfa_verified'] = True
         return jsonify({
             "success": True,
-            "message": "MFA requirement bypassed via SecOps Emergency Dispatch",
+            "message": f"Session elevated: Emergency dispatch authorized under ticket {ACTIVE_DR_TICKET}",
             "redirect": "/dashboard"
-        })
+        }), 200
     
-    return jsonify({"success": False, "error": "Unauthorized session elevation request"}), 403
+    return jsonify({
+        "success": False,
+        "error": "Access Denied: Invalid or expired disaster recovery incident ticket."
+    }), 403
+
+@app.route('/api/v1/auth/session/upgrade', methods=['POST'])
+def api_session_upgrade_legacy():
+    return api_emergency_dispatch()
 
 @app.route('/dashboard')
 def dashboard():
@@ -135,9 +137,6 @@ def logout():
 def about():
     return render_template('about.html')
 
-@app.route('/services')
-def services():
-    return render_template('services.html')
 
 @app.route('/contact')
 def contact():

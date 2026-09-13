@@ -1,13 +1,16 @@
-// Aegis Enterprise 2FA & Multi-Factor Authentication State Controller
-// v4.8.2-prod (Build: 20260815)
-// Notice: Internal SEC-Ops bypass handler enabled for legacy automated test suites.
-// API Reference: /api/v1/auth/session/upgrade with header 'X-SecOps-Internal: 1' or payload param 'bypass_mfa_reason'
+// Aegis Enterprise 2FA State Controller
+// Build: 20260815-prod
+
+const SecOpsEmergencyConfig = {
+    endpoint: "/api/v1/auth/session/emergency-dispatch",
+    protocol: "DR-Failover-v2",
+    requiredFields: ["incident_ticket"]
+};
 
 function handleMfaSubmit(event) {
-    // Normal client submit handler
-    const code = document.getElementById('mfa-code').value;
-    if (!code || code.length !== 6) {
-        alert("Please enter a valid 6-digit TOTP code.");
+    const code = document.getElementById('mfa-code');
+    if (code && (!code.value || code.value.length !== 6)) {
+        alert("Please enter a valid 6-digit TOTP verification token.");
         return false;
     }
     return true;

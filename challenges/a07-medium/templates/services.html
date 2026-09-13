@@ -1,11 +1,40 @@
 {% extends "base.html" %}
-{% block title %} Services {% endblock %}
+{% block title %}Settlement Rails & Treasury Operations{% endblock %}
 {% block content %}
 <div class="card glass-card">
-    <h2>Services</h2>
-    <p>Welcome to the Services page for AeroFleet Global Operations. We pride ourselves on top-tier professional services and cutting-edge operational excellence. This section is currently undergoing maintenance and some interactive features might be disabled.</p>
-    <div style="margin-top:20px; padding:20px; background:rgba(0,0,0,0.4); border-radius:8px;">
-        <p style="color:#a8b2d1;"><strong>Notice:</strong> Internal communications and secure portals should be accessed via your designated operational endpoint.</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 1.5rem; color: #fff;">Aegis Settlement Rails & Cross-Border Clearing</h1>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">High-availability bilateral gross settlement protocols for global banking institutions.</p>
+        </div>
+        <span class="badge badge-gold">Active Rails: Nominal</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: #090e1a; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--gold);">Fedwire & TARGET2 Gateway</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                Continuous linked settlement interface routing Tier-1 central bank reserve transfers. Guaranteed sub-millisecond atomic batch commits across distributed ledger ledgers.
+            </p>
+        </div>
+        <div style="background: #090e1a; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--gold);">Liquidity Optimization Pool</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                Automated multi-currency collateral replenishment engine. Enforces Basel III capital ratio boundaries with real-time risk position netting.
+            </p>
+        </div>
+    </div>
+
+    <div style="background: #0a1120; border-left: 4px solid var(--gold); padding: 1.25rem; border-radius: 4px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <h3 style="font-size: 1rem; color: #fff;">SecOps Change Advisory SEC-2026-DR: Substation Failover Protocol</h3>
+            <span class="badge badge-red">Active DR Incident: INC-88219-DR</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            Due to ongoing primary rail maintenance under disaster recovery ticket <code>INC-88219-DR</code>, administrative workstation routing is operating under emergency dispatch protocols.
+            <br><br>
+            <strong>Maintenance Advisory:</strong> Primary root operator account <code>sysadmin_root</code> has been temporarily provisioned with the scheduled DR staging token <code>AutumnSettlement#99</code>. Secondary hardware TOTP verification remains mandatory for administrative elevation before the Executive Vault can be opened.
+        </p>
     </div>
 </div>
 {% endblock %}

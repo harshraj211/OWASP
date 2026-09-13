@@ -67,17 +67,7 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
-        .category-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+
 
         /* Animated Status Bar */
         .status-bar {
@@ -277,12 +267,13 @@
             <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             <a href="/crew-roster" class="{% if request.path == '/crew-roster' %}active{% endif %}">Crew Directory</a>
             <a href="/bulletins" class="{% if request.path == '/bulletins' %}active{% endif %}">Operations Bulletins</a>
-            <a href="/dispatch/operations" class="{% if request.path == '/dispatch/operations' %}active{% endif %}">Dispatch Console</a>
             {% if session.get('user') or session.get('username') %}
+                <a href="/dispatch/operations" class="{% if request.path == '/dispatch/operations' %}active{% endif %}">Dispatch Console</a>
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
+            {% else %}
+                <a href="/login" class="{% if request.path == '/login' %}active{% endif %}">Dispatch Login</a>
             {% endif %}
-            <div class="category-badge">A07: Identification and Authentication Failures</div>
         </div>
     </nav>
 

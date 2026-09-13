@@ -1,18 +1,18 @@
-# A07 Medium: Multi-Factor Authentication (MFA) Bypass
+# A07 Medium: Multi-Factor Authentication (MFA) Bypass (Aegis Global Treasury)
 
 ### Category: OWASP Top 10:2025 - A07 Authentication Failures
-* **Difficulty:** Medium (Very Difficult Level)
+* **Difficulty:** Medium (Enterprise State Machine Bypass)
 * **Default Port:** 6020
-* **Concept:** Multi-Stage Authentication State Machine Bypass & Leaked SecOps Internal Headers
+* **Concept:** Multi-Stage Authentication State Machine Bypass & SecOps Disaster Recovery Elevation
 
 ---
 
 ### Challenge Description
-Aegis Clearinghouse manages bilateral high-value gross settlements for international investment banks. Administrative sessions demand multi-factor authentication (TOTP 6-digit codes) protected by rate limits.
+Aegis Global Treasury manages bilateral high-value gross settlements for international investment banks. Administrative sessions demand multi-factor authentication (hardware TOTP 6-digit codes) before clearance into the Executive Vault is granted.
 
-However, automated test suites and disaster-recovery protocols introduced undocumented session elevation pathways into the authentication flow.
+During ongoing infrastructure failover operations, undocumented emergency session elevation pathways were integrated into the authentication pipeline to ensure business continuity for automated settlement routines.
 
 ### Objective
-1. Enumerate `/services` and JavaScript client assets to discover leaked credentials (`sysadmin_root` / `AutumnSettlement#99`) and internal SecOps headers (`X-SecOps-Internal: 1` or `/api/v1/auth/session/upgrade`).
-2. Log in as `sysadmin_root` and bypass the 2FA enforcement stage.
-3. Access `/security/audit-vault` to extract the dynamic flag.
+1. Explore the institutional settlement platform and operational advisories to discover temporary administrative maintenance credentials and active disaster recovery incident parameters.
+2. Authenticate as the root administrative operator and analyze the multi-factor authentication state controller.
+3. Leverage the SecOps emergency dispatch elevation protocol to bypass the secondary verification requirement and access `/security/audit-vault` to extract the dynamic flag.
