@@ -1,16 +1,36 @@
-<!DOCTYPE html>
+import os
+import re
+
+challenges_dir = "/home/kali/Desktop/OSWAP/challenges"
+
+themes = {
+    "a07-easy": {"company": "AeroFleet Global", "category": "A07", "color": "#D4AF37"},
+    "a07-medium": {"company": "Aegis Global Treasury", "category": "A07", "color": "#50C878"},
+    "a07-hard": {"company": "Apex BioLogistics", "category": "A07", "color": "#87CEEB"},
+    "a08-easy": {"company": "Novus CMS", "category": "A08", "color": "#00BFFF"},
+    "a08-medium": {"company": "VortexEdge SCADA", "category": "A08", "color": "#FFBF00"},
+    "a08-hard": {"company": "AeroData Analytics", "category": "A08", "color": "#00BFFF"},
+    "a09-easy": {"company": "Sentinel SOC", "category": "A09", "color": "#DC143C"},
+    "a09-medium": {"company": "Apex Global Bank", "category": "A09", "color": "#50C878"},
+    "a09-hard": {"company": "Titan Defense", "category": "A09", "color": "#DC143C"},
+    "a10-easy": {"company": "QuantEdge Capital", "category": "A10", "color": "#50C878"},
+    "a10-medium": {"company": "Synapse SCADA Grid", "category": "A10", "color": "#FFBF00"},
+    "a10-hard": {"company": "OmniPress Media", "category": "A10", "color": "#00BFFF"}
+}
+
+base_template_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}AeroFleet Global{% endblock %} - AeroFleet Global</title>
+    <title>{% block title %}{{company}}{% endblock %} - {{company}}</title>
     <style>
         :root {
             --bg-main: #0c0d10;
             --bg-surface: #14161b;
             --bg-card: #1c1f26;
             --border: #2a2e39;
-            --accent: #D4AF37;
+            --accent: {{color}};
             --text-primary: #f0f2f5;
             --text-secondary: #9aa0ac;
             --text-muted: #646a78;
@@ -156,12 +176,12 @@
     <header class="site-header">
         <a class="brand" href="/">
             <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="RedTeam Hacker Academy" style="height: 32px; border-radius: 4px;">
-            <span>AeroFleet Global</span>
+            <span>{{company}}</span>
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/crew-roster" class="{% if request.path == '/crew-roster' %}active{% endif %}">Crew Directory</a>\n            <a href="/bulletins" class="{% if request.path == '/bulletins' %}active{% endif %}">Operations Bulletins</a>\n            <a href="/dispatch/operations" class="{% if request.path == '/dispatch/operations' %}active{% endif %}">Dispatch Console</a>
-            <span class="badge badge-outline">A07</span>
+            {% block extra_nav %}{% endblock %}
+            <span class="badge badge-outline">{{category}}</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); font-size: 0.85rem; font-weight: 600;">Log Out</a>
@@ -174,7 +194,40 @@
     </div>
 
     <footer class="footer">
-        AeroFleet Global Internal Systems &copy; 2026.
+        {{company}} Internal Systems &copy; 2026.
     </footer>
 </body>
 </html>
+"""
+
+for item in os.listdir(challenges_dir):
+    chal_path = os.path.join(challenges_dir, item)
+    if os.path.isdir(chal_path) and item in themes:
+        theme = themes[item]
+        templates_dir = os.path.join(chal_path, 'templates')
+        if not os.path.exists(templates_dir):
+            continue
+
+        base_path = os.path.join(templates_dir, 'base.html')
+        if os.path.exists(base_path):
+            with open(base_path, 'r') as f:
+                old_base = f.read()
+
+            extra_nav_links = []
+            links = re.findall(r'<a href="(/[^"]+)"[^>]*>(.*?)</a>', old_base)
+            for link, text in links:
+                if link not in ['/', '/login', '/logout'] and not link.startswith('/static') and "Home" not in text and "Log Out" not in text and "Terminate" not in text:
+                    if "<img" not in text and "{" not in link and "<" not in text:
+                        extra_nav_links.append(f'<a href="{link}" class="{{% if request.path == \'{link}\' %}}active{{% endif %}}">{text}</a>')
+            
+            extra_nav_str = "\\n            ".join(extra_nav_links)
+
+            new_base = base_template_html.replace("{{company}}", theme['company']) \
+                .replace("{{category}}", theme['category']) \
+                .replace("{{color}}", theme['color']) \
+                .replace("{% block extra_nav %}{% endblock %}", extra_nav_str)
+
+            with open(base_path, 'w') as f:
+                f.write(new_base)
+
+print("A06-style minimalist clean UI applied to A07-A10.")

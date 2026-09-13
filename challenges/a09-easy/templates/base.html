@@ -1,237 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Sentinel SOC{% endblock %} - Sentinel SOC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #DC143C;
-            --primary-hover: #E84A68;
-            --bg-color: #0A0A0A;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --border: rgba(255, 255, 255, 0.15);
+            --bg-main: #0c0d10;
+            --bg-surface: #14161b;
+            --bg-card: #1c1f26;
+            --border: #2a2e39;
+            --accent: #DC143C;
+            --text-primary: #f0f2f5;
+            --text-secondary: #9aa0ac;
+            --text-muted: #646a78;
+            --danger: #f87171;
+            --success: #34d399;
+            --radius: 8px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0505 100%), radial-gradient(circle at center, rgba(220,20,60,0.1) 0%, transparent 70%);
-            background-color: var(--bg-color);
-            color: var(--text-light);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-attachment: fixed;
         }
 
-        /* Top Navbar */
-        .navbar {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
+        .site-header {
+            height: 72px;
+            padding: 0 clamp(1.5rem, 5vw, 4rem);
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .navbar-brand {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-light);
-            text-decoration: none;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .navbar-brand::before {
-            content: '';
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .category-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Animated Status Bar */
-        .status-bar {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--bg-surface);
             border-bottom: 1px solid var(--border);
-            padding: 0.5rem 2rem;
-            display: flex;
-            gap: 3rem;
-            font-size: 0.75rem;
-            font-family: 'Inter', monospace;
-            color: var(--text-muted);
-            overflow: hidden;
-            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .status-item {
+        .brand {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .status-value {
-            color: var(--text-light);
+            gap: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
-        .status-indicator {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            animation: pulse 2s infinite;
-        }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(220, 20, 60, 0.7); }
-            70% { opacity: 1; box-shadow: 0 0 0 6px rgba(220, 20, 60, 0); }
-            100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(220, 20, 60, 0); }
-        }
-
-        /* Container & Cards */
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
+            margin: 3rem auto;
             padding: 0 1.5rem;
             flex: 1;
             width: 100%;
         }
 
-        .card, .glass-card {
-            background: rgba(10, 15, 25, 0.65);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
             padding: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Forms */
         label {
             display: block;
             font-size: 0.8rem;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             margin-bottom: 0.5rem;
             font-weight: 600;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.5px;
         }
 
         input[type="text"], input[type="password"], input[type="email"], select, textarea {
             width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(0, 0, 0, 0.4) !important;
+            padding: 0.8rem 1rem;
+            background: var(--bg-surface) !important;
             border: 1px solid var(--border) !important;
-            border-radius: 6px;
-            color: var(--text-light) !important;
-            font-size: 0.9rem;
+            border-radius: var(--radius);
+            color: var(--text-primary) !important;
+            font-size: 0.95rem;
             font-family: inherit;
             transition: all 0.2s;
             margin-bottom: 1.5rem;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus {
             outline: none;
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 0 2px rgba(220, 20, 60, 0.2);
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 1px var(--accent);
         }
 
         button, .btn {
             width: 100%;
-            padding: 0.875rem 1.5rem;
-            background-color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
             color: #000;
             border: none;
-            border-radius: 6px;
+            border-radius: var(--radius);
             font-size: 0.9rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
+            transition: opacity 0.2s;
             text-decoration: none;
             display: inline-block;
             text-align: center;
         }
 
-        button:hover, .btn:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-        }
+        button:hover, .btn:hover { opacity: 0.9; }
         
-        .btn-primary {
-            background: var(--primary) !important;
-            color: #111 !important;
-        }
+        .btn-primary { background: var(--accent) !important; color: #111 !important; }
 
-        /* Nav Links */
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-            padding: 0.4rem 0.6rem;
-            border-radius: 6px;
-        }
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Footer */
         .footer {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--bg-surface);
             border-top: 1px solid var(--border);
-            padding: 1.5rem;
+            padding: 2rem;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            letter-spacing: 0.05em;
-        }
-        
-        .footer strong {
-            color: var(--primary);
+            margin-top: auto;
         }
 
-        /* Utility */
         .badge {
             padding: 0.25rem 0.6rem;
             border-radius: 4px;
@@ -239,98 +142,39 @@
             font-weight: 600;
             text-transform: uppercase;
         }
-        .badge-green { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34,197,94,0.3); }
-        .badge-red { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        th, td {
-            padding: 0.85rem 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.875rem;
-        }
-        th {
-            color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-        }
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.03);
-        }
+        .badge-green { background: rgba(52, 211, 153, 0.1); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.2); }
+        .badge-red { background: rgba(248, 113, 113, 0.1); color: var(--danger); border: 1px solid rgba(248, 113, 113, 0.2); }
+        .badge-outline { border: 1px solid var(--border); color: var(--text-secondary); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        th { color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="/" class="navbar-brand">
-            <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="RedTeam Hacker Academy" style="height: 38px; width: auto; margin-right: 10px; border-radius: 4px;">
-            Sentinel SOC
+    <header class="site-header">
+        <a class="brand" href="/">
+            <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="RedTeam Hacker Academy" style="height: 32px; border-radius: 4px;">
+            <span>Sentinel SOC</span>
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
             <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/compliance" class="{% if request.path == '/compliance' %}active{% endif %}">Compliance Audit</a>\n            <a href="/siem/monitor" class="{% if request.path == '/siem/monitor' %}active{% endif %}">SIEM Activity Viewer</a>\n            <a href="/api/v1/docs" class="{% if request.path == '/api/v1/docs' %}active{% endif %}">API Gateway Docs</a>\n            <a href="/auditor/vault" class="{% if request.path == '/auditor/vault' %}active{% endif %}">Auditor Vault</a>
+            <span class="badge badge-outline">A09</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
-                <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
+                <a href="/logout" style="color: var(--danger); font-size: 0.85rem; font-weight: 600;">Log Out</a>
             {% endif %}
-            <div class="category-badge">A09: Security Logging and Alerting Failures</div>
         </div>
-    </nav>
-
-    <div class="status-bar">
-        <div class="status-item">
-            <span class="status-indicator"></span>
-            <span>Active Alerts:</span>
-            <span class="status-value dynamic-stat">4</span>
-        </div>
-        <div class="status-item">
-            <span class="status-indicator" style="animation-delay: 0.5s;"></span>
-            <span>Events Per Second:</span>
-            <span class="status-value dynamic-stat-2">14,502</span>
-        </div>
-        <div class="status-item">
-            <span class="status-indicator" style="animation-delay: 1s;"></span>
-            <span>SIEM Status:</span>
-            <span class="status-value">ACTIVE</span>
-        </div>
-        <div class="status-item" style="margin-left: auto;">
-            <span>SYS_TIME:</span>
-            <span class="status-value" id="sys-time">00:00:00 UTC</span>
-        </div>
-    </div>
+    </header>
 
     <div class="container">
         {% block content %}{% endblock %}
     </div>
 
     <footer class="footer">
-        CONFIDENTIAL: <strong>Sentinel SOC</strong> Internal Systems &copy; 2026. Unauthorized access is strictly prohibited and monitored.
+        Sentinel SOC Internal Systems &copy; 2026.
     </footer>
-
-    <script>
-        // Decorative JS for live operational stats
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('sys-time').innerText = now.toISOString().substring(11, 19) + ' UTC';
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Randomly tick numbers to make it look alive
-        const stat1 = document.querySelector('.dynamic-stat');
-        const stat2 = document.querySelector('.dynamic-stat-2');
-        
-        setInterval(() => {
-            if(stat1 && stat1.innerText.includes(',')) {
-                let val = parseInt(stat1.innerText.replace(/,/g, ''));
-                val += Math.floor(Math.random() * 3);
-                stat1.innerText = val.toLocaleString();
-            }
-        }, 4000);
-    </script>
 </body>
 </html>
