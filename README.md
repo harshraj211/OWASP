@@ -53,9 +53,9 @@ Active Vulnerable Lab Instance (Ports: 6001–6030)
 - **Hard (Port 6015)**: `a05-hard` — Blind Server-Side Template Injection (SSTI)
 
 ### A06:2025 – Insecure Design
-- **Easy (Port 6016)**: `a06-easy` — Northstar Market: Negative Price Purchase & Balance Abuse
-- **Medium (Port 6017)**: `a06-medium` — Harborline Bookings: Payment Workflow Bypass & Insecure Webhook Callback
-- **Hard (Port 6018)**: `a06-hard` — Apex Sovereign Vault: Coupon & Wallet Abuse (Concurrency Race & HMAC Forgery)
+- **Easy (Port 6016)**: `a06-easy` — Negative Price Purchase
+- **Medium (Port 6017)**: `a06-medium` — Payment Workflow Bypass
+- **Hard (Port 6018)**: `a06-hard` — Coupon and Wallet Abuse
 
 ### A07:2025 – Authentication Failures
 - **Easy (Port 6019)**: `a07-easy` — AeroFleet Global: Weak Password Policy & Targeted Password Spray

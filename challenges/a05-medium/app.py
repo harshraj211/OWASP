@@ -122,5 +122,5 @@ def admin_status():
     }), 200
 
 if __name__ == "__main__":
-    port = int(os.environ.get("LAB_PORT", "6014"))
+    port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or "6014")
     app.run(host="0.0.0.0", port=port, debug=False)

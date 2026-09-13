@@ -30,10 +30,11 @@ app.get('/partners', auth, (_req, res) => res.send(page('Partners', '<section cl
 
 // Deliberate CORS flaw: suffix validation accepts attacker.asterion-partners.local and credentials.
 function flawedCors(req, res, next) { const origin = req.get('Origin') || ''; if (origin.endsWith('.asterion-partners.local')) { res.set('Access-Control-Allow-Origin', origin); res.set('Access-Control-Allow-Credentials', 'true'); res.set('Vary', 'Origin'); } if (req.method === 'OPTIONS') { res.set('Access-Control-Allow-Methods', 'GET, OPTIONS'); res.set('Access-Control-Allow-Headers', 'X-Partner-Client, Content-Type'); return res.sendStatus(204); } next(); }
+function flawedPartnerClient(req) { const partnerClient = (req.get('X-Partner-Client') || '').toLowerCase(); const origin = req.get('Origin') || ''; let partnerHint = ''; try { partnerHint = new URL(origin).hostname.split('.')[0]; } catch (_e) {} return partnerClient.startsWith('benefits-console') && (!!partnerHint && partnerClient.includes(partnerHint)); }
 app.options('/api/v2/member/*', flawedCors);
 app.get('/api/v2/member/coverage', flawedCors, jsonAuth, (_req, res) => res.json({ member: member.memberId, plan: 'Asterion Select PPO', status: 'active' }));
 app.get('/api/v2/member/claims', flawedCors, jsonAuth, (_req, res) => res.json({ member: member.memberId, open: 0, recent: [] }));
-app.get('/api/v2/member/internal-notices', flawedCors, jsonAuth, (req, res) => { if (req.get('X-Partner-Client') !== 'benefits-console') return res.status(403).json({ error: 'Partner client header required' }); res.json(internalNotice); });
+app.get('/api/v2/member/internal-notices', flawedCors, jsonAuth, (req, res) => { if (!flawedPartnerClient(req)) return res.status(403).json({ error: 'Partner client verification failed' }); res.json(internalNotice); });
 
 app.get('/tools/partner-preview', (_req, res) => res.send(page('Partner preview', '<section class="card"><p class="eyebrow">PARTNER PREVIEW TOOL</p><h1>Integration preview</h1><p class="muted">This preview loads partner data from the member API. If opened from an approved partner origin, browser credentials may be included automatically.</p><pre id="output">Waiting for partner response…</pre><script>fetch("/api/v2/member/coverage",{credentials:"include"}).then(r=>r.json()).then(x=>output.textContent=JSON.stringify(x,null,2)).catch(e=>output.textContent=e)</script></section>')));
 

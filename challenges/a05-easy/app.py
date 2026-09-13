@@ -109,5 +109,5 @@ def logout():
 
 if __name__ == "__main__":
     init_db()
-    port = int(os.environ.get("LAB_PORT", "6013"))
+    port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or "6013")
     app.run(host="0.0.0.0", port=port, debug=False)

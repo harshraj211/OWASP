@@ -93,5 +93,5 @@ def download():
     return render_template("index.html", error=f"Target file '{safe_filename}' does not exist on vault repository.")
 
 if __name__ == "__main__":
-    port = int(os.environ.get("LAB_PORT", "6011"))
+    port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or "6011")
     app.run(host="0.0.0.0", port=port, debug=False)

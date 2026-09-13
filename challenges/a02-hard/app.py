@@ -216,5 +216,5 @@ def vault_keys():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("LAB_PORT", "6006"))
+    port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or "6006")
     app.run(host="0.0.0.0", port=port, debug=False)

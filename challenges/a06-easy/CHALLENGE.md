@@ -9,7 +9,7 @@ Obtain the **Redline Travel Case** without paying its listed price and recover t
 - Category: A06:2025 - Insecure Design
 - Difficulty: Easy
 - Estimated time: 10-20 minutes
-- Flag format: `CTF{...}`
+- Flag format: `RTSA{...}`
 - Starting balance: `$75.00`
 
 Only interact with the challenge through its web interface and HTTP requests.

@@ -9,7 +9,7 @@ Chain multiple business-logic and architectural design flaws to bypass coupon re
 - Category: A06:2025 - Insecure Design
 - Difficulty: Hard
 - Estimated time: 35-60 minutes
-- Flag format: `CTF{...}`
+- Flag format: `RTSA{...}`
 - Starting balance: `₹50.00`
 
 Only interact with the challenge through its web interface and HTTP requests.
