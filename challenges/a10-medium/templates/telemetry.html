@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 {% block title %}Telemetry Ingestion Portal{% endblock %}
 {% block content %}
-<div style="max-width: 650px; margin: 2rem auto;">
+<div style="max-width: 750px; margin: 2rem auto;">
     <div class="card">
-        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Sensor Telemetry Ingest</h1>
+        <h1 style="font-size: 1.4rem; margin-bottom: 0.5rem;">Sensor Telemetry Ingestion Gateway</h1>
         <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-            Submit sensor telemetry frames to the safety supervisor. Malformed frames are evaluated by the harmonic distortion analyzer.
+            Submit real-time sensor telemetry frames to the multi-node consensus engine. Frames are validated and routed to the target substation worker daemon.
         </p>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.5rem;">
+            {% for key, node in nodes.items() %}
+            <div style="background: #03060a; border: 1px solid var(--border); padding: 0.75rem; border-radius: 6px; text-align: center;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Node {{ key }}</div>
+                <div style="font-size: 0.9rem; font-weight: 700; margin-top: 0.25rem;">
+                    {% if node.status == 'HEALTHY' %}
+                    <span style="color: var(--success);">ONLINE</span>
+                    {% else %}
+                    <span style="color: var(--danger);">FAULT ({{ node.seconds_remaining }}s)</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
         {% if message %}
         <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid var(--success); color: #6ee7b7; padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
@@ -15,27 +30,35 @@
         {% endif %}
         {% if fault_message %}
         <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 1rem; border-radius: 6px; font-size: 0.85rem; margin-bottom: 1.25rem;">
-            <h4 style="color: var(--danger); margin-bottom: 0.25rem;">SAFETY INTERLOCK SUPERVISOR CRASH:</h4>
-            <p>{{ fault_message }}</p>
-            <p style="margin-top: 0.5rem; color: var(--yellow); font-weight: 600;">System has entered FAIL-SAFE EMERGENCY OVERRIDE mode for 60 seconds!</p>
+            <h4 style="color: var(--danger); margin-bottom: 0.25rem;">CRITICAL WORKER EXCEPTION ENCOUNTERED:</h4>
+            <pre style="font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all;">{{ fault_message }}</pre>
         </div>
         {% endif %}
 
         <form method="POST" action="/grid/telemetry">
             <div style="margin-bottom: 1rem;">
-                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Sensor Frame JSON Payload</label>
-                <textarea name="payload" rows="8" required style="width: 100%; padding: 0.75rem; background: #03060a; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-family: monospace; font-size: 0.85rem;">{
-  "sensor_id": "SN-500-A",
-  "voltage_kv": 500.2,
-  "frequency_hz": 60.0,
-  "harmonics": [1.0, 0.05, 0.02]
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Target Ingestion Node</label>
+                <select name="node" style="width: 100%; padding: 0.6rem; background: #03060a; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.85rem;">
+                    <option value="alpha">Node-Alpha (500kV Main Bus)</option>
+                    <option value="beta">Node-Beta (230kV Thermal Feeder)</option>
+                    <option value="gamma">Node-Gamma (Tie-Line Intertie)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Telemetry Frame JSON (Or Dispatch via POST /api/v1/telemetry/submit)</label>
+                <textarea name="payload" rows="9" required style="width: 100%; padding: 0.75rem; background: #03060a; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-family: monospace; font-size: 0.85rem;">{
+  "node": "alpha",
+  "voltage_kv": 500.0,
+  "current_a": 1200.0,
+  "active_power_mw": 100.0,
+  "reactive_power_mvar": 20.0
 }</textarea>
             </div>
-            <button type="submit" class="btn btn-yellow" style="width: 100%;">Dispatch Telemetry Frame</button>
+            <button type="submit" class="btn btn-yellow" style="width: 100%;">Commit Telemetry Frame</button>
         </form>
 
         <div style="margin-top: 1.25rem; font-size: 0.75rem; color: var(--text-muted);">
-            Expected schema: <code>harmonics</code> array of float multipliers used in harmonic distortion calculations: <code>sum(h**2)</code>.
+            Accepts JSON frame with fields: <code>node</code> (string: alpha|beta|gamma), <code>voltage_kv</code> (float), <code>current_a</code> (float), <code>active_power_mw</code> (float), <code>reactive_power_mvar</code> (float).
         </div>
     </div>
 </div>

@@ -5,7 +5,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <div>
             <h1 style="font-size: 1.5rem;">Digital Media Asset Library</h1>
-            <p style="color: var(--text-muted); font-size: 0.875rem;">Verified images and unformatted assets staged for publication.</p>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Verified media assets published to the content delivery network.</p>
         </div>
         <a href="/media/upload" class="btn btn-pink">+ Upload New Asset</a>
     </div>
@@ -13,9 +13,9 @@
     <table>
         <thead>
             <tr>
-                <th>Filename</th>
-                <th>Location</th>
-                <th>Validation Stage</th>
+                <th>Asset Name</th>
+                <th>Storage Tier</th>
+                <th>Processing Stage</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -23,7 +23,7 @@
             {% for asset in assets %}
             <tr>
                 <td><strong>{{ asset.name }}</strong></td>
-                <td><code>{{ asset.path }}</code></td>
+                <td><span style="font-family: monospace; font-size: 0.85rem; color: var(--cyan);">{{ asset.tier }}</span></td>
                 <td>{{ asset.stage }}</td>
                 <td><span class="badge badge-green">{{ asset.status }}</span></td>
             </tr>

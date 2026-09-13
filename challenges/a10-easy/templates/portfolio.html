@@ -10,7 +10,7 @@
 
         {% if error_trace %}
         <div style="background: #1e0909; border: 1px solid var(--danger); padding: 1.25rem; border-radius: 6px; margin-bottom: 1.5rem;">
-            <h3 style="color: var(--danger); font-size: 0.95rem; margin-bottom: 0.5rem;">Unhandled Worker Exception (Thread Synchronization Crash):</h3>
+            <h3 style="color: var(--danger); font-size: 0.95rem; margin-bottom: 0.5rem;">Unhandled Worker Exception:</h3>
             <pre style="color: #fca5a5; font-family: monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; max-height: 350px; overflow-y: auto;">{{ error_trace | safe }}</pre>
         </div>
         {% endif %}
@@ -36,18 +36,17 @@
             </div>
 
             <div style="background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 6px; padding: 1rem; margin-bottom: 1.5rem;">
-                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.75rem; font-weight: 600;">Advanced Matrix Config (Worker Memory Subsystem)</div>
+                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.75rem; font-weight: 600;">Advanced Matrix Configuration</div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div>
                         <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Decomposition Algorithm</label>
                         <input type="text" name="algorithm" value="cholesky_decomposition" style="width: 100%; padding: 0.6rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.8rem;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Worker Slice Reference (Hex Offset)</label>
+                        <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">Worker Slice Reference</label>
                         <input type="text" name="worker_slice_ref" value="0x00" style="width: 100%; padding: 0.6rem; background: #040810; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 0.8rem;">
                     </div>
                 </div>
-                <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; display: block;">Underlying API uses nested JSON: <code>{"matrix_config": {"worker_slice_ref": "0x00"}}</code></span>
             </div>
 
             <button type="submit" class="btn btn-cyan" style="width: 100%;">Execute Matrix Decomposition</button>

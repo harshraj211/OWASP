@@ -106,3 +106,10 @@ th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font
     font-size: 0.8rem;
     background: #03060a;
 }
+
+.logo-img {
+    height: 32px;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}

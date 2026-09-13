@@ -2,18 +2,45 @@
 {% block title %}Press Releases & Articles{% endblock %}
 {% block content %}
 <div class="card">
-    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Editorial Drafts & Workflows</h1>
+    <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Editorial Drafts & Media Production</h1>
     <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
-        Upcoming investigative publications and technical specifications.
+        Active journalistic drafts, media asset schedules, and publishing automation queues.
     </p>
 
     <div style="background: #060911; border-left: 4px solid var(--pink); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
-        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Architecture Advisory: Automated Media Sanitizer Pipeline</h3>
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Media Processing Standards (Edition 2026.4)</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-            1. Stage 1: Filename validation and image header parser.<br>
-            2. Stage 2: Deep content anti-malware string signature scanner.<br>
-            3. Fallback Handler: If an <code>ImageHeaderError</code> exception occurs during Stage 1 header verification, the file is assumed to be an unformatted legacy binary and is moved to <code>static/scripts/</code> without reaching the Stage 2 malware scanner.
+            All digital assets uploaded for publication undergo automated container format inspection followed by static anti-malware evaluation. Unformatted or legacy media assets failing container checks require manual review before placement into production channels.
         </p>
     </div>
+
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Pending Editorial Drafts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Draft ID</th>
+                <th>Working Title</th>
+                <th>Author</th>
+                <th>Target Edition</th>
+                <th>Pipeline Stage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>DFT-401</code></td>
+                <td>Autonomous Systems in High-Frequency Trading</td>
+                <td>E. Vance</td>
+                <td>Q3 International</td>
+                <td><span class="badge badge-green">Ready for Print</span></td>
+            </tr>
+            <tr>
+                <td><code>DFT-402</code></td>
+                <td>Global Cybersecurity Compliance Standards 2026</td>
+                <td>K. Mercer</td>
+                <td>Special Report</td>
+                <td><span class="badge badge-pink">Media Review</span></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 {% endblock %}

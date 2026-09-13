@@ -11,20 +11,20 @@
     </div>
 
     {% if flag %}
-    <div style="background: #040810; border: 1px dashed var(--cyan); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-        <h3 style="color: var(--cyan); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem;">Extracted Proprietary Strategy Flag</h3>
+    <div style="background: #040810; border: 1px solid var(--success); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h3 style="color: var(--success); font-size: 0.95rem; text-transform: uppercase; margin-bottom: 0.5rem;">Master Strategy Token Authenticated</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
-            Successfully extracted sensitive internal secrets from unhandled exception disclosure. Here is the dynamic flag:
+            Institutional strategy vault authorization granted. Production flag:
         </p>
         <div style="background: #0e172a; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 1.15rem; color: #10b981; border: 1px solid var(--border); word-break: break-all;">
             {{ flag }}
         </div>
     </div>
     {% else %}
-    <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px;">
-        <h3 style="color: var(--danger); font-size: 1rem; margin-bottom: 0.5rem;">Access Denied: Internal Token Required</h3>
+    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); padding: 1.5rem; border-radius: 8px;">
+        <h3 style="color: var(--danger); font-size: 1rem; margin-bottom: 0.5rem;">403 Forbidden: Institutional Token Required</h3>
         <p style="color: #fca5a5; font-size: 0.85rem;">
-            Query <code>/api/v1/internal/confidential-vault?token=...</code> with the internal master token.
+            Access to the proprietary strategy vault is restricted to authorized execution daemons.
         </p>
     </div>
     {% endif %}

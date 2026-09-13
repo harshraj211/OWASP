@@ -382,7 +382,10 @@ def launch_lab():
 
         launcher_script = os.path.join(app.root_path, "scripts", "start_challenge.sh")
         if os.path.exists(launcher_script):
-            subprocess.run([launcher_script, category, level], check=True)
+            res = subprocess.run([launcher_script, category, level], capture_output=True, text=True)
+            if res.returncode != 0:
+                err_msg = res.stderr.strip() or res.stdout.strip() or f"Launcher exited with code {res.returncode}"
+                return jsonify({"success": False, "error": err_msg}), 500
             port = 6001
             status_file = "/tmp/active_lab.json"
             if os.path.exists(status_file):

@@ -25,6 +25,12 @@ if [[ ! -f "$challenge_dir/Dockerfile" ]]; then
 fi
 
 docker rm -f "$container_name" >/dev/null 2>&1 || true
+old_pid="$(cat /tmp/oswap-active-challenge.pid 2>/dev/null || true)"
+if [[ "$old_pid" =~ ^[0-9]+$ ]]; then
+    kill "$old_pid" >/dev/null 2>&1 || true
+    rm -f /tmp/oswap-active-challenge.pid
+fi
+fuser -k "${port}/tcp" >/dev/null 2>&1 || true
 
 flag="RTSA{${challenge_key}_$(openssl rand -hex 12)}"
 
@@ -40,6 +46,17 @@ if docker info >/dev/null 2>&1; then
         --publish "127.0.0.1:${port}:${port}" \
         --env "FLAG=${flag}" \
         "$image_name" >/dev/null
+    for _ in {1..30}; do
+        running="$(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null || true)"
+        if [[ "$running" == "true" ]]; then
+            if python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
+                break
+            fi
+        else
+            break
+        fi
+        sleep 0.25
+    done
     running="$(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null || true)"
     if [[ "$running" != "true" ]]; then
         docker logs "$container_name" >&2 || true

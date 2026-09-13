@@ -31,7 +31,12 @@ for path in ["/flag.txt", os.path.join(BASE_DIR, "flag.txt")]:
     except Exception:
         pass
 
-ASSETS = []
+DEFAULT_ASSETS = [
+    {"name": "press_keynote_2026.png", "tier": "Public Media CDN", "stage": "Stage 1+2 Verified", "status": "Published"},
+    {"name": "editorial_board_hq.jpg", "tier": "Public Media CDN", "stage": "Stage 1+2 Verified", "status": "Published"},
+    {"name": "market_summary_infographic.png", "tier": "Public Media CDN", "stage": "Stage 1+2 Verified", "status": "Published"}
+]
+ASSETS = list(DEFAULT_ASSETS)
 
 class ImageHeaderError(Exception):
     pass
@@ -48,11 +53,11 @@ def validate_image_header(data):
     elif data.startswith(b"\xff\xd8\xff"):
         return "JPEG"
     elif data.startswith(b"GIF87a") or data.startswith(b"GIF89a"):
+        if b"\x00\x2c" not in data:
+            raise ImageHeaderError("Malformed GIF structure: Missing valid Image Descriptor block.")
         return "GIF"
-    elif data.startswith(b"CORRUPT_RAW_STREAM"):
-        raise ImageHeaderError("Decompression/format fault: Unhandled raw image bitstream.")
     else:
-        raise ValueError("Unsupported asset format. Only PNG, JPEG, or RAW stream containers allowed.")
+        raise ValueError("Unsupported asset format. Only standard media containers (PNG, JPEG, GIF) allowed.")
 
 def scan_malware(data):
     signatures = [b"eval(", b"system(", b"subprocess", b"popen", b"exec(", b"<?php", b"passthru", b"import os"]
@@ -65,10 +70,13 @@ def scan_malware(data):
 def healthz():
     return jsonify({"status": "ok", "challenge": CHALLENGE_KEY}), 200
 
+@app.route('/robots.txt')
+def robots_txt():
+    return "User-agent: *\nDisallow: /editorial/terminal\nDisallow: /static/scripts/\n", 200, {'Content-Type': 'text/plain'}
+
 @app.route('/')
 def index():
-    scripts = os.listdir(SCRIPTS_DIR)
-    return render_template('index.html', staged_scripts=scripts)
+    return render_template('index.html')
 
 @app.route('/articles')
 def articles():
@@ -101,22 +109,17 @@ def upload_view():
             with open(dest, "wb") as out:
                 out.write(content)
             
-            ASSETS.append({"name": safe_name, "path": f"/static/uploads/{safe_name}", "stage": "Stage 1+2 Verified", "status": "Clean"})
+            ASSETS.append({"name": safe_name, "tier": "Public Media CDN", "stage": "Stage 1+2 Verified", "status": "Clean"})
             msg = f"Asset '{safe_name}' verified and published to library."
 
         except ImageHeaderError as ihe:
-            # VULNERABILITY: Mishandling of Exceptional Conditions (Fail-Open File Upload)
-            # When an ImageHeaderError occurs during Stage 1 header verification, the server catches
-            # the exception and executes a fallback "raw asset staging" path.
-            # This completely skips the Stage 2 malware scanner and writes the file using the original
-            # filename into the executable scripts directory (static/scripts/)!
+            # Fallback path for assets encountering image container structure faults
             raw_filename = os.path.basename(filename)
             script_path = os.path.join(SCRIPTS_DIR, raw_filename)
             with open(script_path, "wb") as out:
                 out.write(content)
             
-            ASSETS.append({"name": raw_filename, "path": f"/static/scripts/{raw_filename}", "stage": "Bypassed via Exception", "status": "Staged as Script"})
-            msg = f"ImageHeaderError caught ({str(ihe)}). Exception fallback triggered: asset archived to scripts directory as '{raw_filename}'!"
+            msg = f"Asset container warning: Malformed image structure ({str(ihe)}). Deferred to internal staging."
 
         except MalwareDetectedError as mde:
             err = f"Security Violation: {str(mde)}"
@@ -127,9 +130,8 @@ def upload_view():
 
 @app.route('/editorial/terminal')
 def terminal_view():
-    scripts = os.listdir(SCRIPTS_DIR)
     out = session.pop('terminal_output', None)
-    return render_template('terminal.html', staged_scripts=scripts, execution_output=out)
+    return render_template('terminal.html', execution_output=out)
 
 @app.route('/editorial/run-automation', methods=['POST'])
 def run_automation():
@@ -155,24 +157,6 @@ def run_automation():
         session['terminal_output'] = f"Execution Exception: {str(e)}"
     
     return redirect(url_for('terminal_view'))
-
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/services')
-def services():
-    return render_template('services.html')
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
-@app.route('/careers')
-def careers():
-    return render_template('careers.html')
-
 
 if __name__ == '__main__':
     port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or 6030)

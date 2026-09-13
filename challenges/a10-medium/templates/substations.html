@@ -4,32 +4,50 @@
 <div class="card">
     <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Substation Feeder Bus Architecture</h1>
     <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
-        Regional transmission substations monitored by the central safety supervisor daemon.
+        Regional transmission substations monitored by the central safety consensus engine.
     </p>
 
     <table>
         <thead>
             <tr>
-                <th>Feeder ID</th>
-                <th>Transformer Bank</th>
-                <th>Telemetry Protocol</th>
-                <th>Interlock Mode</th>
+                <th>Node ID</th>
+                <th>Substation Feeder</th>
+                <th>Nominal Voltage</th>
+                <th>Stability Algorithm</th>
+                <th>Consensus Weight</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><code>FEEDER-500-A</code></td>
-                <td>Westinghouse 750MVA</td>
-                <td>DNP3 / JSON Frame</td>
-                <td><span class="badge badge-green">Hardware Interlock</span></td>
+                <td><code>alpha</code></td>
+                <td>Substation Alpha (500kV Main Bus)</td>
+                <td>500.0 kV</td>
+                <td>Surge Impedance Loading (SIL)</td>
+                <td>1 Vote (TMR)</td>
             </tr>
             <tr>
-                <td><code>FEEDER-230-B</code></td>
-                <td>ABB Autotransformer</td>
-                <td>Modbus TCP Frame</td>
-                <td><span class="badge badge-green">Hardware Interlock</span></td>
+                <td><code>beta</code></td>
+                <td>Substation Beta (230kV Thermal Feeder)</td>
+                <td>230.0 kV</td>
+                <td>Surge Impedance Loading (SIL)</td>
+                <td>1 Vote (TMR)</td>
+            </tr>
+            <tr>
+                <td><code>gamma</code></td>
+                <td>Substation Gamma (Tie-Line Intertie)</td>
+                <td>345.0 kV</td>
+                <td>Surge Impedance Loading (SIL)</td>
+                <td>1 Vote (TMR)</td>
             </tr>
         </tbody>
     </table>
+
+    <div style="margin-top: 1.5rem; background: #040810; padding: 1rem; border-radius: 6px; border: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted);">
+        <strong style="color: var(--yellow);">Stability Matrix Calculation:</strong>
+        <p style="margin-top: 0.25rem;">
+            Each ingestion daemon calculates real-time Surge Impedance Loading: <code>sqrt(V^2 - 25*Q) / P</code>.
+            Telemetry frames must maintain continuous numeric convergence to sustain quorum voting.
+        </p>
+    </div>
 </div>
 {% endblock %}

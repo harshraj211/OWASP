@@ -4,53 +4,80 @@
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <div>
         <h1 style="font-size: 1.8rem; font-weight: 700;">Synapse SCADA Regional Power Dispatch</h1>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated 500kV / 230kV transmission grid protection & telemetry interlocks.</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Automated 500kV / 230kV transmission grid protection & multi-node consensus.</p>
     </div>
     <div>
-        {% if is_fail_open %}
-        <span class="badge badge-red">FAIL-SAFE EMERGENCY OVERRIDE ACTIVE</span>
+        {% if has_quorum %}
+        <span class="badge badge-green">QUORUM ACTIVE ({{ healthy_count }}/3 NODES ONLINE)</span>
         {% else %}
-        <span class="badge badge-green">INTERLOCKS ARMED & NORMAL</span>
+        <span class="badge badge-red">QUORUM COLLAPSED ({{ healthy_count }}/3 NODES ONLINE)</span>
         {% endif %}
     </div>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     <div class="card">
-        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Grid Total Load</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Total Active Load</div>
         <div style="font-size: 2rem; font-weight: 700; margin-top: 0.5rem; color: var(--yellow);">18,450 MW</div>
     </div>
     <div class="card">
-        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Safety Daemon Status</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Consensus Safety Status</div>
         <div style="font-size: 1.25rem; font-weight: 700; margin-top: 0.5rem;">
-            {% if is_fail_open %}
-            <span style="color: var(--danger);">DAEMON FAULT (FAIL-OPEN)</span>
+            {% if has_quorum %}
+            <span style="color: var(--success);">ARMED (2-OF-3 QUORUM)</span>
             {% else %}
-            <span style="color: var(--success);">ONLINE (PROTECTION ON)</span>
+            <span style="color: var(--danger);">BYPASS (QUORUM LOST)</span>
             {% endif %}
         </div>
     </div>
     <div class="card">
-        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Emergency Core State</div>
+        <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Emergency Core Circuit</div>
         <div style="font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem;">
-            {% if is_fail_open %}
+            {% if not has_quorum %}
             <a href="/core/override" style="color: var(--yellow); text-decoration: none;">Core Access Ready &rarr;</a>
             {% else %}
-            <span style="color: var(--text-muted);">Protected by Interlock</span>
+            <span style="color: var(--text-muted);">Locked by Quorum</span>
             {% endif %}
         </div>
     </div>
 </div>
 
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Distributed Ingestion Nodes (Triple Modular Redundancy)</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+        {% for key, node in nodes.items() %}
+        <div style="background: #040810; border: 1px solid var(--border); border-radius: 6px; padding: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <strong style="font-size: 0.9rem;">{{ node.name }}</strong>
+                {% if node.status == 'HEALTHY' %}
+                <span class="badge badge-green">ONLINE</span>
+                {% else %}
+                <span class="badge badge-red">FAULT ({{ node.seconds_remaining }}s)</span>
+                {% endif %}
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                Key: <code>{{ key }}</code>
+            </div>
+            {% if node.last_fault %}
+            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #fca5a5; font-family: monospace;">
+                Last Fault: {{ node.last_fault }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 <div class="card">
-    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Active Substation Feeder Nodes</h2>
+    <h2 style="font-size: 1.15rem; margin-bottom: 1rem;">Active Substation Feeder Lines</h2>
     <table>
         <thead>
             <tr>
                 <th>Substation</th>
                 <th>Bus Voltage</th>
                 <th>Phase Angle</th>
-                <th>Breaker Protection</th>
+                <th>Redundant Ingestion Node</th>
+                <th>Protection</th>
             </tr>
         </thead>
         <tbody>
@@ -58,13 +85,22 @@
                 <td><strong>Substation Alpha (500kV Main)</strong></td>
                 <td>502.4 kV</td>
                 <td>+12.4°</td>
-                <td><span class="badge badge-green">Engaged</span></td>
+                <td><code>alpha</code></td>
+                <td><span class="badge badge-green">Active</span></td>
             </tr>
             <tr>
                 <td><strong>Substation Beta (Thermal Peaker)</strong></td>
                 <td>231.1 kV</td>
                 <td>-4.1°</td>
-                <td><span class="badge badge-green">Engaged</span></td>
+                <td><code>beta</code></td>
+                <td><span class="badge badge-green">Active</span></td>
+            </tr>
+            <tr>
+                <td><strong>Substation Gamma (Intertie Line)</strong></td>
+                <td>345.0 kV</td>
+                <td>+1.8°</td>
+                <td><code>gamma</code></td>
+                <td><span class="badge badge-green">Active</span></td>
             </tr>
         </tbody>
     </table>

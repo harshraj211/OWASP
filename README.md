@@ -52,6 +52,11 @@ Active Vulnerable Lab Instance (Ports: 6001–6030)
 - **Medium (Port 6014)**: `a05-medium` — Server-Side Request Forgery (SSRF)
 - **Hard (Port 6015)**: `a05-hard` — Blind Server-Side Template Injection (SSTI)
 
+### A06:2025 – Insecure Design
+- **Easy (Port 6016)**: `a06-easy` — Northstar Market: Negative Price Purchase & Balance Manipulation
+- **Medium (Port 6017)**: `a06-medium` — Summit Travel: Insecure Payment Webhook Callback & State Inversion
+- **Hard (Port 6018)**: `a06-hard` — Apex Rewards: Concurrency Coupon Race Condition & Order Forgery
+
 ### A07:2025 – Authentication Failures
 - **Easy (Port 6019)**: `a07-easy` — AeroFleet Global: Weak Password Policy & Targeted Password Spray
 - **Medium (Port 6020)**: `a07-medium` — Aegis Global Treasury: MFA State Machine Bypass & SecOps Headers
@@ -86,6 +91,11 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 ### 2. Launch Specific Challenge Directly via CLI
 ```bash
+# Category A06
+bash scripts/start_challenge.sh A06 easy     # Port 6016
+bash scripts/start_challenge.sh A06 medium   # Port 6017
+bash scripts/start_challenge.sh A06 hard     # Port 6018
+
 # Category A07
 bash scripts/start_challenge.sh A07 easy     # Port 6019
 bash scripts/start_challenge.sh A07 medium   # Port 6020

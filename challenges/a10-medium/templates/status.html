@@ -4,24 +4,50 @@
 <div class="card">
     <h1 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Safety Interlock Monitor & State Machine</h1>
     <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.5rem;">
-        Real-time status of the hardware interlock daemon and fail-open override timer.
+        Real-time multi-node consensus voting supervisor and watchdog monitors.
     </p>
 
     <div style="background: #03060a; border-left: 4px solid var(--yellow); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
-        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">NERC CIP Fail-Open Architecture Specification</h3>
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Multi-Node Consensus Architecture (NERC CIP)</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-            To prevent grid blackout or equipment explosion when sensory analysis crashes, the supervisor enters a 60-second <strong>Fail-Safe Emergency Override</strong> mode. During this window, all interlocks disengage, allowing manual activation of the emergency power core.
+            Hardware breaker interlocks are enforced through Triple Modular Redundancy (TMR). A minimum quorum of <strong>2 healthy nodes</strong> is required to maintain the interlock lock state. Watchdog daemons automatically attempt thread reset 20 seconds after unhandled worker faults.
         </p>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">Ingestion Node Redundancy Pool</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            {% for key, node in nodes.items() %}
+            <div style="background: #0e1626; border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>{{ node.name }}</strong>
+                    {% if node.status == 'HEALTHY' %}
+                    <span class="badge badge-green">ONLINE (VOTING)</span>
+                    {% else %}
+                    <span class="badge badge-red">FAULT ({{ node.seconds_remaining }}s)</span>
+                    {% endif %}
+                </div>
+                <div style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+                    Routing Key: <code>{{ key }}</code>
+                </div>
+                {% if node.last_fault %}
+                <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #fca5a5; font-family: monospace; word-break: break-all;">
+                    {{ node.last_fault }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
     <div style="display: flex; justify-content: space-between; align-items: center; background: #0e1626; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border);">
         <div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Current Safety Daemon State</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Consensus Quorum Status</div>
             <div style="font-size: 1.3rem; font-weight: 700; margin-top: 0.25rem;">
-                {% if is_fail_open %}
-                <span style="color: var(--danger);">FAIL-SAFE EMERGENCY OVERRIDE (ACTIVE)</span>
+                {% if has_quorum %}
+                <span style="color: var(--success);">ARMED — QUORUM ACTIVE ({{ healthy_count }}/3 NODES HEALTHY)</span>
                 {% else %}
-                <span style="color: var(--success);">ARMED — ALL INTERLOCKS ENGAGED</span>
+                <span style="color: var(--danger);">DISENGAGED — QUORUM COLLAPSED ({{ healthy_count }}/3 NODES HEALTHY)</span>
                 {% endif %}
             </div>
         </div>

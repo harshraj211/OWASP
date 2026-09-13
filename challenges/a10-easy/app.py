@@ -17,11 +17,6 @@ def get_flag():
 
 DYNAMIC_FLAG = get_flag()
 
-# 32-character master key partitioned into four 8-byte chunks
-# Chunk 0 (+0x00): QE_KEY{9
-# Chunk 1 (+0x08): f81_b3c4
-# Chunk 2 (+0x10): _771a_d9
-# Chunk 3 (+0x18): 01_f5c2}
 INTERNAL_VAULT_TOKEN = "QE_KEY{9f81_b3c4_771a_d901_f5c2}"
 
 class SharedWorkerState:
@@ -140,7 +135,10 @@ def portfolio():
 
 @app.route('/vault')
 def vault_view():
-    return render_template('vault.html', flag=None)
+    token = request.args.get('token', '').strip()
+    if token and token == INTERNAL_VAULT_TOKEN:
+        return render_template('vault.html', flag=DYNAMIC_FLAG)
+    return render_template('vault.html', flag=None), 403
 
 @app.route('/api/v1/internal/confidential-vault')
 def internal_vault():
@@ -150,24 +148,6 @@ def internal_vault():
             return jsonify({"success": True, "flag": DYNAMIC_FLAG})
         return render_template('vault.html', flag=DYNAMIC_FLAG)
     return jsonify({"success": False, "error": "Unauthorized: Invalid internal vault token."}), 403
-
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/services')
-def services():
-    return render_template('services.html')
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
-@app.route('/careers')
-def careers():
-    return render_template('careers.html')
-
 
 if __name__ == '__main__':
     port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or 6028)
