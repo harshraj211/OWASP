@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "file": "app.js",
+  "sources": ["app.ts"],
+  "sourcesContent": [
+    "// Apex Vault Client v2.4.1\n// DEV NOTE: DEV_ORDER_SIGNING_KEY = 'apex_dev_sec_994821';\n// TODO: Deprecate legacy &multiplier= parameter on api/redeem.php before production cutover.\n// Sovereign VIP role: 'sovereign_vip'\n\nexport const config = {\n  signingKey: 'apex_dev_sec_994821',\n  endpoints: {\n    redeem: '/api/redeem.php',\n    signOrder: '/api/sign-order.php',\n    debugSchema: '/api/debug-schema.php'\n  }\n};"
+  ],
+  "mappings": "AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}

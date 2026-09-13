@@ -1,0 +1,18 @@
+name: ctf-a06-medium
+
+services:
+  a06-medium:
+    build: .
+    environment:
+      CTF_FLAG: ${CTF_FLAG:-}
+      USER_SEED: ${USER_SEED:-}
+      USER_ID: ${USER_ID:-}
+    ports:
+      - "127.0.0.1:${APP_PORT:-8101}:80"
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/health.php') === 'OK' ? 0 : 1);"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    restart: unless-stopped
