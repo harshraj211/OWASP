@@ -80,6 +80,10 @@ else
     elif [[ -f "$challenge_dir/app.js" ]]; then
         FLAG="$flag" PORT="$port" setsid nohup node "$challenge_dir/app.js" \
             >/tmp/oswap-active-challenge.log 2>&1 &
+    elif [[ -d "$challenge_dir/src" ]]; then
+        # Intentionally no php-cli fallback: availability is not guaranteed across host environments.
+        echo "Challenge ${challenge_key} requires Docker (PHP-based lab); process-mode fallback is not supported for this challenge." >&2
+        exit 1
     fi
     echo $! >/tmp/oswap-active-challenge.pid
     pid="$!"

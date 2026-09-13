@@ -99,5 +99,5 @@ def probe():
         }), 500
 
 if __name__ == "__main__":
-    port = int(os.environ.get("LAB_PORT", "6015"))
+    port = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or "6015")
     app.run(host="0.0.0.0", port=port, debug=False)

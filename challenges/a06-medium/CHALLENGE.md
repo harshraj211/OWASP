@@ -9,7 +9,6 @@ Complete a reservation for the **Aurora Glass Lodge** without making a successfu
 - Category: A06:2025 - Insecure Design
 - Difficulty: Medium
 - Estimated time: 25-40 minutes
-- Flag format: `CTF{...}`
+- Flag format: `RTSA{...}`
 
 Only interact with the challenge through its web interface and HTTP requests.
-

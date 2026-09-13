@@ -20,7 +20,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 CHALLENGE_KEY = "a03-medium"
-PORT = int(os.environ.get("LAB_PORT", 6008))
+PORT = int(os.environ.get("LAB_PORT") or os.environ.get("PORT") or 6008)
 
 def get_flag():
     env_flag = os.environ.get("FLAG") or os.environ.get("CTF_FLAG")
