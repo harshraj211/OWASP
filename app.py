@@ -148,20 +148,20 @@ OWASP_CATEGORIES_2025 = [
         "options": [
             {
                 "level": "Option 1 (Easy)",
-                "name": "Password Reset Poisoning",
-                "topic": "Host Header Injection, Password Reset Hijacking",
+                "name": "Negative Price Purchase",
+                "topic": "Northstar Market: Client-Side Trust, Negative Price Injection, Balance Abuse",
                 "cmd_code": "A06 easy"
             },
             {
                 "level": "Option 2 (Medium)",
-                "name": "Cross-Site Request Forgery (CSRF)",
-                "topic": "CSRF, State-Changing Requests, Missing Anti-CSRF Token",
+                "name": "Payment Workflow Bypass",
+                "topic": "Harborline Bookings: Insecure Payment Webhook Callback, State Machine Bypass",
                 "cmd_code": "A06 medium"
             },
             {
                 "level": "Option 3 (Hard)",
-                "name": "Business Logic Abuse",
-                "topic": "Multi-Step Cart Logic, Coupon Stacking, Negative Cart",
+                "name": "Coupon and Wallet Abuse",
+                "topic": "Apex Sovereign Vault: Coupon Concurrency Race, HMAC Token Forgery, Privilege Escalation",
                 "cmd_code": "A06 hard"
             }
         ]
