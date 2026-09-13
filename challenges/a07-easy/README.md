@@ -1,16 +1,18 @@
-# A07 Easy: Weak Password Policy (AeroFleet Operations)
+# A07 Easy: Weak Password Policy & Rate-Limit Bypass (AeroFleet Operations)
 
 ### Category: OWASP Top 10:2025 - A07 Authentication Failures
-* **Difficulty:** Easy (Enterprise Multi-Page Enumeration)
+* **Difficulty:** Easy (Enterprise Rate-Limit Evasion & Targeted Spray)
 * **Default Port:** 6019
-* **Concept:** Multi-Page Enumeration, Targeted Password Deduction & Legacy Provisioning Schema
+* **Concept:** Username Enumeration, Reverse-Proxy Header Spoofing (`X-Forwarded-For`), Targeted Password Spraying
 
 ---
 
 ### Challenge Description
-AeroFleet Global manages commercial air transport and international charter logistics. During a phased migration to an enterprise SSO solution, older dispatch workstation accounts were grandfathered under a default corporate credential schema.
+AeroFleet Global manages commercial air transport and international charter logistics. The operations dispatch portal protects crew accounts with IP-based rate limiting (blocking addresses after 3 failed attempts).
 
-The authentication portal enforces strict consecutive failure lockouts (5 failed attempts locks an account). Security analysts must explore the platform, enumerate operational bulletins and personnel rosters, identify which role holds diplomatic clearance, deduce the legacy credential format, and authenticate to inspect the restricted diplomatic flight manifest.
+However, flawed client IP extraction trusts unvalidated reverse-proxy headers, and the authentication handler returns distinct responses for registered vs. unregistered identifiers. Security analysts must enumerate the personnel directory, confirm the authorized Chief Dispatcher account, evade rate-limiting via header spoofing, and spray candidate operational credentials to access the restricted diplomatic cargo manifest.
 
 ### Objective
-Enumerate the crew directory and IT security bulletins, deduce the default legacy dispatch credentials for the authorized operations role, authenticate, and access the restricted diplomatic cargo manifest at `/dispatch/manifest/classified` to recover the dynamic flag.
+1. Enumerate the crew directory and IT security bulletins to identify the Chief Flight Dispatcher account.
+2. Evade the portal's IP-based rate limiting using spoofed proxy headers (`X-Forwarded-For`).
+3. Spray common operational credentials to compromise the dispatcher account, and access `/dispatch/manifest/classified` to recover the dynamic flag.

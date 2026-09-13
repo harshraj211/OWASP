@@ -10,11 +10,13 @@
     <div style="display: flex; flex-direction: column; gap: 1.25rem;">
         <div style="background: #141b26; border-left: 4px solid var(--accent); padding: 1.25rem; border-radius: 4px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                <h3 style="font-size: 1rem; color: #fff;">SEC-2024-09: Legacy Dispatch Workstation Dispatch Code Policy</h3>
-                <span class="badge badge-amber">Compliance Advisory</span>
+                <h3 style="font-size: 1rem; color: #fff;">SEC-2026-04: Dispatch Key Hygiene & Brute-Force Rate Limiting</h3>
+                <span class="badge badge-amber">Security Directive</span>
             </div>
             <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
-                During the phased migration to Okta SSO, ground operations staff accounts provisioned prior to 2024 have been grandfathered under the legacy password standard. Dispatch workstation credentials follow the default corporate provisioning schema: home station hub IATA code, an exclamation mark delimiter, followed by the employee's onboarding season and year as recorded in the official personnel directory. All grandfathered staff must update their credentials at the dispatch terminal.
+                An internal audit revealed that field dispatch personnel frequently configure predictable terminal passwords based on common annual operational templates (such as <code>AeroFleet2025!</code>, <code>FlightOps2026!</code>, <code>Dispatch2026!</code>, or <code>LAXOps2026!</code>). 
+                <br><br>
+                To mitigate unauthorized access attempts, the dispatch login portal enforces IP-based rate limiting (blocking addresses exceeding 3 consecutive failed attempts).
             </p>
         </div>
 
@@ -24,7 +26,7 @@
                 <span class="badge badge-blue">Flight Operations</span>
             </div>
             <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
-                Flight AF-802 carries diplomatic priority air freight. The electronic diplomatic clearance manifest is restricted to Chief Dispatchers and requires authentication via the Dispatch Console.
+                Flight AF-802 carries diplomatic priority air freight. The electronic diplomatic clearance manifest is restricted to Chief Flight Dispatchers and requires authentication via the Dispatch Console.
             </p>
         </div>
     </div>

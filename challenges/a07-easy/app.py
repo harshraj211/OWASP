@@ -25,16 +25,23 @@ STAFF = [
     {"id": "EMP-5190", "name": "David Thorne", "username": "d.thorne", "hub": "DFW", "role": "Avionics Maintenance Tech", "joined": "Winter 2022"}
 ]
 
-# Credentials: Marcus Vance still has default grandfathered password matching company memo formula
+# Credentials: Marcus Vance has a weak corporate password
 CREDENTIALS = {
-    "m.vance": "LAX!Fall2023",
-    "j.morrison": secrets.token_hex(18), # Complex rotated password
+    "m.vance": "Dispatch2026!",
+    "j.morrison": secrets.token_hex(18),
     "e.rostova": secrets.token_hex(18),
     "s.jenkins": secrets.token_hex(18),
     "d.thorne": secrets.token_hex(18)
 }
 
-FAILED_ATTEMPTS = {} # username -> {"count": int, "lock_until": float}
+IP_FAILED_ATTEMPTS = {} # ip -> {"count": int, "lock_until": float}
+
+def get_client_ip():
+    """Extract client IP from reverse proxy headers with vulnerable spoofing."""
+    xff = request.headers.get('X-Forwarded-For')
+    if xff:
+        return xff.split(',')[0].strip()
+    return request.remote_addr or '127.0.0.1'
 
 @app.route('/healthz')
 def healthz():
@@ -60,29 +67,39 @@ def login():
     username = request.form.get('username', '').strip().lower()
     password = request.form.get('password', '').strip()
     now = time.time()
+    client_ip = get_client_ip()
 
-    # Check lock
-    lock_info = FAILED_ATTEMPTS.get(username, {"count": 0, "lock_until": 0})
-    if lock_info["lock_until"] > now:
-        remaining = int(lock_info["lock_until"] - now)
-        return render_template('login.html', error=f"Account locked due to consecutive failed attempts. Retry in {remaining}s."), 429
+    # Check IP-based rate limit
+    ip_lock = IP_FAILED_ATTEMPTS.get(client_ip, {"count": 0, "lock_until": 0})
+    if ip_lock["lock_until"] > now:
+        remaining = int(ip_lock["lock_until"] - now)
+        return render_template('login.html', error=f"Too Many Requests: IP {client_ip} temporarily locked. Retry in {remaining}s."), 429
 
-    if username in CREDENTIALS and CREDENTIALS[username] == password:
+    # Username enumeration difference
+    if username not in CREDENTIALS:
+        ip_lock["count"] += 1
+        if ip_lock["count"] >= 3:
+            ip_lock["lock_until"] = now + 60
+            IP_FAILED_ATTEMPTS[client_ip] = ip_lock
+            return render_template('login.html', error=f"Too Many Requests: IP {client_ip} exceeded maximum failed attempts (3)."), 429
+        IP_FAILED_ATTEMPTS[client_ip] = ip_lock
+        return render_template('login.html', error="Authentication failed: Employee identifier not registered in directory."), 401
+
+    if CREDENTIALS[username] == password:
         # Success
-        FAILED_ATTEMPTS.pop(username, None)
+        IP_FAILED_ATTEMPTS.pop(client_ip, None)
         session['user'] = username
         session['role'] = "Chief Flight Dispatcher" if username == "m.vance" else "Flight Crew"
         return redirect(url_for('dispatch'))
     else:
-        # Failure
-        lock_info["count"] += 1
-        if lock_info["count"] >= 5:
-            lock_info["lock_until"] = now + 120 # 2 minute lock
-            FAILED_ATTEMPTS[username] = lock_info
-            return render_template('login.html', error="Account locked: Exceeded 5 consecutive failed attempts."), 429
-        else:
-            FAILED_ATTEMPTS[username] = lock_info
-            return render_template('login.html', error=f"Invalid credentials. Warning: {5 - lock_info['count']} attempt(s) remaining before lockout."), 401
+        # Invalid password for valid account
+        ip_lock["count"] += 1
+        if ip_lock["count"] >= 3:
+            ip_lock["lock_until"] = now + 60
+            IP_FAILED_ATTEMPTS[client_ip] = ip_lock
+            return render_template('login.html', error=f"Too Many Requests: IP {client_ip} exceeded maximum failed attempts (3)."), 429
+        IP_FAILED_ATTEMPTS[client_ip] = ip_lock
+        return render_template('login.html', error="Authentication failed: Invalid dispatch security key for registered crew member."), 401
 
 @app.route('/dispatch/operations')
 def dispatch():

@@ -68,8 +68,6 @@ def login():
         session['mfa_verified'] = True
         return redirect(url_for('dashboard'))
 
-ACTIVE_DR_TICKET = "INC-88219-DR"
-
 @app.route('/auth/2fa', methods=['GET', 'POST'])
 def mfa_view():
     if not session.get('user'):
@@ -83,31 +81,36 @@ def mfa_view():
     code = request.form.get('code', '').strip()
     return render_template('mfa.html', error="Invalid TOTP authentication code. Attempt logged to SecOps monitor."), 403
 
-@app.route('/api/v1/auth/session/emergency-dispatch', methods=['POST'])
-def api_emergency_dispatch():
-    """Emergency dispatch elevation endpoint for active DR response."""
+@app.route('/api/v1/auth/verify-backup', methods=['POST'])
+def api_verify_backup():
+    """Verify an emergency backup code to satisfy MFA step-up."""
     if not session.get('user'):
-        return jsonify({"success": False, "error": "No active authenticated session."}), 401
+        return jsonify({"success": False, "error": "No active primary session."}), 401
 
     data = request.get_json(silent=True) or {}
-    ticket = (data.get('incident_ticket') or request.form.get('incident_ticket') or request.headers.get('X-SecOps-Ticket') or '').strip()
+    submitted_code = data.get('backup_code')
 
-    if ticket == ACTIVE_DR_TICKET:
+    user_record = USERS.get(session.get('user'), {})
+    expected_code = user_record.get('backup_code')
+
+    # Flaw: Uninitialized database field returns None. Submitting {"backup_code": null} results in None == None (True).
+    if submitted_code == expected_code:
         session['mfa_verified'] = True
         return jsonify({
             "success": True,
-            "message": f"Session elevated: Emergency dispatch authorized under ticket {ACTIVE_DR_TICKET}",
+            "message": "Emergency backup verification successful. Session elevated.",
             "redirect": "/dashboard"
         }), 200
-    
+
     return jsonify({
         "success": False,
-        "error": "Access Denied: Invalid or expired disaster recovery incident ticket."
+        "error": "Invalid emergency backup recovery code."
     }), 403
 
-@app.route('/api/v1/auth/session/upgrade', methods=['POST'])
-def api_session_upgrade_legacy():
-    return api_emergency_dispatch()
+# Keep legacy route alias for compatibility
+@app.route('/api/v1/auth/session/emergency-dispatch', methods=['POST'])
+def api_emergency_dispatch():
+    return api_verify_backup()
 
 @app.route('/dashboard')
 def dashboard():
