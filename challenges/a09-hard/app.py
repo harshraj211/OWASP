@@ -17,7 +17,7 @@ def get_flag():
 
 DYNAMIC_FLAG = get_flag()
 
-ADMIN_KEY = "TITAN_SEC_MAINT_2026"
+ADMIN_KEY = "cert_titan_secops_7719"
 
 def compute_hash(index, prev_hash, timestamp, event_type, details):
     content = f"{index}|{prev_hash}|{timestamp}|{event_type}|{details}".encode('utf-8')
@@ -37,7 +37,31 @@ LEDGER = [
         "index": 1,
         "timestamp": "2026-09-01 00:01:00",
         "event_type": "SYSTEM_BOOT",
-        "details": "Command Center Core Services Activated",
+        "details": "Command Center Core Services Activated (Maintenance Certificate: cert_titan_secops_7719)",
+        "prev_hash": "",
+        "hash": ""
+    },
+    {
+        "index": 2,
+        "timestamp": "2026-09-01 00:05:00",
+        "event_type": "UNAUTHORIZED_BREACH_DETECTED",
+        "details": "Perimeter intrusion detected at classified vault sector 4; lockdown initiated",
+        "prev_hash": "",
+        "hash": ""
+    },
+    {
+        "index": 3,
+        "timestamp": "2026-09-01 00:08:00",
+        "event_type": "TELEMETRY_HEARTBEAT",
+        "details": "Automated perimeter telemetry heartbeat verified",
+        "prev_hash": "",
+        "hash": ""
+    },
+    {
+        "index": 4,
+        "timestamp": "2026-09-01 00:15:00",
+        "event_type": "TELEMETRY_HEARTBEAT",
+        "details": "Sector 9 routine system telemetry verified",
         "prev_hash": "",
         "hash": ""
     }
@@ -45,8 +69,9 @@ LEDGER = [
 
 # Calculate initial hashes
 LEDGER[0]["hash"] = compute_hash(0, LEDGER[0]["prev_hash"], LEDGER[0]["timestamp"], LEDGER[0]["event_type"], LEDGER[0]["details"])
-LEDGER[1]["prev_hash"] = LEDGER[0]["hash"]
-LEDGER[1]["hash"] = compute_hash(1, LEDGER[1]["prev_hash"], LEDGER[1]["timestamp"], LEDGER[1]["event_type"], LEDGER[1]["details"])
+for i in range(1, len(LEDGER)):
+    LEDGER[i]["prev_hash"] = LEDGER[i - 1]["hash"]
+    LEDGER[i]["hash"] = compute_hash(i, LEDGER[i]["prev_hash"], LEDGER[i]["timestamp"], LEDGER[i]["event_type"], LEDGER[i]["details"])
 
 def append_block(event_type, details):
     prev = LEDGER[-1]
@@ -109,10 +134,19 @@ def clearance():
         msg = f"Badge session established for call-sign: {u}"
     return render_template('clearance.html', message=msg)
 
+@app.route('/robots.txt')
+def robots_txt():
+    return "User-agent: *\nDisallow: /audit/console\nDisallow: /vault/classified\nDisallow: /api/v1/audit/\n", 200, {'Content-Type': 'text/plain'}
+
 @app.route('/audit/ledger')
 def ledger_view():
     _, chain_valid, _ = validate_ledger()
     return render_template('ledger.html', ledger=LEDGER, chain_valid=chain_valid)
+
+@app.route('/api/v1/audit/ledger')
+def api_ledger():
+    _, chain_valid, reason = validate_ledger()
+    return jsonify({"ledger": LEDGER, "chain_valid": chain_valid, "reason": reason})
 
 @app.route('/audit/console')
 def console_view():
@@ -122,6 +156,10 @@ def console_view():
 
 @app.route('/vault/classified')
 def classified_vault():
+    auth_key = request.headers.get('X-Admin-Key') or request.args.get('admin_key')
+    if auth_key == ADMIN_KEY:
+        session['maintenance_authorized'] = True
+
     # If not authorized by maintenance or officer clearance, trigger breach detection and log it!
     if not session.get('maintenance_authorized') and session.get('user') != 'titan_authorized_officer':
         caller = session.get('user') or 'anonymous_intruder'
@@ -133,42 +171,54 @@ def classified_vault():
 
 @app.route('/api/v1/audit/tamper-block', methods=['POST'])
 def tamper_block():
-    key = request.form.get('admin_key') or (request.get_json(silent=True) or {}).get('admin_key')
+    data = request.get_json(silent=True) or request.form
+    key = data.get('admin_key', '').strip()
     if key != ADMIN_KEY:
+        if request.is_json:
+            return jsonify({"success": False, "error": "Unauthorized: Invalid SecOps Admin Key."}), 403
         session['console_err'] = "Unauthorized: Invalid SecOps Admin Key."
         return redirect(url_for('console_view'))
 
-    idx = int(request.form.get('index') or (request.get_json(silent=True) or {}).get('index', -1))
-    new_type = request.form.get('event_type') or (request.get_json(silent=True) or {}).get('event_type')
-    new_details = request.form.get('details') or (request.get_json(silent=True) or {}).get('details')
+    try:
+        idx = int(data.get('index', -1))
+    except (ValueError, TypeError):
+        idx = -1
 
-    if 0 <= idx < len(LEDGER):
-        LEDGER[idx]["event_type"] = new_type
-        LEDGER[idx]["details"] = new_details
-        session['maintenance_authorized'] = True
-        session['console_msg'] = f"Block #{idx} updated. Remember to recompute ledger hash chain."
-        return redirect(url_for('console_view'))
-    
-    session['console_err'] = "Invalid block index."
-    return redirect(url_for('console_view'))
-
-@app.route('/api/v1/audit/recompute-chain', methods=['POST'])
-def recompute_chain():
-    key = request.form.get('admin_key') or (request.get_json(silent=True) or {}).get('admin_key')
-    if key != ADMIN_KEY:
-        session['console_err'] = "Unauthorized: Invalid SecOps Admin Key."
+    if not (0 <= idx < len(LEDGER)):
+        if request.is_json:
+            return jsonify({"success": False, "error": "Invalid block index."}), 400
+        session['console_err'] = "Invalid block index."
         return redirect(url_for('console_view'))
 
-    # Rebuild chain from Genesis
-    for i in range(len(LEDGER)):
-        if i == 0:
-            LEDGER[0]["hash"] = compute_hash(0, LEDGER[0]["prev_hash"], LEDGER[0]["timestamp"], LEDGER[0]["event_type"], LEDGER[0]["details"])
-        else:
-            LEDGER[i]["prev_hash"] = LEDGER[i - 1]["hash"]
-            LEDGER[i]["hash"] = compute_hash(i, LEDGER[i]["prev_hash"], LEDGER[i]["timestamp"], LEDGER[i]["event_type"], LEDGER[i]["details"])
+    new_type = data.get('event_type')
+    new_details = data.get('details')
+    new_prev = data.get('prev_hash')
+    new_hash = data.get('hash')
+    new_ts = data.get('timestamp')
+
+    if new_type is not None:
+        LEDGER[idx]["event_type"] = str(new_type)
+    if new_details is not None:
+        LEDGER[idx]["details"] = str(new_details)
+    if new_prev is not None:
+        LEDGER[idx]["prev_hash"] = str(new_prev)
+    if new_hash is not None:
+        LEDGER[idx]["hash"] = str(new_hash)
+    if new_ts is not None:
+        LEDGER[idx]["timestamp"] = str(new_ts)
 
     session['maintenance_authorized'] = True
-    session['console_msg'] = "Cryptographic ledger hash chain successfully recomputed and verified."
+    msg = f"Block #{idx} updated in ledger."
+    if request.is_json:
+        has_breach, chain_valid, reason = validate_ledger()
+        return jsonify({
+            "success": True,
+            "message": msg,
+            "block": LEDGER[idx],
+            "chain_valid": chain_valid,
+            "has_breach": has_breach
+        })
+    session['console_msg'] = msg
     return redirect(url_for('console_view'))
 
 

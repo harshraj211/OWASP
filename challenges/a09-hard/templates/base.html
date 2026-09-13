@@ -277,13 +277,10 @@
             <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             <a href="/clearance" class="{% if request.path == '/clearance' %}active{% endif %}">Clearance Desk</a>
             <a href="/audit/ledger" class="{% if request.path == '/audit/ledger' %}active{% endif %}">Cryptographic Audit Ledger</a>
-            <a href="/audit/console" class="{% if request.path == '/audit/console' %}active{% endif %}">Ledger Maintenance Console</a>
-            <a href="/vault/classified" class="{% if request.path == '/vault/classified' %}active{% endif %}">Classified Vault</a>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
             {% endif %}
-            <div class="category-badge">A09: Security Logging and Alerting Failures</div>
         </div>
     </nav>
 

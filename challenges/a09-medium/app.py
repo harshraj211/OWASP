@@ -83,10 +83,13 @@ def stream_view():
             lines = [l.strip() for l in f.readlines()]
     return render_template('stream.html', log_lines=lines[-50:])
 
+@app.route('/robots.txt')
+def robots_txt():
+    return "User-agent: *\nDisallow: /vault/treasury\nDisallow: /compliance/status\n", 200, {'Content-Type': 'text/plain'}
+
 @app.route('/compliance/status')
 def status_view():
     return render_template('status.html', 
-                           active_token=get_daily_token(), 
                            override_active=is_override_active())
 
 @app.route('/vault/treasury')

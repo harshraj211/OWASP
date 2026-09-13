@@ -5,7 +5,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
         <div>
             <h1 style="font-size: 1.5rem;">Ledger Maintenance Console</h1>
-            <p style="color: var(--text-muted); font-size: 0.875rem;">Authorized SecOps administrators can manage and purge audit records.</p>
+            <p style="color: var(--text-muted); font-size: 0.875rem;">Authorized SecOps administrators can manage and redact audit records.</p>
         </div>
         <a href="/audit/ledger" class="btn btn-amber">&larr; View Ledger</a>
     </div>
@@ -27,38 +27,51 @@
             <form method="POST" action="/api/v1/audit/tamper-block">
                 <div style="margin-bottom: 0.75rem;">
                     <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Block Index</label>
-                    <input type="number" name="index" required placeholder="3" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                    <input type="number" name="index" required placeholder="2" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">New Event Type</label>
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Event Type</label>
                     <input type="text" name="event_type" required value="ROUTINE_SECURITY_PATROL" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
                 </div>
                 <div style="margin-bottom: 0.75rem;">
-                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">New Details</label>
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Details</label>
                     <input type="text" name="details" required value="Routine telemetry heartbeat" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
                 </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Previous Hash (Optional)</label>
+                    <input type="text" name="prev_hash" placeholder="Keep current or supply new hash" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
+                <div style="margin-bottom: 0.75rem;">
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Block Hash (Optional)</label>
+                    <input type="text" name="hash" placeholder="Keep current or supply new hash" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
+                </div>
                 <div style="margin-bottom: 1rem;">
-                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Admin Key</label>
+                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Admin Key / Certificate</label>
                     <input type="password" name="admin_key" required placeholder="••••••••" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
                 </div>
-                <button type="submit" class="btn btn-amber" style="width: 100%;">Redact Block Content</button>
+                <button type="submit" class="btn btn-amber" style="width: 100%;">Apply Block Redaction</button>
             </form>
         </div>
 
         <div style="background: #080c14; padding: 1.25rem; border-radius: 6px; border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-                <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--amber);">Recompute Hash Chain</h3>
+                <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--amber);">Cryptographic Consensus Specification</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
-                    After editing or deleting audit records, the cryptographic hash chain must be recomputed from genesis so that Sentinel inspection validates all block hashes.
+                    Titan Defense operates a strict SHA-256 cryptographic chain. Each block header links directly to its ancestor:
+                </p>
+                <div style="background: #111827; padding: 0.75rem; border-radius: 4px; font-family: monospace; font-size: 0.75rem; color: #6ee7b7; border: 1px solid var(--border); margin-bottom: 1rem; word-break: break-all;">
+                    hash = sha256(index | prev_hash | timestamp | event_type | details)
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem;">
+                    <strong>Integrity Policy:</strong> Redacting historical records breaks all downstream hashes. Administrators modifying records must recalculate downstream block linkages to preserve consensus before vault lockouts can be cleared.
                 </p>
             </div>
-            <form method="POST" action="/api/v1/audit/recompute-chain">
-                <div style="margin-bottom: 1rem;">
-                    <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Admin Key</label>
-                    <input type="password" name="admin_key" required placeholder="••••••••" style="width: 100%; padding: 0.6rem; background: #111827; border: 1px solid var(--border); border-radius: 4px; color: #fff; font-size: 0.85rem;">
-                </div>
-                <button type="submit" class="btn btn-amber" style="width: 100%;">Recompute Ledger Hashes</button>
-            </form>
+            <div style="border-top: 1px solid var(--border); padding-top: 1rem;">
+                <span class="badge badge-amber">API Enabled</span>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                    Automated programmatic updates can be performed via <code>POST /api/v1/audit/tamper-block</code> using JSON payloads.
+                </p>
+            </div>
         </div>
     </div>
 </div>

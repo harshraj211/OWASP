@@ -8,13 +8,15 @@
     </p>
 
     <div style="background: #040811; border-left: 4px solid var(--emerald); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
-        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Auditor Override Verification Specification</h3>
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Automated Compliance Verification Policy (Rule 44.B)</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-            The compliance daemon searches for log entries matching:
-            <br>
-            <code style="color: var(--emerald);">[YYYY-MM-DD HH:MM:SS] [AUDIT_OVERRIDE] CLEARANCE_TOKEN=&lt;MD5_HASH&gt; STATUS=CERTIFIED</code>
+            Treasury access is locked by default. The automated compliance daemon continuously monitors the transaction audit stream for authorized regulatory overrides.
             <br><br>
-            Current Active Clearance Token for Today: <strong style="color: #fff; font-family: monospace;">{{ active_token }}</strong>
+            <strong>Override Requirements:</strong>
+            <br>
+            • An authorized <code>[AUDIT_OVERRIDE]</code> record must be recorded in the live audit log.
+            • Record must contain <code>CLEARANCE_TOKEN</code> matching the daily institutional digest: <code>MD5('APEX_AUDIT_' + YYYYMMDD)</code>.
+            • Record status must be validated as <code>STATUS=CERTIFIED</code>.
         </p>
     </div>
 

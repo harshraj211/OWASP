@@ -278,12 +278,10 @@
             <a href="/transfer" class="{% if request.path == '/transfer' %}active{% endif %}">Wire Transfers</a>
             <a href="/compliance/stream" class="{% if request.path == '/compliance/stream' %}active{% endif %}">Audit Log Stream</a>
             <a href="/compliance/status" class="{% if request.path == '/compliance/status' %}active{% endif %}">Compliance Monitor</a>
-            <a href="/vault/treasury" class="{% if request.path == '/vault/treasury' %}active{% endif %}">Treasury Vault</a>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
             {% endif %}
-            <div class="category-badge">A09: Security Logging and Alerting Failures</div>
         </div>
     </nav>
 

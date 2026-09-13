@@ -277,13 +277,10 @@
             <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
             <a href="/compliance" class="{% if request.path == '/compliance' %}active{% endif %}">Compliance Audit</a>
             <a href="/siem/monitor" class="{% if request.path == '/siem/monitor' %}active{% endif %}">SIEM Activity Viewer</a>
-            <a href="/api/v1/docs" class="{% if request.path == '/api/v1/docs' %}active{% endif %}">API Gateway Docs</a>
-            <a href="/auditor/vault" class="{% if request.path == '/auditor/vault' %}active{% endif %}">Auditor Vault</a>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
                 <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
             {% endif %}
-            <div class="category-badge">A09: Security Logging and Alerting Failures</div>
         </div>
     </nav>
 

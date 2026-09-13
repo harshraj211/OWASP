@@ -16,9 +16,62 @@ def get_flag():
 
 DYNAMIC_FLAG = get_flag()
 
+CANDIDATES = [
+    "Sentinel2026!",
+    "Guardian2026!",
+    "Firewall2026!",
+    "Perimeter2026!",
+    "Cyber2026!",
+    "Defense2026!",
+    "Monitor2026!",
+    "Telemetry2026!",
+    "Gateway2026!",
+    "Shield2026!",
+    "Secure2026!",
+    "Enclave2026!",
+    "Bastion2026!",
+    "Vault2026!",
+    "Lockdown2026!",
+    "Protocol2026!",
+    "Incident2026!",
+    "Forensics2026!",
+    "Inspector2026!",
+    "Assessor2026!",
+    "Examiner2026!",
+    "Regulator2026!",
+    "Controller2026!",
+    "Oversight2026!",
+    "ComplianceAuditor2026!",  # Exact middle candidate (#25 of 50)
+    "Verification2026!",
+    "Governance2026!",
+    "Integrity2026!",
+    "Consensus2026!",
+    "Cryptographic2026!",
+    "Enterprise2026!",
+    "Strategy2026!",
+    "Resilience2026!",
+    "RedTeam2026!",
+    "BlueTeam2026!",
+    "SecOps2026!",
+    "SysAdmin2026!",
+    "Operations2026!",
+    "Network2026!",
+    "Cloud2026!",
+    "Infrastructure2026!",
+    "Terminal2026!",
+    "Access2026!",
+    "Clearance2026!",
+    "Identity2026!",
+    "Directory2026!",
+    "Federation2026!",
+    "Provider2026!",
+    "Benchmark2026!",
+    "Standard2026!"
+]
+
 ACCOUNTS = {
     "sec_auditor": {
-        "password": "Auditor2026!",
+        "password": "ComplianceAuditor2026!",
         "role": "Lead Compliance Auditor"
     }
 }
@@ -47,11 +100,19 @@ def index():
 
 @app.route('/compliance')
 def compliance():
-    return render_template('compliance.html')
+    return render_template('compliance.html', candidates=CANDIDATES)
+
+@app.route('/compliance/candidates.txt')
+def compliance_candidates():
+    return "\n".join(CANDIDATES) + "\n", 200, {'Content-Type': 'text/plain'}
 
 @app.route('/siem/monitor')
 def siem_monitor():
     return render_template('siem.html', events=SIEM_EVENTS[-25:])
+
+@app.route('/robots.txt')
+def robots_txt():
+    return "User-agent: *\nDisallow: /api/v1/sso/\nDisallow: /auditor/vault\nDisallow: /api/v1/docs\nDisallow: /compliance/candidates.txt\n", 200, {'Content-Type': 'text/plain'}
 
 @app.route('/api/v1/docs')
 def api_docs():
@@ -64,7 +125,7 @@ def api_docs():
         "endpoints": {
             "/api/v1/sso/partner-auth": {
                 "method": "POST",
-                "summary": "Legacy partner single sign-on authentication service (bypasses centralized SIEM event streamer).",
+                "summary": "Partner single sign-on authentication service for external compliance audit portals.",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -99,6 +160,16 @@ def login():
     password = request.form.get('password', '').strip()
 
     # Monitored login endpoint
+    if username == "sec_auditor":
+        IP_FAILURES[ip] = IP_FAILURES.get(ip, 0) + 1
+        blocked = (IP_FAILURES[ip] >= 3)
+        if blocked:
+            BLACKLISTED_IPS.add(ip)
+        log_siem_event(ip, "/login", "AUTH_FAIL", username, blocked=blocked)
+        if blocked:
+            return render_template('login.html', error="Intrusion Detected: Your IP has been blacklisted by the SIEM automated sensor."), 403
+        return render_template('login.html', error=f"Access Denied: External audit accounts ('sec_auditor') cannot authenticate via employee web portal. Warning: {3 - IP_FAILURES[ip]} attempt(s) remaining before automatic IP blacklist."), 401
+
     if username in ACCOUNTS and ACCOUNTS[username]["password"] == password:
         log_siem_event(ip, "/login", "AUTH_SUCCESS", username, blocked=False)
         IP_FAILURES[ip] = 0

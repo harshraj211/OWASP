@@ -8,13 +8,17 @@
 ---
 
 ### Challenge Description
-Titan Defense Strategic Systems protects classified Special Access Programs (SAP) using a tamper-evident cryptographic audit ledger. Any attempt to access `/vault/classified` without prior authorization triggers an alarm and appends an `UNAUTHORIZED_BREACH_DETECTED` block to the blockchain-like audit trail.
+Titan Defense Strategic Systems protects classified Special Access Programs (SAP) using a tamper-evident cryptographic audit ledger. Any security breach or perimeter alert recorded in the immutable audit ledger activates automated Sentinel interlocks that permanently lock down the classified vault.
 
-The vault's automated Sentinel interlock permanently seals the vault as long as any breach event is recorded in the ledger OR if the SHA-256 hash chain is broken.
+The automated Sentinel interlock strictly requires:
+1. Zero breach or intrusion alert records in the audit trail.
+2. 100% cryptographic SHA-256 forward-linked chain consensus integrity.
+
+Can you inspect the system telemetry, discover authorized administrative credentials from system initialization records, redact the incident evidence, and programmatically recalculate the cryptographic hash chain to unlock the classified vault?
 
 ### Objective
-1. Visit `/vault/classified` to trigger the intrusion alert and inspect the resulting block in `/audit/ledger`.
-2. Inspect client assets (`/static/js/titan_audit.js`) to discover the SecOps maintenance key (`TITAN_SEC_MAINT_2026`).
-3. Access `/audit/console` or the REST API to tamper with the breach block, modifying its event type to `ROUTINE_SECURITY_PATROL`.
-4. Recompute the cryptographic hash chain using `/api/v1/audit/recompute-chain` to satisfy Sentinel integrity verification.
-5. Revisit `/vault/classified` to extract the dynamic classified flag.
+1. Perform reconnaissance on the web platform and inspect the cryptographic ledger at `/audit/ledger`.
+2. Discover administrative SecOps credentials by analyzing historical initialization blocks.
+3. Identify hidden administrative and vault endpoints via directory/robots reconnaissance.
+4. Programmatically redact security violation records and recalculate downstream SHA-256 block hashes to maintain cryptographic consensus.
+5. Access `/vault/classified` to retrieve the dynamic flag.

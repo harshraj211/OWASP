@@ -12,8 +12,17 @@
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
             Assigned Lead Compliance Officer: <strong>Elena Kostas</strong><br>
             Auditor Account ID: <code>sec_auditor</code><br>
-            Compliance Directive Note: "Temporary password assigned per security onboarding memo: <code>Auditor2026!</code>. The compliance vault is accessible only by verified audit accounts."
+            Compliance Directive Note: "External audit accounts adhere strictly to Institutional Baseline 12.A. Passwords rotate quarterly across the approved 50-word rotation dictionary. Direct web form access is disabled for external auditors; Partner SSO must be utilized. Account lockouts enforced by SIEM after 3 failed attempts."
         </p>
+        <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 0.8rem; color: #fff; font-weight: 600;">Rotation Candidate Pool (50 Keys):</span>
+            <a href="/compliance/candidates.txt" target="_blank" style="padding: 0.35rem 0.75rem; font-size: 0.75rem; color: var(--cyan); border: 1px solid var(--cyan); border-radius: 4px; text-decoration: none; font-weight: 600;">Download candidates.txt</a>
+        </div>
+        <div style="background: #030712; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.75rem; margin-top: 0.75rem; max-height: 180px; overflow-y: auto; font-family: monospace; font-size: 0.8rem; line-height: 1.5; color: #94a3b8;">
+            {% for c in candidates %}
+            <div><span style="color: var(--text-muted); width: 28px; display: inline-block;">{{ loop.index }}.</span> {{ c }}</div>
+            {% endfor %}
+        </div>
     </div>
 
     <table>
