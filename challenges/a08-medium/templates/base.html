@@ -67,17 +67,7 @@
             box-shadow: 0 0 10px var(--primary);
         }
 
-        .category-badge {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+
 
         /* Animated Status Bar */
         .status-bar {
@@ -281,9 +271,7 @@
             <a href="/settings/logs" class="{% if request.path == '/settings/logs' %}active{% endif %}">System Logs</a>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
-                <a href="/logout" style="color: var(--danger); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">Terminate Session</a>
             {% endif %}
-            <div class="category-badge">A08: Software and Data Integrity Failures</div>
         </div>
     </nav>
 

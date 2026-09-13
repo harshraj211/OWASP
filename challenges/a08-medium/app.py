@@ -1,4 +1,6 @@
 import os
+import json
+import hashlib
 import tarfile
 import secrets
 import subprocess
@@ -39,8 +41,10 @@ CONFIG = {
 
 SYSTEM_LOGS = [
     "[SYSTEM] VortexEdge SCADA Substation Gateway Initialized.",
+    "[SYSTEM] Hardware Controller: Model VortexEdge-GW01, Active Firmware: v3.1.4.",
     "[SYSTEM] Modbus TCP Channel Poller running on port 502.",
-    "[SECURITY] OTA Integrity Monitor: Unauthenticated HTTP mirrors permitted for local field service."
+    "[INTEGRITY] Firmware Ingestion Policy: Package must contain 'firmware.json' (target_model='VortexEdge-GW01', version > 'v3.1.4', entrypoint script, and checksum_sha256).",
+    "[SECURITY] Ingestion Warning: Root cryptographic CA signature verification is disabled in local field service mode."
 ]
 
 def log_event(msg):
@@ -78,27 +82,60 @@ def logs_view():
     return render_template('logs.html', logs=SYSTEM_LOGS[-30:])
 
 def execute_firmware_archive(tar_path):
-    """Unpack archive and execute post_install.sh without authenticity verification."""
+    """Unpack archive, validate manifest consistency, and execute post_install.sh."""
     unpack_dir = os.path.join(STAGING_DIR, f"upgrade_{secrets.token_hex(4)}")
     os.makedirs(unpack_dir, exist_ok=True)
     try:
         with tarfile.open(tar_path, "r:*") as tf:
             tf.extractall(unpack_dir)
         
-        script = None
-        for candidate in ["post_install.sh", "install.sh", "upgrade.sh"]:
-            target = os.path.join(unpack_dir, candidate)
-            if os.path.exists(target):
-                script = target
-                break
+        manifest_file = os.path.join(unpack_dir, "firmware.json")
+        if not os.path.exists(manifest_file):
+            log_event("Package rejected: Missing 'firmware.json' manifest.")
+            return "Upgrade failed: Package missing required 'firmware.json' manifest."
         
-        if not script:
-            return "Upgrade failed: No post_install.sh script found in update package."
+        try:
+            with open(manifest_file, "r") as mf:
+                manifest = json.load(mf)
+        except Exception as je:
+            return f"Upgrade failed: Invalid JSON in manifest: {str(je)}"
         
-        os.chmod(script, 0o755)
+        # Check target hardware
+        target_model = manifest.get("target_model")
+        if target_model != "VortexEdge-GW01":
+            log_event(f"Package rejected: Incompatible hardware model '{target_model}'.")
+            return f"Upgrade failed: Hardware model mismatch. Expected 'VortexEdge-GW01', got '{target_model}'."
+        
+        # Check firmware version
+        pkg_version = manifest.get("version", "0.0.0")
+        if pkg_version <= CONFIG["current_version"]:
+            log_event(f"Package rejected: Version downgrade attempt ({pkg_version} <= {CONFIG['current_version']}).")
+            return f"Upgrade failed: Firmware rollback prohibited. Package version ({pkg_version}) must be higher than current ({CONFIG['current_version']})."
+        
+        # Check script entrypoint
+        script_name = manifest.get("entrypoint", "post_install.sh")
+        script_path = os.path.join(unpack_dir, script_name)
+        if not os.path.exists(script_path):
+            log_event(f"Package rejected: Entrypoint '{script_name}' not found.")
+            return f"Upgrade failed: Specified entrypoint '{script_name}' does not exist in package."
+        
+        # Verify SHA-256 integrity hash of entrypoint
+        expected_sha256 = str(manifest.get("checksum_sha256", "")).lower().strip()
+        with open(script_path, "rb") as sf:
+            actual_sha256 = hashlib.sha256(sf.read()).hexdigest().lower()
+        
+        if expected_sha256 != actual_sha256:
+            log_event(f"Package rejected: Checksum mismatch on {script_name}.")
+            return f"Upgrade failed: Checksum verification failed for '{script_name}'. Expected: {expected_sha256}, Computed: {actual_sha256}."
+        
+        # VULNERABILITY (A08: Software and Data Integrity Failures):
+        # Daemon validates internal checksum matches manifest, but completely omits cryptographic digital signature (GPG/Ed25519) on the package itself!
+        log_event(f"Integrity check passed for package {pkg_version} (checksum: {actual_sha256[:16]}...). Digital signature check: BYPASSED (Field Mode).")
+        
+        os.chmod(script_path, 0o755)
         # Execute upgrade script
         proc = subprocess.run(
-            ["bash", script],
+            ["bash", script_path],
             cwd=unpack_dir,
             capture_output=True,
             text=True,

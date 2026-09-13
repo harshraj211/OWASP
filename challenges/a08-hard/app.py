@@ -36,11 +36,14 @@ class DataPipeline:
         return f"Pipeline '{self.name}' evaluated across {len(self.stages)} stages: Status 100% Complete."
 
 class RestrictedUnpickler(pickle.Unpickler):
-    BLOCKED_MODULES = {'os', 'subprocess', 'posix', 'sys', 'commands'}
+    BLOCKED_MODULES = {'os', 'subprocess', 'posix', 'sys', 'commands', 'pty', 'shutil', 'socket'}
+    BLOCKED_NAMES = {'eval', 'exec', 'system', 'popen', 'spawn', 'compile', 'call', 'check_output', 'check_call'}
 
     def find_class(self, module, name):
         if module in self.BLOCKED_MODULES:
             raise pickle.UnpicklingError(f"Security Sandbox Violation: Module '{module}' is blacklisted.")
+        if name in self.BLOCKED_NAMES:
+            raise pickle.UnpicklingError(f"Security Sandbox Violation: Execution function '{name}' is blacklisted.")
         return super().find_class(module, name)
 
 @app.route('/healthz')

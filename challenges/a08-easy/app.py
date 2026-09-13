@@ -58,7 +58,7 @@ def login():
     user = request.form.get('username', '').strip()
     pwd = request.form.get('password', '').strip()
 
-    if user == "editor" and pwd == "EditorNovus2026!":
+    if user == "editor" and pwd == "NovusEditorial2026!":
         session['user'] = user
         session['role'] = "Senior Managing Editor"
         return redirect(url_for('dashboard'))
@@ -98,13 +98,16 @@ def upload_plugin():
         plugin_name = manifest_data.get("name", "Custom Extension")
         entrypoint = manifest_data.get("entrypoint", "plugin.py")
 
-        # Flawed integrity verification: allows developer bypass or algorithm 'none'
+        # Flawed integrity verification: allows developer bypass when environment is sandbox/staging
         v_mode = manifest_data.get("verification_mode")
-        v_algo = manifest_data.get("signature_algorithm")
+        v_env = manifest_data.get("environment")
         
-        if v_mode != "developer_bypass" and v_algo != "none":
+        is_bypass = (v_mode == "developer_bypass" and v_env in ["sandbox", "staging"])
+        if not is_bypass:
             if "signature" not in manifest_data or not manifest_data.get("signature"):
-                return render_template('plugin_upload.html', error="Untrusted plugin: Missing cryptographic signature from Novus CA."), 403
+                return render_template('plugin_upload.html', error="Untrusted plugin: Missing cryptographic signature certified by Novus CA."), 403
+            if manifest_data.get("signature") != "NOVUS_CA_CERT_VALID":
+                return render_template('plugin_upload.html', error="Signature verification failed: Invalid Novus CA signature."), 403
 
         # Extract files to plugins directory
         dest_dir = os.path.join(PLUGINS_DIR, plugin_id)
@@ -115,7 +118,7 @@ def upload_plugin():
             "id": plugin_id,
             "name": plugin_name,
             "version": manifest_data.get("version", "1.0.0"),
-            "integrity": "Developer Bypass / Unverified" if v_mode else "Custom Signature",
+            "integrity": "Developer Sandbox Bypass" if is_bypass else "Novus CA Certified",
             "entrypoint": os.path.join(dest_dir, entrypoint)
         })
 

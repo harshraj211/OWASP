@@ -10,7 +10,16 @@
     <div style="background: #141b26; border-left: 4px solid var(--purple); padding: 1.25rem; border-radius: 4px; margin-bottom: 1.5rem;">
         <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Developer Bulletin: Third-Party Plugin Signing Standard</h3>
         <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
-            Novus CMS requires third-party plugins to provide an integrity manifest <code>manifest.json</code> inside the ZIP archive. For internal sandbox testing, the signature verifier supports <code>verification_mode: "developer_bypass"</code> or self-signed verification when <code>public_key.pem</code> is bundled in the archive.
+            Novus CMS requires all production extensions to provide an integrity manifest <code>manifest.json</code> inside the ZIP bundle. Production installations enforce digital signatures certified by the Novus Root CA. 
+            <br><br>
+            <strong>Testing Exceptions:</strong> For local staging and test environments, developers can configure <code>verification_mode: "developer_bypass"</code> with <code>environment: "sandbox"</code> to bypass public CA signature verification during extension prototyping.
+        </p>
+    </div>
+
+    <div style="background: #141b26; border-left: 4px solid var(--primary); padding: 1.25rem; border-radius: 4px;">
+        <h3 style="font-size: 1rem; color: #fff; margin-bottom: 0.5rem;">Editorial Operations Notice: Q3 Workspace Onboarding</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+            All incoming editorial contributors must submit drafts through Senior Managing Editor Marcus Vance (account: <code>editor</code>). Initial editorial workstation access keys are provisioned under institutional standard protocol (<code>NovusEditorial2026!</code>).
         </p>
     </div>
 </div>
