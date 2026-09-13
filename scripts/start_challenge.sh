@@ -41,15 +41,18 @@ if docker info >/dev/null 2>&1; then
     if [[ "$image_hash" != "$source_hash" ]]; then
         docker build --label "org.oswap.source-hash=${source_hash}" --tag "$image_name" "$challenge_dir"
     fi
+    container_port="$(docker image inspect --format '{{range $p, $conf := .Config.ExposedPorts}}{{$p}}{{break}}{{end}}' "$image_name" 2>/dev/null | cut -d/ -f1 || true)"
+    container_port="${container_port:-$port}"
     docker run --detach --name "$container_name" \
         --cap-add NET_ADMIN \
-        --publish "127.0.0.1:${port}:${port}" \
+        --publish "127.0.0.1:${port}:${container_port}" \
         --env "FLAG=${flag}" \
+        --env "CTF_FLAG=${flag}" \
         "$image_name" >/dev/null
     for _ in {1..30}; do
         running="$(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null || true)"
         if [[ "$running" == "true" ]]; then
-            if python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
+            if python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/', timeout=1)" >/dev/null 2>&1 || python3 -c "from urllib.request import urlopen; urlopen('http://127.0.0.1:${port}/healthz', timeout=1)" >/dev/null 2>&1; then
                 break
             fi
         else
