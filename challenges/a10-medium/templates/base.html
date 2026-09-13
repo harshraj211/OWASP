@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/substations" class="{% if request.path == '/substations' %}active{% endif %}">Substation Feeder Bus</a>\n            <a href="/grid/telemetry" class="{% if request.path == '/grid/telemetry' %}active{% endif %}">Telemetry Ingestion</a>\n            <a href="/system/safety-interlock" class="{% if request.path == '/system/safety-interlock' %}active{% endif %}">Safety Interlock Monitor</a>\n            <a href="/core/override" class="{% if request.path == '/core/override' %}active{% endif %}">Emergency Core</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/substations" class="{% if request.path == '/substations' %}active{% endif %}">Substation Feeder Bus</a>
+            <a href="/grid/telemetry" class="{% if request.path == '/grid/telemetry' %}active{% endif %}">Telemetry Ingestion</a>
+            <a href="/system/safety-interlock" class="{% if request.path == '/system/safety-interlock' %}active{% endif %}">Safety Interlock Monitor</a>
+            <a href="/core/override" class="{% if request.path == '/core/override' %}active{% endif %}">Emergency Core</a>
             <span class="badge badge-outline">A10</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

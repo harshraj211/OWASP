@@ -160,7 +160,12 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">News & Articles</a>\n            <a href="/admin/dashboard" class="{% if request.path == '/admin/dashboard' %}active{% endif %}">Editorial Suite</a>\n            <a href="/admin/plugins" class="{% if request.path == '/admin/plugins' %}active{% endif %}">Plugins Manager</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">News & Articles</a>
+            <a href="/admin/dashboard" class="{% if request.path == '/admin/dashboard' %}active{% endif %}">Editorial Suite</a>
+            <a href="/admin/plugins" class="{% if request.path == '/admin/plugins' %}active{% endif %}">Plugins Manager</a>
             <span class="badge badge-outline">A08</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

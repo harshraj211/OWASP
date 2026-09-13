@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Settlement Rails</a>\n            <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Treasury Desk</a>\n            <a href="/security/audit-vault" class="{% if request.path == '/security/audit-vault' %}active{% endif %}">Executive Vault</a>\n            <a href="/auth/2fa" class="{% if request.path == '/auth/2fa' %}active{% endif %}">2FA Verification Pending</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Settlement Rails</a>
+            <a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Treasury Desk</a>
+            <a href="/security/audit-vault" class="{% if request.path == '/security/audit-vault' %}active{% endif %}">Executive Vault</a>
+            <a href="/auth/2fa" class="{% if request.path == '/auth/2fa' %}active{% endif %}">2FA Verification Pending</a>
             <span class="badge badge-outline">A07</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

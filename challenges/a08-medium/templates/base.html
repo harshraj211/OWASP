@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/telemetry" class="{% if request.path == '/telemetry' %}active{% endif %}">Sensor Telemetry</a>\n            <a href="/settings/firmware" class="{% if request.path == '/settings/firmware' %}active{% endif %}">Firmware & OTA</a>\n            <a href="/settings/network" class="{% if request.path == '/settings/network' %}active{% endif %}">Network Config</a>\n            <a href="/settings/logs" class="{% if request.path == '/settings/logs' %}active{% endif %}">System Logs</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/telemetry" class="{% if request.path == '/telemetry' %}active{% endif %}">Sensor Telemetry</a>
+            <a href="/settings/firmware" class="{% if request.path == '/settings/firmware' %}active{% endif %}">Firmware & OTA</a>
+            <a href="/settings/network" class="{% if request.path == '/settings/network' %}active{% endif %}">Network Config</a>
+            <a href="/settings/logs" class="{% if request.path == '/settings/logs' %}active{% endif %}">System Logs</a>
             <span class="badge badge-outline">A08</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">Press Drafts</a>\n            <a href="/media/library" class="{% if request.path == '/media/library' %}active{% endif %}">Asset Library</a>\n            <a href="/media/upload" class="{% if request.path == '/media/upload' %}active{% endif %}">Asset Upload</a>\n            <a href="/editorial/terminal" class="{% if request.path == '/editorial/terminal' %}active{% endif %}">Script Terminal</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/articles" class="{% if request.path == '/articles' %}active{% endif %}">Press Drafts</a>
+            <a href="/media/library" class="{% if request.path == '/media/library' %}active{% endif %}">Asset Library</a>
+            <a href="/media/upload" class="{% if request.path == '/media/upload' %}active{% endif %}">Asset Upload</a>
+            <a href="/editorial/terminal" class="{% if request.path == '/editorial/terminal' %}active{% endif %}">Script Terminal</a>
             <span class="badge badge-outline">A10</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

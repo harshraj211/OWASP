@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/portfolio" class="{% if request.path == '/portfolio' %}active{% endif %}">Portfolio Optimizer</a>\n            <a href="/models" class="{% if request.path == '/models' %}active{% endif %}">Risk Models</a>\n            <a href="/api-spec" class="{% if request.path == '/api-spec' %}active{% endif %}">Engine API Spec</a>\n            <a href="/vault" class="{% if request.path == '/vault' %}active{% endif %}">Quant Vault</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/portfolio" class="{% if request.path == '/portfolio' %}active{% endif %}">Portfolio Optimizer</a>
+            <a href="/models" class="{% if request.path == '/models' %}active{% endif %}">Risk Models</a>
+            <a href="/api-spec" class="{% if request.path == '/api-spec' %}active{% endif %}">Engine API Spec</a>
+            <a href="/vault" class="{% if request.path == '/vault' %}active{% endif %}">Quant Vault</a>
             <span class="badge badge-outline">A10</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

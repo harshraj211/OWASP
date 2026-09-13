@@ -160,7 +160,12 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/datasets" class="{% if request.path == '/datasets' %}active{% endif %}">Telemetry Datasets</a>\n            <a href="/pipeline" class="{% if request.path == '/pipeline' %}active{% endif %}">Pipeline Studio</a>\n            <a href="/pipeline/import" class="{% if request.path == '/pipeline/import' %}active{% endif %}">Import Session</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/datasets" class="{% if request.path == '/datasets' %}active{% endif %}">Telemetry Datasets</a>
+            <a href="/pipeline" class="{% if request.path == '/pipeline' %}active{% endif %}">Pipeline Studio</a>
+            <a href="/pipeline/import" class="{% if request.path == '/pipeline/import' %}active{% endif %}">Import Session</a>
             <span class="badge badge-outline">A08</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

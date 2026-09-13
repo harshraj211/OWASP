@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/compliance" class="{% if request.path == '/compliance' %}active{% endif %}">Compliance Audit</a>\n            <a href="/siem/monitor" class="{% if request.path == '/siem/monitor' %}active{% endif %}">SIEM Activity Viewer</a>\n            <a href="/api/v1/docs" class="{% if request.path == '/api/v1/docs' %}active{% endif %}">API Gateway Docs</a>\n            <a href="/auditor/vault" class="{% if request.path == '/auditor/vault' %}active{% endif %}">Auditor Vault</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/compliance" class="{% if request.path == '/compliance' %}active{% endif %}">Compliance Audit</a>
+            <a href="/siem/monitor" class="{% if request.path == '/siem/monitor' %}active{% endif %}">SIEM Activity Viewer</a>
+            <a href="/api/v1/docs" class="{% if request.path == '/api/v1/docs' %}active{% endif %}">API Gateway Docs</a>
+            <a href="/auditor/vault" class="{% if request.path == '/auditor/vault' %}active{% endif %}">Auditor Vault</a>
             <span class="badge badge-outline">A09</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

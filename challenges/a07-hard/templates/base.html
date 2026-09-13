@@ -160,7 +160,12 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/trials" class="{% if request.path == '/trials' %}active{% endif %}">Active Trials</a>\n            <a href="/outbox" class="{% if request.path == '/outbox' %}active{% endif %}">Research Relay (Outbox)</a>\n            <a href="/admin/governance" class="{% if request.path == '/admin/governance' %}active{% endif %}">Governance Vault</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/trials" class="{% if request.path == '/trials' %}active{% endif %}">Active Trials</a>
+            <a href="/outbox" class="{% if request.path == '/outbox' %}active{% endif %}">Research Relay (Outbox)</a>
+            <a href="/admin/governance" class="{% if request.path == '/admin/governance' %}active{% endif %}">Governance Vault</a>
             <span class="badge badge-outline">A07</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

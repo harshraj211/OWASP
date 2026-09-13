@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/clearance" class="{% if request.path == '/clearance' %}active{% endif %}">Clearance Desk</a>\n            <a href="/audit/ledger" class="{% if request.path == '/audit/ledger' %}active{% endif %}">Cryptographic Audit Ledger</a>\n            <a href="/audit/console" class="{% if request.path == '/audit/console' %}active{% endif %}">Ledger Maintenance Console</a>\n            <a href="/vault/classified" class="{% if request.path == '/vault/classified' %}active{% endif %}">Classified Vault</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/clearance" class="{% if request.path == '/clearance' %}active{% endif %}">Clearance Desk</a>
+            <a href="/audit/ledger" class="{% if request.path == '/audit/ledger' %}active{% endif %}">Cryptographic Audit Ledger</a>
+            <a href="/audit/console" class="{% if request.path == '/audit/console' %}active{% endif %}">Ledger Maintenance Console</a>
+            <a href="/vault/classified" class="{% if request.path == '/vault/classified' %}active{% endif %}">Classified Vault</a>
             <span class="badge badge-outline">A09</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>

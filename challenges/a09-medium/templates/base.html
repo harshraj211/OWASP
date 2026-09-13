@@ -160,7 +160,13 @@
         </a>
         <div class="nav-links">
             <a href="/" class="{% if request.path == '/' %}active{% endif %}">Home</a>
-            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>\n            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>\n            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>\n            <a href="/transfer" class="{% if request.path == '/transfer' %}active{% endif %}">Wire Transfers</a>\n            <a href="/compliance/stream" class="{% if request.path == '/compliance/stream' %}active{% endif %}">Audit Log Stream</a>\n            <a href="/compliance/status" class="{% if request.path == '/compliance/status' %}active{% endif %}">Compliance Monitor</a>\n            <a href="/vault/treasury" class="{% if request.path == '/vault/treasury' %}active{% endif %}">Treasury Vault</a>
+            <a href="/about" class="{% if request.path == '/about' %}active{% endif %}">About Us</a>
+            <a href="/services" class="{% if request.path == '/services' %}active{% endif %}">Services</a>
+            <a href="/contact" class="{% if request.path == '/contact' %}active{% endif %}">Contact</a>
+            <a href="/transfer" class="{% if request.path == '/transfer' %}active{% endif %}">Wire Transfers</a>
+            <a href="/compliance/stream" class="{% if request.path == '/compliance/stream' %}active{% endif %}">Audit Log Stream</a>
+            <a href="/compliance/status" class="{% if request.path == '/compliance/status' %}active{% endif %}">Compliance Monitor</a>
+            <a href="/vault/treasury" class="{% if request.path == '/vault/treasury' %}active{% endif %}">Treasury Vault</a>
             <span class="badge badge-outline">A09</span>
             {% if session.get('user') or session.get('username') %}
                 <span class="badge badge-green">Authorized</span>
